@@ -44,25 +44,6 @@ const User = sequelize.define('User', {
         allowNull: true,
         field: 'full_name'
     },
-    avatar: {
-        type: DataTypes.STRING,
-        allowNull: true,
-        defaultValue: ''
-    },
-    bio: {
-        type: DataTypes.STRING(500),
-        allowNull: true
-    },
-    isVerified: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
-        field: 'is_verified'
-    },
-    isActive: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true,
-        field: 'is_active'
-    },
     role: {
         type: DataTypes.ENUM('user', 'admin', 'chef'),
         defaultValue: 'user'

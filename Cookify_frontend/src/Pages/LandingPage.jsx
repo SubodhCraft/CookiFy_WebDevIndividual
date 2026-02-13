@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const LandingPage = () => {
+    const navigate = useNavigate();
     const [isScrolled, setIsScrolled] = useState(false);
     const [currentTestimonial, setCurrentTestimonial] = useState(0);
 
@@ -17,8 +19,8 @@ const LandingPage = () => {
         return () => clearInterval(interval);
     }, []);
 
-    const handleLoginClick = () => console.log('Navigate to Login');
-    const handleRegisterClick = () => console.log('Navigate to Register');
+    const handleLoginClick = () => navigate('/signin');
+    const handleRegisterClick = () => navigate('/signup');
 
     const features = [
         {
@@ -293,8 +295,8 @@ const LandingPage = () => {
                                     <div
                                         key={index}
                                         className={`transition-all duration-500 ${index === currentTestimonial
-                                                ? 'opacity-100 translate-y-0'
-                                                : 'opacity-0 translate-y-4 absolute inset-0'
+                                            ? 'opacity-100 translate-y-0'
+                                            : 'opacity-0 translate-y-4 absolute inset-0'
                                             }`}
                                     >
                                         <blockquote className="text-xl md:text-2xl text-[#2d2d2d] font-light leading-relaxed mb-8 font-serif italic">
