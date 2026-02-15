@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LandingPage from './Pages/LandingPage';
 import SignupPage from './Pages/SignupPage';
+import SigninPage from './Pages/SigninPage';
 import './App.css';
 
 function App() {
@@ -9,8 +10,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/signup" element={<SignupPage />} />
-        {/* Sign in route will be added later */}
-        <Route path="/signin" element={<div className="min-h-screen flex items-center justify-center text-2xl">Sign In Page - Coming Soon</div>} />
+        <Route path="/signin" element={<SigninPage />} />
       </Routes>
     </Router>
   );
