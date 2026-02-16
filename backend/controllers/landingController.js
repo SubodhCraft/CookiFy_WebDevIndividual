@@ -1,59 +1,64 @@
 const getLandingPageData = async (req, res) => {
     try {
         const landingData = {
-            stats: {
-                totalRecipes: 10000,
-                totalChefs: 5000,
-                totalUsers: 15000,
-                cuisinesAvailable: 50
-            },
+            stats: [
+                { value: '50K+', label: 'Curated Recipes' },
+                { value: '150+', label: 'Countries' },
+                { value: '500K+', label: 'Active Members' },
+                { value: '4.9', label: 'App Store Rating' }
+            ],
             features: [
                 {
-                    id: 1,
-                    title: 'Vast Collection',
-                    description: 'Thousands of recipes from cuisines worldwide',
-                    icon: '📖'
+                    number: '01',
+                    title: 'Curated Collection',
+                    description: 'Access over 50,000 professionally tested recipes from award-winning chefs and culinary experts worldwide.'
                 },
                 {
-                    id: 2,
-                    title: 'Expert Tips',
-                    description: 'Learn from professional chefs and home cooks',
-                    icon: '👨‍🍳'
+                    number: '02',
+                    title: 'Personalized Experience',
+                    description: 'AI-powered recommendations tailored to your dietary preferences, skill level, and available ingredients.'
                 },
                 {
-                    id: 3,
-                    title: 'Save Favorites',
-                    description: 'Create your personal cookbook collection',
-                    icon: '❤️'
+                    number: '03',
+                    title: 'Step-by-Step Guidance',
+                    description: 'Detailed instructions with video tutorials, timing guides, and pro tips for flawless execution.'
+                },
+                {
+                    number: '04',
+                    title: 'Community & Sharing',
+                    description: 'Connect with passionate food lovers, share your creations, and discover trending recipes.'
                 }
             ],
             testimonials: [
                 {
-                    id: 1,
-                    name: 'Sarah Johnson',
-                    role: 'Home Cook',
-                    comment: 'CookiFy has transformed my cooking! I discover new recipes every day.',
-                    rating: 5
+                    quote: "CookiFy has completely transformed how I approach cooking. The quality of recipes and attention to detail is unmatched.",
+                    author: "Alexandra Chen",
+                    role: "Culinary Director, The Modern Kitchen",
+                    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=120&h=120&fit=crop&crop=face"
                 },
                 {
-                    id: 2,
-                    name: 'Mike Chen',
-                    role: 'Food Blogger',
-                    comment: 'The best recipe platform I\'ve ever used. Highly recommended!',
-                    rating: 5
+                    quote: "As a professional chef, I'm impressed by the depth and authenticity of recipes. This is the gold standard for culinary platforms.",
+                    author: "Marcus Williams",
+                    role: "Executive Chef, Eleven Madison Park",
+                    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=120&h=120&fit=crop&crop=face"
                 },
                 {
-                    id: 3,
-                    name: 'Emily Davis',
-                    role: 'Professional Chef',
-                    comment: 'Great community and amazing recipe collection. Love sharing my recipes here!',
-                    rating: 5
+                    quote: "The personalized recommendations have helped me discover cuisines I never knew I'd love. Absolutely brilliant platform.",
+                    author: "Sarah Mitchell",
+                    role: "Food Writer, Bon Appétit",
+                    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=120&h=120&fit=crop&crop=face"
                 }
             ],
+            categories: [
+                { name: 'Italian', image: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?w=600&h=400&fit=crop', count: '2,400+ recipes' },
+                { name: 'Asian Fusion', image: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=600&h=400&fit=crop', count: '3,100+ recipes' },
+                { name: 'French Cuisine', image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&h=400&fit=crop', count: '1,800+ recipes' },
+                { name: 'Mediterranean', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=600&h=400&fit=crop', count: '2,200+ recipes' }
+            ],
             heroContent: {
-                title: 'Welcome to CookiFy',
-                tagline: 'Where Every Recipe Tells a Delicious Story',
-                description: 'Discover, create, and share amazing recipes from around the world.'
+                title: 'Where Culinary Excellence Meets Home',
+                subtitle: 'The Art of Cooking, Reimagined',
+                description: 'Discover a refined collection of world-class recipes, curated by professional chefs and designed for the discerning home cook.'
             }
         };
 
