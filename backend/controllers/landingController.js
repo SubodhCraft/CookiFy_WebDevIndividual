@@ -34,31 +34,31 @@ const getLandingPageData = async (req, res) => {
                     quote: "CookiFy has completely transformed how I approach cooking. The quality of recipes and attention to detail is unmatched.",
                     author: "Alexandra Chen",
                     role: "Culinary Director, The Modern Kitchen",
-                    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=120&h=120&fit=crop&crop=face"
+                    image: "https://res.cloudinary.com/demo/image/upload/v1/samples/people/smiling-man.jpg"
                 },
                 {
                     quote: "As a professional chef, I'm impressed by the depth and authenticity of recipes. This is the gold standard for culinary platforms.",
                     author: "Marcus Williams",
                     role: "Executive Chef, Eleven Madison Park",
-                    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=120&h=120&fit=crop&crop=face"
+                    image: "https://res.cloudinary.com/demo/image/upload/v1/samples/people/boy-snow-hoodie.jpg"
                 },
                 {
                     quote: "The personalized recommendations have helped me discover cuisines I never knew I'd love. Absolutely brilliant platform.",
                     author: "Sarah Mitchell",
                     role: "Food Writer, Bon Appétit",
-                    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=120&h=120&fit=crop&crop=face"
+                    image: "https://res.cloudinary.com/demo/image/upload/v1/samples/people/kitchen-bar.jpg"
                 }
             ],
             categories: [
-                { name: 'Italian', image: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?w=600&h=400&fit=crop', count: '2,400+ recipes' },
-                { name: 'Asian Fusion', image: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=600&h=400&fit=crop', count: '3,100+ recipes' },
-                { name: 'French Cuisine', image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&h=400&fit=crop', count: '1,800+ recipes' },
-                { name: 'Mediterranean', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=600&h=400&fit=crop', count: '2,200+ recipes' }
+                { name: 'Artisanal', image: 'https://res.cloudinary.com/demo/image/upload/v1/samples/food/fish-vegetables.jpg', count: '2,400+ recipes' },
+                { name: 'Patisserie', image: 'https://res.cloudinary.com/demo/image/upload/v1/samples/food/dessert.jpg', count: '3,100+ recipes' },
+                { name: 'Gourmet', image: 'https://res.cloudinary.com/demo/image/upload/v1/samples/food/spices.jpg', count: '1,800+ recipes' },
+                { name: 'Molecular', image: 'https://res.cloudinary.com/demo/image/upload/v1/samples/food/pot-mussels.jpg', count: '2,200+ recipes' }
             ],
             heroContent: {
                 title: 'Where Culinary Excellence Meets Home',
                 subtitle: 'The Art of Cooking, Reimagined',
-                description: 'Discover a refined collection of world-class recipes, curated by professional chefs and designed for the discerning home cook.'
+                description: 'Discover a refined collection of world-class recipes, curated by professional chefs and delivered via Cloudinary CDN.'
             }
         };
 

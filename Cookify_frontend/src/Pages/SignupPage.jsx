@@ -119,8 +119,8 @@ const SignupPage = () => {
 
                 <div className="relative z-10 max-w-lg w-full space-y-12">
                     <div className="glass-card p-10 space-y-6 border-white/10 shadow-2xl">
-                        <div className="w-14 h-14 bg-indigo-500/20 rounded-2xl flex items-center justify-center border border-indigo-500/30">
-                            <span className="text-3xl">👨‍🍳</span>
+                        <div className="w-14 h-14 bg-indigo-500/20 rounded-2xl flex items-center justify-center border border-indigo-500/30 p-3">
+                            <img src="https://res.cloudinary.com/demo/image/upload/v1/samples/logos/cloudinary_icon_white.png" className="w-full h-full object-contain" alt="chef icon" />
                         </div>
                         <h3 className="text-3xl font-bold text-white leading-tight">Elite Chef Program</h3>
                         <p className="text-slate-400 text-lg leading-relaxed">

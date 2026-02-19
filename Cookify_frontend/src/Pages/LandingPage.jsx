@@ -102,7 +102,7 @@ const LandingPage = () => {
                     <div className="relative hidden lg:block animate-fade-in delay-300">
                         <div className="relative z-10 p-4 glass-card border-white/10 shadow-[0_40px_100px_rgba(0,0,0,0.6)]">
                             <img
-                                src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1000&h=1200&fit=crop"
+                                src="https://res.cloudinary.com/demo/image/upload/v1/samples/food/fish-vegetables.jpg"
                                 className="rounded-2xl w-full h-[650px] object-cover filter brightness-90 grayscale-[0.2]"
                                 alt="Chef work"
                             />
@@ -152,7 +152,7 @@ const LandingPage = () => {
                     </div>
                     <div className="glass-card p-1 items-center justify-center flex overflow-hidden group">
                         <img
-                            src="https://images.unsplash.com/photo-1547592180-85f173990554?w=800&q=80"
+                            src="https://res.cloudinary.com/demo/image/upload/v1/samples/food/pot-mussels.jpg"
                             className="rounded-3xl object-cover w-full h-[500px] transition-transform duration-700 group-hover:scale-110"
                             alt="Cooking"
                         />

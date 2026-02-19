@@ -8,9 +8,16 @@ const { connectDB } = require('./database/db');
 require('./models');
 const routes = require('./routes');
 
+const seedRecipes = require('./seedData');
+
 const app = express();
 
-connectDB();
+const startServer = async () => {
+    await connectDB();
+    await seedRecipes();
+};
+
+startServer();
 
 const allowedOrigins = [
     'http://localhost:5173',

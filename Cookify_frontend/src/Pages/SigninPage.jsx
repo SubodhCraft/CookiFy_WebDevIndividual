@@ -38,7 +38,7 @@ const SigninPage = () => {
             const response = await authService.signin(formData);
             if (response.success) {
                 authService.setAuthData(response.data.token, response.data.user);
-                navigate('/');
+                navigate('/dashboard');
             }
         } catch (error) {
             setApiError(error.response?.data?.message || 'Login failed');
@@ -80,7 +80,7 @@ const SigninPage = () => {
                         <div className="flex -space-x-3">
                             {[1, 2, 3, 4].map(i => (
                                 <div key={i} className="w-12 h-12 rounded-full border-4 border-[#0a0a0f] bg-slate-800 flex items-center justify-center overflow-hidden">
-                                    <img src={`https://i.pravatar.cc/150?u=${i}`} alt="user" />
+                                    <img src={`https://res.cloudinary.com/demo/image/upload/w_100,h_100,c_thumb,g_auto,v1/samples/people/boy-snow-hoodie.jpg`} alt="user" />
                                 </div>
                             ))}
                         </div>
