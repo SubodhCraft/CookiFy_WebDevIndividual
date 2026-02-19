@@ -1,65 +1,66 @@
+
 const Footer = () => {
-    const footerLinks = [
-        { title: 'Product', links: ['Features', 'Recipes', 'Meal Plans', 'Mobile App'] },
-        { title: 'Company', links: ['About', 'Careers', 'Press', 'Contact'] },
-        { title: 'Legal', links: ['Terms', 'Privacy', 'Cookies', 'Licenses'] }
-    ];
-
-    const socialLinks = ['Twitter', 'Instagram', 'YouTube', 'Pinterest'];
-
     return (
-        <footer className="py-16 bg-secondary text-white">
-            <div className="max-w-7xl mx-auto px-6 lg:px-8">
-                <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
-                    <div className="lg:col-span-2">
-                        <div className="flex items-center gap-3 mb-6">
-                            <div className="w-10 h-10 bg-secondary-light rounded-lg flex items-center justify-center">
-                                <svg className="w-5 h-5 text-primary" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
-                                </svg>
-                            </div>
-                            <span className="text-xl font-serif font-semibold">CookiFy</span>
-                        </div>
-                        <p className="text-neutral-400 leading-relaxed max-w-sm mb-8">
-                            Elevating home cooking through curated recipes, expert guidance, and a passionate global community.
-                        </p>
-                        <div className="flex gap-4">
-                            {socialLinks.map((social) => (
-                                <a
-                                    key={social}
-                                    href="#"
-                                    className="w-10 h-10 bg-secondary-light rounded-lg flex items-center justify-center text-neutral-400 hover:text-primary hover:bg-neutral-700 transition-colors"
-                                >
-                                    <span className="sr-only">{social}</span>
-                                    {/* Placeholder social icons */}
-                                    <span className="text-xs font-bold">{social[0]}</span>
-                                </a>
-                            ))}
-                        </div>
-                    </div>
+        <footer className="footer bg-[#07070a] border-t border-white/5 py-24 relative overflow-hidden">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent" />
 
-                    {footerLinks.map((column) => (
-                        <div key={column.title}>
-                            <h4 className="font-medium mb-6 text-white">{column.title}</h4>
-                            <ul className="space-y-4">
-                                {column.links.map((link) => (
-                                    <li key={link}>
-                                        <a href="#" className="text-neutral-400 hover:text-primary transition-colors text-sm">
-                                            {link}
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
+            <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12 relative z-10">
+                <div className="col-span-2 space-y-8">
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center">
+                            <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                            </svg>
                         </div>
-                    ))}
+                        <span className="text-2xl font-bold tracking-tighter text-white">COOKIFY.PRO</span>
+                    </div>
+                    <p className="text-slate-500 max-w-sm leading-relaxed font-medium">
+                        Elevating home kitchens through technology and community since 2024.
+                        The largest decentralized recipe network in the world.
+                    </p>
+                    <div className="flex gap-4">
+                        {[1, 2, 3, 4].map(i => (
+                            <div key={i} className="w-10 h-10 rounded-xl glass-card border-white/5 flex items-center justify-center hover:bg-white/5 cursor-pointer transition-colors">
+                                <div className="w-4 h-4 bg-slate-400 rounded-full" />
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
-                <div className="pt-8 border-t border-secondary-light flex flex-col md:flex-row justify-between items-center gap-4">
-                    <p className="text-neutral-500 text-sm">© {new Date().getFullYear()} CookiFy. All rights reserved.</p>
-                    <div className="flex gap-6">
-                        <a href="#" className="text-neutral-500 hover:text-white transition-colors text-sm">Terms of Service</a>
-                        <a href="#" className="text-neutral-500 hover:text-white transition-colors text-sm">Privacy Policy</a>
-                    </div>
+                <div className="space-y-6">
+                    <h4 className="text-sm font-bold text-white uppercase tracking-widest">Platform</h4>
+                    <ul className="space-y-4 text-slate-500 text-sm font-bold">
+                        {['Recipe Vault', 'AI Planning', 'Smart Grocery', 'Labs'].map(link => (
+                            <li key={link} className="hover:text-indigo-400 transition-colors cursor-pointer">{link}</li>
+                        ))}
+                    </ul>
+                </div>
+
+                <div className="space-y-6">
+                    <h4 className="text-sm font-bold text-white uppercase tracking-widest">Company</h4>
+                    <ul className="space-y-4 text-slate-500 text-sm font-bold">
+                        {['About Us', 'Careers', 'Press', 'Legal'].map(link => (
+                            <li key={link} className="hover:text-indigo-400 transition-colors cursor-pointer">{link}</li>
+                        ))}
+                    </ul>
+                </div>
+
+                <div className="space-y-6">
+                    <h4 className="text-sm font-bold text-white uppercase tracking-widest">Support</h4>
+                    <ul className="space-y-4 text-slate-500 text-sm font-bold">
+                        {['Help Center', 'API Status', 'Security', 'Contact'].map(link => (
+                            <li key={link} className="hover:text-indigo-400 transition-colors cursor-pointer">{link}</li>
+                        ))}
+                    </ul>
+                </div>
+            </div>
+
+            <div className="max-w-7xl mx-auto px-6 lg:px-12 mt-24 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between gap-6 text-[10px] font-bold text-slate-600 uppercase tracking-[0.2em]">
+                <div>© 2024 Cookify Global Operations. All Rights Reserved.</div>
+                <div className="flex gap-8">
+                    <span>Terms of Service</span>
+                    <span>Privacy Policy</span>
+                    <span>Cookie Shield</span>
                 </div>
             </div>
         </footer>

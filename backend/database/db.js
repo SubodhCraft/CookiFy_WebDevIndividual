@@ -11,7 +11,7 @@ const sequelize = new Sequelize(
         host: process.env.DB_HOST || 'localhost',
         port: process.env.DB_PORT || 5432,
         dialect: 'postgres',
-        logging: process.env.NODE_ENV === 'development' ? console.log : false,
+        logging: false,
         pool: {
             max: 5,
             min: 0,
@@ -28,15 +28,13 @@ const sequelize = new Sequelize(
 const connectDB = async () => {
     try {
         await sequelize.authenticate();
-        console.log('PostgreSQL Connected Successfully');
-        console.log(`Database: ${process.env.DB_NAME || 'cookify_db'}`);
+        console.log('✅ PostgreSQL Connected');
 
         if (process.env.NODE_ENV === 'development') {
             await sequelize.sync({ alter: true });
-            console.log('Database synced (alter mode)');
+            console.log('✅ Database Synchronized');
         } else {
             await sequelize.sync();
-            console.log('Database synced');
         }
 
         return sequelize;
