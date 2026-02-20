@@ -29,11 +29,17 @@ api.interceptors.request.use(
 api.interceptors.response.use(
     (response) => response,
     (error) => {
-        if (error.response?.status === 401) {
+        // Only redirect to signin if we're not already trying to login
+        const isLoginAttempt = error.config?.url?.includes('/auth/login');
+
+        if (error.response?.status === 401 && !isLoginAttempt) {
             // Token expired or invalid
             localStorage.removeItem('cookify_token');
             localStorage.removeItem('cookify_user');
-            window.location.href = '/signin';
+            // Avoid redirecting if already on signin or signup
+            if (!window.location.pathname.includes('/signin') && !window.location.pathname.includes('/signup')) {
+                window.location.href = '/signin';
+            }
         }
         return Promise.reject(error);
     }

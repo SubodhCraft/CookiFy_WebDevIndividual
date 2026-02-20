@@ -1,6 +1,6 @@
-
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import authService from '../services/authService';
 import Input from '../components/common/Input';
 import Button from '../components/common/Button';
@@ -17,7 +17,6 @@ const SignupPage = () => {
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const [apiError, setApiError] = useState('');
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -41,11 +40,16 @@ const SignupPage = () => {
         e.preventDefault();
         if (!validateForm()) return;
         setIsLoading(true);
+        const loadingToast = toast.loading('Creating your chef profile...');
         try {
             const response = await authService.signup(formData);
-            if (response.success) navigate('/signin');
+            if (response.success) {
+                toast.success('Registration successful! Please sign in.', { id: loadingToast });
+                navigate('/signin');
+            }
         } catch (error) {
-            setApiError(error.response?.data?.message || 'Registration failed');
+            const message = error.response?.data?.message || 'Registration failed. Please try again.';
+            toast.error(message, { id: loadingToast });
         } finally {
             setIsLoading(false);
         }

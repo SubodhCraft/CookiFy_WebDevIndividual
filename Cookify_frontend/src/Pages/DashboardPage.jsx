@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import authService from '../services/authService';
 import recipeService from '../services/recipeService';
 
@@ -10,12 +11,9 @@ const DashboardPage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [user, setUser] = useState(null);
 
-    // Cloudinary Base URL for Icons (Using high-quality flat icons)
-    const iconBase = "https://res.cloudinary.com/dzm9y6vxt/image/upload/v1708332000/cookify_assets/";
-
     // Icon Mappings
     const icons = {
-        home: "https://cdn-icons-png.flaticon.com/512/1946/1946436.png", // Temporarily using high-end flat icons
+        home: "https://cdn-icons-png.flaticon.com/512/1946/1946436.png",
         search: "https://cdn-icons-png.flaticon.com/512/1170/1170666.png",
         bookmarks: "https://cdn-icons-png.flaticon.com/512/102/102279.png",
         profile: "https://cdn-icons-png.flaticon.com/512/1077/1077063.png",
@@ -41,6 +39,7 @@ const DashboardPage = () => {
                 setRecipes(response.data);
             }
         } catch (error) {
+            toast.error('Failed to sync recipe vault. Please try again.');
             console.error('Error fetching recipes:', error);
         } finally {
             setIsLoading(false);
@@ -49,15 +48,22 @@ const DashboardPage = () => {
 
     const handleLogout = () => {
         authService.clearAuthData();
+        toast.success('Signed out successfully. See you soon, Chef!');
         navigate('/');
+    };
+
+    const handleBookmark = (title) => {
+        toast.success(`"${title}" added to your bookmarks!`, {
+            icon: '🔖',
+        });
     };
 
     const TabButton = ({ id, label, icon }) => (
         <button
             onClick={() => setActiveTab(id)}
             className={`flex items-center gap-3 px-6 py-3 rounded-xl transition-all duration-300 ${activeTab === id
-                    ? 'bg-indigo-600 text-white shadow-[0_0_20px_rgba(79,70,229,0.4)]'
-                    : 'text-slate-400 hover:bg-white/5 hover:text-white group'
+                ? 'bg-indigo-600 text-white shadow-[0_0_20px_rgba(79,70,229,0.4)]'
+                : 'text-slate-400 hover:bg-white/5 hover:text-white group'
                 }`}
         >
             <img
@@ -168,7 +174,10 @@ const DashboardPage = () => {
                                                         </span>
                                                     ))}
                                                 </div>
-                                                <button className="w-12 h-12 rounded-2xl glass-card border-white/10 flex items-center justify-center hover:bg-indigo-600 hover:border-indigo-500 transition-all duration-500 shadow-xl group/btn">
+                                                <button
+                                                    onClick={() => handleBookmark(recipe.title)}
+                                                    className="w-12 h-12 rounded-2xl glass-card border-white/10 flex items-center justify-center hover:bg-indigo-600 hover:border-indigo-500 transition-all duration-500 shadow-xl group/btn"
+                                                >
                                                     <img src={icons.bookmarks} className="w-5 h-5 object-contain brightness-0 invert opacity-40 group-hover/btn:opacity-100" alt="save" />
                                                 </button>
                                             </div>

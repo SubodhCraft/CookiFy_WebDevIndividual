@@ -1,6 +1,6 @@
-
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import authService from '../services/authService';
 import Input from '../components/common/Input';
 import Button from '../components/common/Button';
@@ -11,13 +11,11 @@ const SigninPage = () => {
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const [apiError, setApiError] = useState('');
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
         if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
-        setApiError('');
     };
 
     const validateForm = () => {
@@ -31,17 +29,19 @@ const SigninPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setApiError('');
         if (!validateForm()) return;
         setIsLoading(true);
+        const loadingToast = toast.loading('Syncing your culinary vault...');
         try {
             const response = await authService.signin(formData);
             if (response.success) {
                 authService.setAuthData(response.data.token, response.data.user);
+                toast.success(`Welcome back, ${response.data.user.fullName}!`, { id: loadingToast });
                 navigate('/dashboard');
             }
         } catch (error) {
-            setApiError(error.response?.data?.message || 'Login failed');
+            const message = error.response?.data?.message || 'Login failed. Please check your credentials.';
+            toast.error(message, { id: loadingToast });
         } finally {
             setIsLoading(false);
         }
@@ -102,15 +102,6 @@ const SigninPage = () => {
                         <h2 className="text-4xl font-bold text-white tracking-tight">Sign In</h2>
                         <p className="text-slate-500">Access your personalized strategy vault.</p>
                     </div>
-
-                    {apiError && (
-                        <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm flex items-center gap-3">
-                            <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <circle cx="12" cy="12" r="10" /><path d="M12 8v4M12 16h.01" />
-                            </svg>
-                            {apiError}
-                        </div>
-                    )}
 
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <Input
