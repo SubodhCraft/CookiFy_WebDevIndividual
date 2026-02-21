@@ -38,6 +38,18 @@ const Recipe = sequelize.define('Recipe', {
     tags: {
         type: DataTypes.ARRAY(DataTypes.STRING),
         defaultValue: []
+    },
+    ingredients: {
+        type: DataTypes.ARRAY(DataTypes.TEXT),
+        defaultValue: []
+    },
+    instructions: {
+        type: DataTypes.TEXT,
+        allowNull: true
+    },
+    userId: {
+        type: DataTypes.UUID,
+        allowNull: true // Set to true for now to allow existing recipes without user
     }
 }, {
     timestamps: true

@@ -22,6 +22,29 @@ const recipeService = {
     getRecipeById: async (id) => {
         const response = await api.get(`/recipes/${id}`);
         return response.data;
+    },
+
+    /**
+     * Get recipes created by current user
+     * @returns {Promise} API response
+     */
+    getMyRecipes: async () => {
+        const response = await api.get('/recipes/my/all');
+        return response.data;
+    },
+
+    /**
+     * Create a new recipe
+     * @param {FormData} formData - Recipe data including image
+     * @returns {Promise} API response
+     */
+    createRecipe: async (formData) => {
+        const response = await api.post('/recipes', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        return response.data;
     }
 };
 

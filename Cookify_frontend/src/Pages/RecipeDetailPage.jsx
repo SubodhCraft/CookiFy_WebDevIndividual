@@ -47,8 +47,8 @@ const RecipeDetailPage = () => {
 
     if (isLoading) {
         return (
-            <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
-                <div className="w-16 h-16 border-t-4 border-indigo-500 rounded-full animate-spin" />
+            <div className="min-h-screen bg-[#fafaf9] flex items-center justify-center">
+                <div className="w-16 h-16 border-t-4 border-green-500 rounded-full animate-spin" />
             </div>
         );
     }
@@ -56,104 +56,133 @@ const RecipeDetailPage = () => {
     if (!recipe) return null;
 
     return (
-        <div className="min-h-screen bg-[#0a0a0f] text-slate-200 font-sans pb-20">
+        <div className="min-h-screen bg-[#fafaf9] text-gray-900 font-sans pb-20">
             {/* Header / Hero */}
-            <div className="relative h-[60vh] overflow-hidden">
+            <div className="relative h-[70vh] overflow-hidden">
                 <img
-                    src={recipe.image.includes('cloudinary') ? recipe.image.replace('/upload/', '/upload/c_fill,g_auto,w_1920,h_1080/') : recipe.image}
+                    src={recipe.image.includes('http') ?
+                        (recipe.image.includes('cloudinary') ? recipe.image.replace('/upload/', '/upload/c_fill,g_auto,w_2560,h_1440/') : recipe.image) :
+                        `http://localhost:5000${recipe.image}`}
                     alt={recipe.title}
-                    className="w-full h-full object-cover brightness-50"
+                    className="w-full h-full object-cover brightness-[0.85]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#fafaf9] via-[#fafaf9]/20 to-transparent" />
 
                 {/* Back Button */}
                 <button
                     onClick={() => navigate('/dashboard')}
-                    className="absolute top-10 left-10 p-4 rounded-2xl glass-card border-white/10 hover:bg-white/10 transition-all group z-20"
+                    className="absolute top-10 left-10 p-5 rounded-[24px] bg-white shadow-2xl border border-black/[0.03] hover:bg-green-50 transition-all group z-20"
                 >
-                    <img src={icons.back} className="w-6 h-6 invert opacity-60 group-hover:opacity-100 transition-opacity" alt="back" />
+                    <img src={icons.back} className="w-5 h-5 opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all" alt="back" />
                 </button>
 
-                <div className="absolute bottom-20 left-1/2 -translate-x-1/2 w-full max-w-7xl px-6 lg:px-12 space-y-6">
-                    <div className="inline-flex px-4 py-2 rounded-xl glass-card border-indigo-500/30 text-indigo-400 text-xs font-bold tracking-[0.2em] uppercase">
+                <div className="absolute bottom-20 left-0 w-full page-container space-y-8 animate-fade-up">
+                    <div className="inline-flex px-5 py-2.5 rounded-full bg-green-500 text-white text-[10px] font-black tracking-[0.2em] uppercase shadow-lg shadow-green-500/20">
                         {recipe.category}
                     </div>
-                    <h1 className="text-6xl md:text-8xl font-bold tracking-tighter text-white leading-none">
+                    <h1 className="text-7xl md:text-[120px] font-black tracking-tighter text-gray-900 leading-[0.85]">
                         {recipe.title}
                     </h1>
                 </div>
             </div>
 
             {/* Content Container */}
-            <div className="max-w-7xl mx-auto px-6 lg:px-12 -mt-10 relative z-10 grid lg:grid-cols-3 gap-12">
+            <div className="page-container -mt-10 relative z-10 grid lg:grid-cols-4 gap-16">
 
                 {/* Info Cards */}
-                <div className="lg:col-span-2 space-y-12">
-                    <div className="grid grid-cols-3 gap-6">
+                <div className="lg:col-span-3 space-y-16">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
                         {[
-                            { label: 'Prep Time', val: recipe.prepTime, icon: icons.time, color: 'text-indigo-400' },
-                            { label: 'Calories', val: `${recipe.calories} kcal`, icon: icons.fire, color: 'text-orange-400' },
-                            { label: 'Level', val: recipe.difficulty, icon: icons.level, color: 'text-emerald-400' }
+                            { label: 'Prep Time', val: recipe.prepTime, icon: icons.time, color: 'text-green-600', bg: 'bg-green-50' },
+                            { label: 'Calories', val: `${recipe.calories} kcal`, icon: icons.fire, color: 'text-orange-600', bg: 'bg-orange-50' },
+                            { label: 'Difficulty', val: recipe.difficulty, icon: icons.level, color: 'text-yellow-600', bg: 'bg-yellow-50' }
                         ].map((item, i) => (
-                            <div key={i} className="glass-card p-8 border-white/5 space-y-4">
-                                <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center">
-                                    <img src={item.icon} className={`w-6 h-6 object-contain ${item.color.includes('indigo') ? 'brightness-200' : ''}`} alt={item.label} />
+                            <div key={i} className={`p-10 rounded-[40px] border border-black/[0.03] space-y-6 shadow-sm hover:shadow-xl transition-all bg-white`}>
+                                <div className={`w-14 h-14 rounded-2xl ${item.bg} flex items-center justify-center`}>
+                                    <img src={item.icon} className={`w-6 h-6 object-contain`} alt={item.label} />
                                 </div>
-                                <div>
-                                    <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{item.label}</div>
-                                    <div className={`text-xl font-bold ${item.color}`}>{item.val}</div>
+                                <div className="space-y-1">
+                                    <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{item.label}</div>
+                                    <div className={`text-2xl font-black ${item.color}`}>{item.val}</div>
                                 </div>
                             </div>
                         ))}
                     </div>
 
-                    <div className="space-y-6">
-                        <h2 className="text-3xl font-bold tracking-tight">The Story</h2>
-                        <div className="w-12 h-1 bg-indigo-500 rounded-full" />
-                        <p className="text-xl text-slate-400 leading-relaxed font-light italic">
+                    <div className="space-y-8">
+                        <div className="flex items-center gap-4">
+                            <h2 className="text-4xl font-black tracking-tighter">The Narrative</h2>
+                            <div className="h-0.5 flex-grow bg-black/[0.05]" />
+                        </div>
+                        <p className="text-2xl text-gray-500 leading-relaxed font-medium italic max-w-5xl">
                             "{recipe.description}"
                         </p>
                     </div>
 
-                    {/* Placeholder for real instructions if we had them in model */}
-                    <div className="glass-card p-10 border-white/5 space-y-8">
-                        <h3 className="text-2xl font-bold">Preparation</h3>
-                        <div className="space-y-8">
-                            {[1, 2, 3].map(step => (
-                                <div key={step} className="flex gap-8 group">
-                                    <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-indigo-600/10 border border-indigo-500/20 flex items-center justify-center text-xl font-bold text-indigo-400 group-hover:bg-indigo-600 group-hover:text-white transition-all">
-                                        {step}
+                    {/* Ingredients Section */}
+                    <div className="space-y-8">
+                        <div className="flex items-center gap-4">
+                            <h2 className="text-4xl font-black tracking-tighter">Ingredients</h2>
+                            <div className="h-0.5 flex-grow bg-black/[0.05]" />
+                        </div>
+                        <div className="flex flex-wrap gap-4">
+                            {recipe.ingredients && recipe.ingredients.length > 0 ? (
+                                recipe.ingredients.map((ing, i) => (
+                                    <div key={i} className="px-8 py-5 rounded-[28px] bg-white border border-black/[0.03] shadow-sm flex items-center gap-4 group hover:border-green-500 transition-all">
+                                        <div className="w-2.5 h-2.5 rounded-full bg-green-500 group-hover:scale-150 transition-transform" />
+                                        <span className="text-lg font-bold text-gray-700">{ing}</span>
                                     </div>
-                                    <div className="space-y-2 pt-2">
-                                        <div className="text-lg font-bold text-white">Artisanal Step {step}</div>
-                                        <p className="text-slate-500 leading-relaxed">
-                                            Follow the professional techniques optimized for this gourmet dish. Ensure all ingredients are fresh and sourced locally for the best flavor profile.
-                                        </p>
+                                ))
+                            ) : (
+                                <p className="text-gray-400 font-medium">No specific ingredients listed.</p>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Instructions */}
+                    <div className="bg-white rounded-[56px] p-16 shadow-2xl shadow-black/[0.02] border border-black/[0.01] space-y-12">
+                        <h3 className="text-3xl font-black tracking-tighter uppercase">Preparation Method</h3>
+                        <div className="space-y-12">
+                            {recipe.instructions ? (
+                                recipe.instructions.split('\n').filter(step => step.trim() !== '').map((step, index) => (
+                                    <div key={index} className="flex gap-12 group">
+                                        <div className="flex-shrink-0 w-16 h-16 rounded-[24px] bg-green-500 flex items-center justify-center text-2xl font-black text-white shadow-xl shadow-green-500/20 transform group-hover:rotate-6 transition-transform">
+                                            {index + 1}
+                                        </div>
+                                        <div className="space-y-3 pt-2">
+                                            <p className="text-xl text-gray-600 leading-relaxed font-bold">
+                                                {step.replace(/^Step \d+:? /i, '')}
+                                            </p>
+                                        </div>
                                     </div>
+                                ))
+                            ) : (
+                                <div className="p-10 rounded-[32px] bg-gray-50 border border-dashed border-gray-200 text-center text-gray-400 font-bold">
+                                    The preparation method is currently a guarded secret.
                                 </div>
-                            ))}
+                            )}
                         </div>
                     </div>
                 </div>
 
                 {/* Sidebar Info */}
-                <div className="space-y-8">
-                    <div className="glass-card p-10 border-white/5 space-y-8 sticky top-32">
-                        <div className="flex items-center gap-6 pb-8 border-b border-white/5">
-                            <div className="w-16 h-16 rounded-2xl bg-indigo-600 flex items-center justify-center p-3 shadow-lg shadow-indigo-500/20">
+                <div className="space-y-10 lg:pt-16">
+                    <div className="bg-white rounded-[40px] p-10 shadow-2xl border border-black/[0.01] space-y-10 sticky top-32">
+                        <div className="flex items-center gap-6 pb-10 border-b border-black/[0.05]">
+                            <div className="w-16 h-16 rounded-2xl bg-orange-500 flex items-center justify-center p-4 shadow-lg shadow-orange-500/20">
                                 <img src={icons.chef} className="w-full h-full object-contain brightness-0 invert" alt="chef" />
                             </div>
                             <div>
-                                <div className="text-sm font-bold text-white">Cloudinary Kitchen</div>
-                                <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Verified Publisher</div>
+                                <div className="text-lg font-black text-gray-900">{recipe.User?.fullName || 'Master Chef'}</div>
+                                <div className="text-[10px] text-green-600 font-bold uppercase tracking-widest">Verified Creator</div>
                             </div>
                         </div>
 
                         <div className="space-y-6">
-                            <div className="text-sm font-bold uppercase tracking-widest text-slate-500">Expert Tags</div>
+                            <div className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">Culinary Tags</div>
                             <div className="flex flex-wrap gap-3">
                                 {recipe.tags?.map(tag => (
-                                    <span key={tag} className="px-4 py-2 rounded-xl bg-white/5 border border-white/5 text-sm font-medium text-slate-300">
+                                    <span key={tag} className="px-5 py-2.5 rounded-2xl bg-gray-50 border border-black/[0.02] text-xs font-bold text-gray-500 hover:bg-green-50 hover:text-green-600 transition-colors cursor-default">
                                         #{tag}
                                     </span>
                                 ))}
@@ -161,10 +190,10 @@ const RecipeDetailPage = () => {
                         </div>
 
                         <button
-                            onClick={() => toast.success('Recipe saved to your vault!')}
-                            className="w-full py-5 rounded-2xl bg-indigo-600 text-white font-bold text-lg shadow-xl shadow-indigo-500/20 hover:bg-indigo-500 hover:-translate-y-1 transition-all"
+                            onClick={() => toast.success('Recipe secured in your vault!')}
+                            className="w-full py-6 rounded-[24px] btn-brand text-white font-black text-lg shadow-2xl shadow-green-500/30 active:scale-95"
                         >
-                            Save to Bookmarks
+                            Save to Vault
                         </button>
                     </div>
                 </div>

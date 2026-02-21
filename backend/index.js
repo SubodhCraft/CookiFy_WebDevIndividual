@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const path = require('path');
 
 dotenv.config();
 
@@ -11,6 +12,12 @@ const routes = require('./routes');
 const seedRecipes = require('./seedData');
 
 const app = express();
+
+// EARLY LOGGER
+app.use((req, res, next) => {
+    console.log(`[EARLY LOG] ${req.method} ${req.url}`);
+    next();
+});
 
 const startServer = async () => {
     await connectDB();
@@ -41,6 +48,13 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Request logging middleware
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.url}`);
+    next();
+});
 
 app.get('/', (req, res) => {
     res.json({
@@ -57,6 +71,10 @@ app.get('/api/health', (req, res) => {
     });
 });
 
+// Debug test route
+app.get('/test-direct', (req, res) => res.json({ message: 'Backend is direct-reachable' }));
+
+// API Routes
 app.use('/api', routes);
 
 app.use((req, res) => {
