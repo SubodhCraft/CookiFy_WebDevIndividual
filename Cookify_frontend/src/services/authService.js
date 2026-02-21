@@ -86,6 +86,28 @@ const authService = {
     clearAuthData: () => {
         localStorage.removeItem('cookify_token');
         localStorage.removeItem('cookify_user');
+    },
+
+    /**
+     * Update user profile picture
+     * @param {File} file - Profile image file
+     * @returns {Promise} API response
+     */
+    updateProfilePicture: async (file) => {
+        const formData = new FormData();
+        formData.append('profilePicture', file);
+        const response = await api.post('/auth/update-profile-picture', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+
+        // Update local user data if successful
+        if (response.data.success) {
+            localStorage.setItem('cookify_user', JSON.stringify(response.data.data));
+        }
+
+        return response.data;
     }
 };
 

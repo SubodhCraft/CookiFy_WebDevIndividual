@@ -146,9 +146,46 @@ const logout = async (req, res) => {
     });
 };
 
+const updateProfilePicture = async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({
+                success: false,
+                message: 'Please upload an image'
+            });
+        }
+
+        const user = await User.findByPk(req.user.id);
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        const imagePath = `/uploads/profiles/${req.file.filename}`;
+        user.profilePicture = imagePath;
+        await user.save();
+
+        res.status(200).json({
+            success: true,
+            message: 'Profile picture updated!',
+            data: user.getPublicProfile()
+        });
+    } catch (error) {
+        console.error('Update Profile Picture Error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to update profile picture',
+            error: error.message
+        });
+    }
+};
+
 module.exports = {
     register,
     login,
     getMe,
-    logout
+    logout,
+    updateProfilePicture
 };

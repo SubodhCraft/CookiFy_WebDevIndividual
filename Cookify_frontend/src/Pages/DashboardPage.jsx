@@ -24,6 +24,9 @@ const DashboardPage = () => {
     const [bookmarkedRecipes, setBookmarkedRecipes] = useState([]);
     const [isBookmarksLoading, setIsBookmarksLoading] = useState(false);
 
+    // Profile States
+    const [isUploadingProfile, setIsUploadingProfile] = useState(false);
+
     // Icon Mappings
     const icons = {
         home: "https://cdn-icons-png.flaticon.com/512/1946/1946436.png",
@@ -134,6 +137,36 @@ const DashboardPage = () => {
         }
     };
 
+    const handleProfilePictureChange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // Basic validation
+        if (!file.type.startsWith('image/')) {
+            toast.error('Please upload an image file');
+            return;
+        }
+
+        if (file.size > 2 * 1024 * 1024) {
+            toast.error('Image size must be less than 2MB');
+            return;
+        }
+
+        setIsUploadingProfile(true);
+        try {
+            const response = await authService.updateProfilePicture(file);
+            if (response.success) {
+                toast.success('Profile picture updated!');
+                setUser(response.data);
+            }
+        } catch (error) {
+            console.error('Error updating profile picture:', error);
+            toast.error('Failed to update profile picture');
+        } finally {
+            setIsUploadingProfile(false);
+        }
+    };
+
     const TabButton = ({ id, label, icon }) => (
         <button
             onClick={() => setActiveTab(id)}
@@ -175,6 +208,16 @@ const DashboardPage = () => {
                         <div className="hidden sm:block text-right">
                             <div className="text-sm font-black text-gray-900 leading-none">{user?.fullName}</div>
                             <div className="text-[10px] text-green-600 font-black uppercase tracking-[0.2em] mt-1.5">Master Chef</div>
+                        </div>
+                        <div
+                            className="w-12 h-12 rounded-2xl bg-gray-100 overflow-hidden cursor-pointer border-2 border-white shadow-xl hover:scale-110 transition-transform"
+                            onClick={() => setActiveTab('profile')}
+                        >
+                            <img
+                                src={user?.profilePicture?.startsWith('http') ? user.profilePicture : `http://localhost:5000${user.profilePicture}`}
+                                className="w-full h-full object-cover"
+                                alt="profile"
+                            />
                         </div>
                         <button
                             onClick={handleLogout}
@@ -296,17 +339,28 @@ const DashboardPage = () => {
                 {activeTab === 'profile' && (
                     <div className="animate-fade-in w-full space-y-12">
                         <div className="glass-card bg-white p-16 flex flex-col items-center text-center space-y-8 border-none shadow-xl">
-                            <div className="relative group">
+                            <div className="relative group cursor-pointer" onClick={() => document.getElementById('profile-upload').click()}>
+                                <input
+                                    type="file"
+                                    id="profile-upload"
+                                    className="hidden"
+                                    accept="image/*"
+                                    onChange={handleProfilePictureChange}
+                                />
                                 <div className="absolute inset-0 bg-green-500/20 rounded-[40px] blur-2xl group-hover:bg-green-500/40 transition-all" />
                                 <div className="w-44 h-44 rounded-[40px] bg-green-500 p-1 flex items-center justify-center text-5xl relative z-10 overflow-hidden transform group-hover:scale-105 transition-transform duration-500">
-                                    <img
-                                        src={`https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&h=400&auto=format&fit=crop`}
-                                        className="w-full h-full object-cover"
-                                        alt="avatar"
-                                    />
+                                    {isUploadingProfile ? (
+                                        <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin" />
+                                    ) : (
+                                        <img
+                                            src={user?.profilePicture?.startsWith('http') ? user.profilePicture : `http://localhost:5000${user.profilePicture}`}
+                                            className="w-full h-full object-cover"
+                                            alt="avatar"
+                                        />
+                                    )}
                                 </div>
-                                <div className="absolute -bottom-2 -right-2 w-12 h-12 bg-orange-500 rounded-2xl border-4 border-white flex items-center justify-center text-white z-20 shadow-2xl">
-                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                                <div className="absolute -bottom-2 -right-2 w-12 h-12 bg-orange-500 rounded-2xl border-4 border-white flex items-center justify-center text-white z-20 shadow-2xl group-hover:scale-110 transition-transform">
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                                 </div>
                             </div>
 
