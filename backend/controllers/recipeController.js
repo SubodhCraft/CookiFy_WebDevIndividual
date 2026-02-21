@@ -1,8 +1,34 @@
-const { Recipe, User } = require('../models');
+const { Recipe, User, sequelize } = require('../models');
+const { Op, Sequelize } = require('sequelize');
 
 const getRecipes = async (req, res) => {
     try {
+        const { q } = req.query;
+        console.log(`[getRecipes] Fetching recipes. Search query: ${q || 'none'}`);
+
+        let where = {};
+
+        if (q) {
+            const searchKeyword = `%${q.toLowerCase()}%`;
+            where = {
+                [Op.or]: [
+                    { title: { [Op.iLike]: searchKeyword } },
+                    { description: { [Op.iLike]: searchKeyword } },
+                    { category: { [Op.iLike]: searchKeyword } },
+                    sequelize.where(
+                        sequelize.fn('array_to_string', sequelize.col('tags'), ','),
+                        { [Op.iLike]: searchKeyword }
+                    ),
+                    sequelize.where(
+                        sequelize.fn('array_to_string', sequelize.col('ingredients'), ','),
+                        { [Op.iLike]: searchKeyword }
+                    )
+                ]
+            };
+        }
+
         const recipes = await Recipe.findAll({
+            where,
             order: [['createdAt', 'DESC']],
             include: [{
                 model: User,
@@ -12,13 +38,15 @@ const getRecipes = async (req, res) => {
 
         res.json({
             success: true,
+            count: recipes.length,
             data: recipes
         });
     } catch (error) {
-        console.error('Error fetching recipes:', error);
+        console.error('❌ Error fetching recipes:', error);
         res.status(500).json({
             success: false,
-            message: 'Server Error'
+            message: 'Server Error',
+            error: error.message
         });
     }
 };

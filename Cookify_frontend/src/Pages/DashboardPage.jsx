@@ -14,6 +14,11 @@ const DashboardPage = () => {
     const [user, setUser] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+    // Search States
+    const [searchQuery, setSearchQuery] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
+    const [isSearching, setIsSearching] = useState(false);
+
     // Icon Mappings
     const icons = {
         home: "https://cdn-icons-png.flaticon.com/512/1946/1946436.png",
@@ -42,10 +47,41 @@ const DashboardPage = () => {
                 setRecipes(response.data);
             }
         } catch (error) {
-            toast.error('Failed to sync recipe vault. Please try again.');
+            const errorMsg = error.response?.data?.message || error.message || 'Failed to sync recipe vault.';
+            toast.error(errorMsg);
             console.error('Error fetching recipes:', error);
         } finally {
             setIsLoading(false);
+        }
+    };
+
+    // Real-time Search Logic
+    useEffect(() => {
+        const delayDebounceFn = setTimeout(() => {
+            if (activeTab === 'search') {
+                handleSearch(searchQuery);
+            }
+        }, 500);
+
+        return () => clearTimeout(delayDebounceFn);
+    }, [searchQuery, activeTab]);
+
+    const handleSearch = async (query) => {
+        if (!query.trim()) {
+            setSearchResults([]);
+            return;
+        }
+
+        setIsSearching(true);
+        try {
+            const response = await recipeService.getAllRecipes(query);
+            if (response.success) {
+                setSearchResults(response.data);
+            }
+        } catch (error) {
+            console.error('Search error:', error);
+        } finally {
+            setIsSearching(false);
         }
     };
 
@@ -252,13 +288,125 @@ const DashboardPage = () => {
                     </div>
                 )}
 
-                {(activeTab === 'search' || activeTab === 'bookmarks') && (
+                {activeTab === 'search' && (
+                    <div className="animate-fade-in space-y-16">
+                        <div className="flex flex-col items-center text-center space-y-8 max-w-4xl mx-auto">
+                            <div className="space-y-4">
+                                <h1 className="text-6xl font-black text-gray-900 tracking-tighter uppercase">Culinary Explorer</h1>
+                                <p className="text-xl text-gray-500 font-medium">Search for ingredients, categories, or recipe names across our global vault.</p>
+                            </div>
+
+                            <div className="w-full relative group">
+                                <div className="absolute -inset-1 bg-gradient-to-r from-green-500 to-emerald-500 rounded-[32px] blur-xl opacity-20 group-focus-within:opacity-40 transition-all duration-500" />
+                                <div className={`relative flex items-center bg-white border-2 ${searchQuery ? 'border-green-500' : 'border-black/[0.05]'} rounded-[32px] p-2 transition-all duration-500 shadow-2xl shadow-black/[0.02]`}>
+                                    <div className="w-16 h-16 flex items-center justify-center">
+                                        {isSearching ? (
+                                            <div className="w-6 h-6 border-2 border-green-500 border-t-transparent rounded-full animate-spin" />
+                                        ) : (
+                                            <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                            </svg>
+                                        )}
+                                    </div>
+                                    <input
+                                        type="text"
+                                        placeholder="Try 'Avocado', 'Italian', or 'Breakfast'..."
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        className="flex-grow bg-transparent border-none focus:ring-0 text-xl font-bold placeholder-gray-300 text-gray-800 px-2"
+                                    />
+                                    {searchQuery && (
+                                        <button
+                                            onClick={() => setSearchQuery('')}
+                                            className="w-12 h-12 rounded-2xl hover:bg-gray-100 flex items-center justify-center transition-colors group"
+                                        >
+                                            <svg className="w-5 h-5 text-gray-400 group-hover:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+                        {searchQuery.trim() === '' ? (
+                            <div className="py-20 text-center space-y-4 opacity-40">
+                                <div className="text-8xl">🔍</div>
+                                <div className="text-xl font-black uppercase tracking-widest text-gray-400">Ready for exploration</div>
+                            </div>
+                        ) : isSearching ? (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+                                {[1, 2, 3, 4].map(i => (
+                                    <div key={i} className="h-96 rounded-[48px] bg-white border border-black/[0.02] animate-pulse shadow-sm" />
+                                ))}
+                            </div>
+                        ) : searchResults.length > 0 ? (
+                            <div className="space-y-10">
+                                <div className="flex items-center gap-4">
+                                    <span className="text-[11px] font-black uppercase tracking-[0.3em] text-green-600">Results Found</span>
+                                    <div className="h-0.5 flex-grow bg-green-500/10" />
+                                    <span className="text-sm font-black text-gray-400 px-4 py-2 bg-gray-100 rounded-full">{searchResults.length} Match{searchResults.length !== 1 && 'es'}</span>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+                                    {searchResults.map((recipe) => (
+                                        <div
+                                            key={recipe.id}
+                                            onClick={() => navigate(`/recipe/${recipe.id}`)}
+                                            className="group bg-white rounded-[48px] overflow-hidden hover:shadow-2xl transition-all duration-700 cursor-pointer border border-black/[0.01]"
+                                        >
+                                            <div className="relative h-72 overflow-hidden">
+                                                <img
+                                                    src={recipe.image.startsWith('http') ? recipe.image : `http://localhost:5000${recipe.image}`}
+                                                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                                                    alt={recipe.title}
+                                                />
+                                                <div className="absolute top-6 left-6 px-6 py-3 rounded-2xl bg-white/90 backdrop-blur-xl text-[10px] font-black uppercase tracking-[0.2em] text-green-600 shadow-2xl">
+                                                    {recipe.category}
+                                                </div>
+                                            </div>
+                                            <div className="p-10 space-y-6">
+                                                <h3 className="text-2xl font-black text-gray-900 group-hover:text-green-600 transition-colors uppercase tracking-tighter leading-none">
+                                                    {recipe.title}
+                                                </h3>
+                                                <div className="flex items-center justify-between pt-4 border-t border-black/[0.03]">
+                                                    <div className="flex gap-4">
+                                                        <span className="text-xs font-black text-gray-400">{recipe.prepTime}</span>
+                                                        <span className="text-xs font-black text-gray-400">{recipe.calories} kcal</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="py-32 text-center space-y-8 bg-white rounded-[64px] border border-black/[0.02] shadow-2xl shadow-black/[0.01]">
+                                <div className="w-32 h-32 bg-orange-50 rounded-[48px] flex items-center justify-center text-6xl mx-auto shadow-inner">🍽️</div>
+                                <div className="space-y-4">
+                                    <h3 className="text-4xl font-black text-gray-900 tracking-tighter uppercase">Recipe Not Found</h3>
+                                    <p className="text-gray-500 text-xl font-medium max-w-lg mx-auto leading-relaxed">
+                                        We couldn't find any culinary matches for <span className="text-orange-500 font-black">"{searchQuery}"</span>.
+                                        Try searching for a different ingredient or category.
+                                    </p>
+                                </div>
+                                <button
+                                    onClick={() => setSearchQuery('')}
+                                    className="px-10 py-5 bg-gray-900 text-white rounded-3xl font-black uppercase tracking-widest text-sm hover:bg-orange-600 transition-all shadow-xl shadow-orange-500/10 active:scale-95"
+                                >
+                                    Clear Search
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {activeTab === 'bookmarks' && (
                     <div className="animate-fade-in text-center py-32 space-y-8">
                         <div className="w-24 h-24 bg-orange-500/10 rounded-3xl mx-auto flex items-center justify-center p-6 border border-orange-500/20">
-                            <img src={activeTab === 'search' ? icons.search : icons.bookmarks} className="w-full h-full object-contain" alt="icon" />
+                            <img src={icons.bookmarks} className="w-full h-full object-contain" alt="icon" />
                         </div>
                         <div className="space-y-2">
-                            <h2 className="text-3xl font-bold text-gray-900 tracking-tight">The {activeTab} Screen</h2>
+                            <h2 className="text-3xl font-bold text-gray-900 tracking-tight">The Bookmarks Screen</h2>
                             <p className="text-gray-500 max-w-md mx-auto font-medium">Coming soon! Experience the next level of culinary exploration in our vibrant food vault.</p>
                         </div>
                     </div>

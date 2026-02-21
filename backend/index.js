@@ -35,11 +35,13 @@ const allowedOrigins = [
 
 app.use(cors({
     origin: function (origin, callback) {
-        // allow requests with no origin (like mobile apps or curl requests)
-        if (!origin) return callback(null, true);
+        // Allow all origins in development or if origin is null (e.g. server-to-server)
+        if (!origin || process.env.NODE_ENV === 'development' || origin.includes('localhost') || origin.includes('127.0.0.1')) {
+            return callback(null, true);
+        }
+
         if (allowedOrigins.indexOf(origin) === -1) {
-            const msg = 'The CORS policy for this site does not ' +
-                'allow access from the specified Origin.';
+            const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
             return callback(new Error(msg), false);
         }
         return callback(null, true);

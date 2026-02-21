@@ -9,8 +9,8 @@ const recipeService = {
      * Get all recipes
      * @returns {Promise} API response
      */
-    getAllRecipes: async () => {
-        const response = await api.get('/recipes');
+    getAllRecipes: async (query = '') => {
+        const response = await api.get(`/recipes${query ? `?q=${query}` : ''}`);
         return response.data;
     },
 
