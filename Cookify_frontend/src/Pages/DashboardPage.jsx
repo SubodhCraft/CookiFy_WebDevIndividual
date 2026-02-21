@@ -133,7 +133,11 @@ const DashboardPage = () => {
                         ) : (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                                 {recipes.map((recipe) => (
-                                    <div key={recipe.id} className="group glass-card border-white/5 bg-white/[0.02] overflow-hidden hover:bg-white/[0.04] transition-all duration-700 hover:-translate-y-2">
+                                    <div
+                                        key={recipe.id}
+                                        onClick={() => navigate(`/recipe/${recipe.id}`)}
+                                        className="group glass-card border-white/5 bg-white/[0.02] overflow-hidden hover:bg-white/[0.04] transition-all duration-700 hover:-translate-y-2 cursor-pointer"
+                                    >
                                         <div className="relative h-72 overflow-hidden">
                                             <img
                                                 src={`${recipe.image.includes('cloudinary') ? recipe.image.replace('/upload/', '/upload/c_fill,g_auto,h_600,w_800/') : recipe.image}`}
@@ -175,7 +179,10 @@ const DashboardPage = () => {
                                                     ))}
                                                 </div>
                                                 <button
-                                                    onClick={() => handleBookmark(recipe.title)}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleBookmark(recipe.title);
+                                                    }}
                                                     className="w-12 h-12 rounded-2xl glass-card border-white/10 flex items-center justify-center hover:bg-indigo-600 hover:border-indigo-500 transition-all duration-500 shadow-xl group/btn"
                                                 >
                                                     <img src={icons.bookmarks} className="w-5 h-5 object-contain brightness-0 invert opacity-40 group-hover/btn:opacity-100" alt="save" />

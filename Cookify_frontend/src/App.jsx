@@ -4,6 +4,7 @@ import LandingPage from './Pages/LandingPage';
 import SignupPage from './Pages/SignupPage';
 import SigninPage from './Pages/SigninPage';
 import DashboardPage from './Pages/DashboardPage';
+import RecipeDetailPage from './Pages/RecipeDetailPage';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/signin" element={<SigninPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/recipe/:id" element={<RecipeDetailPage />} />
       </Routes>
     </Router>
   );
