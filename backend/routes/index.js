@@ -9,9 +9,11 @@ router.use((req, res, next) => {
 const authRoutes = require('./authRoutes');
 const landingRoutes = require('./landingRoutes');
 const recipeRoutes = require('./recipeRoutes');
+const bookmarkRoutes = require('./bookmarkRoutes');
 
 router.use('/auth', authRoutes);
 router.use('/landing', landingRoutes);
 router.use('/recipes', recipeRoutes);
+router.use('/bookmarks', bookmarkRoutes);
 
 module.exports = router;

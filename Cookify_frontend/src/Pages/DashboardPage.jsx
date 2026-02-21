@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import authService from '../services/authService';
 import recipeService from '../services/recipeService';
+import bookmarkService from '../services/bookmarkService';
 import RecipeCreateModal from '../components/recipe/RecipeCreateModal';
 import MyRecipes from '../components/recipe/MyRecipes';
 
@@ -18,6 +19,10 @@ const DashboardPage = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [isSearching, setIsSearching] = useState(false);
+
+    // Bookmark States
+    const [bookmarkedRecipes, setBookmarkedRecipes] = useState([]);
+    const [isBookmarksLoading, setIsBookmarksLoading] = useState(false);
 
     // Icon Mappings
     const icons = {
@@ -37,7 +42,27 @@ const DashboardPage = () => {
         }
         setUser(currentUser);
         fetchRecipes();
+        fetchBookmarks();
     }, [navigate]);
+
+    const fetchBookmarks = async () => {
+        setIsBookmarksLoading(true);
+        try {
+            const response = await bookmarkService.getMyBookmarks();
+            if (response.success) {
+                setBookmarkedRecipes(response.data);
+                console.log('Bookmarks synced:', response.data.length);
+            } else {
+                console.error('Failed to sync bookmarks:', response.message);
+            }
+        } catch (error) {
+            console.error('Error fetching bookmarks:', error);
+            const msg = error.response?.data?.message || error.message;
+            toast.error(`Could not load bookmarks: ${msg}`);
+        } finally {
+            setIsBookmarksLoading(false);
+        }
+    };
 
     const fetchRecipes = async () => {
         setIsLoading(true);
@@ -91,10 +116,22 @@ const DashboardPage = () => {
         navigate('/');
     };
 
-    const handleBookmark = (title) => {
-        toast.success(`"${title}" added to your bookmarks!`, {
-            icon: '🔖',
-        });
+    const handleBookmark = async (recipe) => {
+        try {
+            console.log('Toggling bookmark for:', recipe.title, recipe.id);
+            const response = await bookmarkService.toggleBookmark(recipe.id);
+            if (response.success) {
+                toast.success(response.message, {
+                    icon: response.isBookmarked ? '🔖' : '🗑️',
+                });
+                console.log('Bookmark response:', response);
+                // Refresh bookmarks list
+                fetchBookmarks();
+            }
+        } catch (error) {
+            toast.error('Failed to update bookmark');
+            console.error('Bookmark toggle error:', error);
+        }
     };
 
     const TabButton = ({ id, label, icon }) => (
@@ -126,10 +163,10 @@ const DashboardPage = () => {
                         <span className="text-2xl font-black tracking-tighter text-gray-900 uppercase">COOKIFY</span>
                     </div>
 
-                    <div className="hidden lg:flex items-center gap-1.5 bg-gray-100/50 p-2 rounded-2xl">
+                    <div className="flex items-center gap-1 bg-gray-100/50 p-1.5 rounded-2xl overflow-x-auto no-scrollbar max-w-[50%] md:max-w-none">
                         <TabButton id="home" label="Home" icon={icons.home} />
                         <TabButton id="search" label="Search" icon={icons.search} />
-                        <TabButton id="bookmarks" label="Bookmarks" icon={icons.bookmarks} />
+                        <TabButton id="bookmarks" label={`Bookmarks ${bookmarkedRecipes.length > 0 ? `(${bookmarkedRecipes.length})` : ''}`} icon={icons.bookmarks} />
                         <TabButton id="myRecipes" label="My Recipes" icon={icons.chef} />
                         <TabButton id="profile" label="Profile" icon={icons.profile} />
                     </div>
@@ -220,11 +257,21 @@ const DashboardPage = () => {
                                                 <button
                                                     onClick={(e) => {
                                                         e.stopPropagation();
-                                                        handleBookmark(recipe.title);
+                                                        handleBookmark(recipe);
                                                     }}
-                                                    className="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center hover:bg-orange-500 transition-all duration-500 group/btn"
+                                                    className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-500 group/btn ${bookmarkedRecipes.some(b => b.id === recipe.id)
+                                                        ? 'bg-orange-500 shadow-lg shadow-orange-500/20'
+                                                        : 'bg-orange-500/10 hover:bg-orange-500'
+                                                        }`}
                                                 >
-                                                    <img src={icons.bookmarks} className="w-4 h-4 object-contain group-hover:brightness-0 group-hover:invert" alt="save" />
+                                                    <img
+                                                        src={icons.bookmarks}
+                                                        className={`w-4 h-4 object-contain transition-all duration-500 ${bookmarkedRecipes.some(b => b.id === recipe.id)
+                                                            ? 'brightness-0 invert'
+                                                            : 'group-hover/btn:brightness-0 group-hover/btn:invert'
+                                                            }`}
+                                                        alt="save"
+                                                    />
                                                 </button>
                                             </div>
                                         </div>
@@ -373,6 +420,25 @@ const DashboardPage = () => {
                                                         <span className="text-xs font-black text-gray-400">{recipe.prepTime}</span>
                                                         <span className="text-xs font-black text-gray-400">{recipe.calories} kcal</span>
                                                     </div>
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleBookmark(recipe);
+                                                        }}
+                                                        className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-500 group/btn ${bookmarkedRecipes.some(b => b.id === recipe.id)
+                                                            ? 'bg-orange-500 shadow-lg shadow-orange-500/20'
+                                                            : 'bg-orange-500/10 hover:bg-orange-500'
+                                                            }`}
+                                                    >
+                                                        <img
+                                                            src={icons.bookmarks}
+                                                            className={`w-4 h-4 object-contain transition-all duration-500 ${bookmarkedRecipes.some(b => b.id === recipe.id)
+                                                                ? 'brightness-0 invert'
+                                                                : 'group-hover/btn:brightness-0 group-hover/btn:invert'
+                                                                }`}
+                                                            alt="save"
+                                                        />
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -401,14 +467,91 @@ const DashboardPage = () => {
                 )}
 
                 {activeTab === 'bookmarks' && (
-                    <div className="animate-fade-in text-center py-32 space-y-8">
-                        <div className="w-24 h-24 bg-orange-500/10 rounded-3xl mx-auto flex items-center justify-center p-6 border border-orange-500/20">
-                            <img src={icons.bookmarks} className="w-full h-full object-contain" alt="icon" />
+                    <div className="space-y-12 animate-fade-in">
+                        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-black/[0.05] pb-10">
+                            <div className="space-y-2">
+                                <h1 className="text-5xl font-black text-gray-900 tracking-tighter uppercase">Saved Treasures</h1>
+                                <p className="text-gray-500 font-medium text-lg">Your curated collection of culinary masterpieces.</p>
+                            </div>
                         </div>
-                        <div className="space-y-2">
-                            <h2 className="text-3xl font-bold text-gray-900 tracking-tight">The Bookmarks Screen</h2>
-                            <p className="text-gray-500 max-w-md mx-auto font-medium">Coming soon! Experience the next level of culinary exploration in our vibrant food vault.</p>
-                        </div>
+
+                        {isBookmarksLoading ? (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                                {[1, 2, 3, 4].map(i => (
+                                    <div key={i} className="h-[450px] rounded-3xl bg-gray-200 animate-pulse" />
+                                ))}
+                            </div>
+                        ) : bookmarkedRecipes.length > 0 ? (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+                                {bookmarkedRecipes.map((recipe) => (
+                                    <div
+                                        key={recipe.id}
+                                        onClick={() => navigate(`/recipe/${recipe.id}`)}
+                                        className="group glass-card bg-white overflow-hidden hover:shadow-2xl transition-all duration-700 hover:-translate-y-2 cursor-pointer border-none"
+                                    >
+                                        <div className="relative h-72 overflow-hidden">
+                                            <img
+                                                src={recipe.image.includes('http') ?
+                                                    (recipe.image.includes('cloudinary') ? recipe.image.replace('/upload/', '/upload/c_fill,g_auto,h_600,w_800/') : recipe.image) :
+                                                    `http://localhost:5000${recipe.image}`}
+                                                alt={recipe.title}
+                                                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                                            />
+                                            <div className="absolute top-6 right-6 px-4 py-2 rounded-xl bg-green-500 text-[11px] font-bold uppercase tracking-widest text-white shadow-lg">
+                                                {recipe.category}
+                                            </div>
+                                        </div>
+
+                                        <div className="p-8 space-y-5">
+                                            <div className="flex items-center gap-4 text-[10px] font-bold text-orange-500 uppercase tracking-widest">
+                                                <span>{recipe.prepTime}</span>
+                                                <div className="w-1 h-1 bg-gray-300 rounded-full" />
+                                                <span>{recipe.calories} kcal</span>
+                                            </div>
+
+                                            <h3 className="text-2xl font-bold text-gray-900 group-hover:text-green-600 transition-colors leading-tight">
+                                                {recipe.title}
+                                            </h3>
+
+                                            <div className="flex justify-between items-center pt-4 border-t border-gray-100">
+                                                <div className="flex flex-wrap gap-2">
+                                                    {recipe.tags?.slice(0, 2).map(tag => (
+                                                        <span key={tag} className="text-[10px] font-bold text-gray-400 bg-gray-100 px-3 py-1.5 rounded-lg uppercase tracking-tighter">
+                                                            {tag}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleBookmark(recipe);
+                                                    }}
+                                                    className="w-10 h-10 rounded-xl bg-orange-500 flex items-center justify-center hover:bg-orange-600 transition-all duration-500 group/btn"
+                                                >
+                                                    <img src={icons.bookmarks} className="w-4 h-4 object-contain brightness-0 invert" alt="save" />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="py-32 text-center space-y-8 bg-white rounded-[64px] border border-black/[0.02] shadow-2xl shadow-black/[0.01]">
+                                <div className="w-32 h-32 bg-gray-50 rounded-[48px] flex items-center justify-center text-6xl mx-auto shadow-inner">🔖</div>
+                                <div className="space-y-4">
+                                    <h3 className="text-4xl font-black text-gray-900 tracking-tighter uppercase">No Saved Treasures</h3>
+                                    <p className="text-gray-500 text-xl font-medium max-w-lg mx-auto leading-relaxed">
+                                        Your culinary vault is empty. Start exploring and save recipes you love to find them here later!
+                                    </p>
+                                </div>
+                                <button
+                                    onClick={() => setActiveTab('home')}
+                                    className="px-10 py-5 bg-green-500 text-white rounded-3xl font-black uppercase tracking-widest text-sm hover:bg-green-600 transition-all shadow-xl shadow-green-500/10 active:scale-95"
+                                >
+                                    Explore Recipes
+                                </button>
+                            </div>
+                        )}
                     </div>
                 )}
             </main>

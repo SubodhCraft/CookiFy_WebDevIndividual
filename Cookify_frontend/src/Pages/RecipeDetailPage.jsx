@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import recipeService from '../services/recipeService';
+import bookmarkService from '../services/bookmarkService';
 import authService from '../services/authService';
 
 const RecipeDetailPage = () => {
@@ -9,6 +10,8 @@ const RecipeDetailPage = () => {
     const navigate = useNavigate();
     const [recipe, setRecipe] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [isBookmarked, setIsBookmarked] = useState(false);
+    const [isToggling, setIsToggling] = useState(false);
 
     const icons = {
         back: "https://cdn-icons-png.flaticon.com/512/271/271220.png",
@@ -24,7 +27,37 @@ const RecipeDetailPage = () => {
             return;
         }
         fetchRecipeDetails();
+        checkBookmarkStatus();
     }, [id]);
+
+    const checkBookmarkStatus = async () => {
+        try {
+            const response = await bookmarkService.checkBookmark(id);
+            if (response.success) {
+                setIsBookmarked(response.isBookmarked);
+            }
+        } catch (error) {
+            console.error('Error checking bookmark status:', error);
+        }
+    };
+
+    const handleToggleBookmark = async () => {
+        setIsToggling(true);
+        try {
+            const response = await bookmarkService.toggleBookmark(id);
+            if (response.success) {
+                setIsBookmarked(response.isBookmarked);
+                toast.success(response.message, {
+                    icon: response.isBookmarked ? '🔖' : '🗑️',
+                });
+            }
+        } catch (error) {
+            toast.error('Failed to update bookmark');
+            console.error('Bookmark toggle error:', error);
+        } finally {
+            setIsToggling(false);
+        }
+    };
 
     const fetchRecipeDetails = async () => {
         setIsLoading(true);
@@ -190,10 +223,14 @@ const RecipeDetailPage = () => {
                         </div>
 
                         <button
-                            onClick={() => toast.success('Recipe secured in your vault!')}
-                            className="w-full py-6 rounded-[24px] btn-brand text-white font-black text-lg shadow-2xl shadow-green-500/30 active:scale-95"
+                            onClick={handleToggleBookmark}
+                            disabled={isToggling}
+                            className={`w-full py-6 rounded-[24px] font-black text-lg shadow-2xl transition-all active:scale-95 disabled:opacity-50 ${isBookmarked
+                                ? 'bg-orange-500 text-white shadow-orange-500/30'
+                                : 'bg-green-500 text-white shadow-green-500/30'
+                                }`}
                         >
-                            Save to Vault
+                            {isToggling ? 'Syncing...' : isBookmarked ? 'Remove from Vault' : 'Save to Vault'}
                         </button>
                     </div>
                 </div>
