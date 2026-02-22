@@ -45,6 +45,21 @@ const recipeService = {
             }
         });
         return response.data;
+    },
+
+    /**
+     * Update an existing recipe
+     * @param {string} id - Recipe ID
+     * @param {FormData} formData - Updated recipe data including image
+     * @returns {Promise} API response
+     */
+    updateRecipe: async (id, formData) => {
+        const response = await api.put(`/recipes/${id}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        return response.data;
     }
 };
 

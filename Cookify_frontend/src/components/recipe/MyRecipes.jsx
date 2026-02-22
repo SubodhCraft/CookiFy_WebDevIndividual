@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import recipeService from '../../services/recipeService';
 
-const MyRecipes = () => {
+const MyRecipes = ({ onEdit }) => {
     const navigate = useNavigate();
     const [recipes, setRecipes] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -53,7 +53,7 @@ const MyRecipes = () => {
                 <div
                     key={recipe.id}
                     onClick={() => navigate(`/recipe/${recipe.id}`)}
-                    className="group bg-white rounded-[40px] overflow-hidden hover:shadow-2xl transition-all duration-500 cursor-pointer border border-black/[0.03]"
+                    className="group bg-white rounded-[40px] overflow-hidden hover:shadow-2xl transition-all duration-500 cursor-pointer border border-black/[0.03] flex flex-col"
                 >
                     <div className="relative h-64 overflow-hidden">
                         <img
@@ -64,16 +64,30 @@ const MyRecipes = () => {
                         <div className="absolute top-6 left-6 px-4 py-2 rounded-xl bg-white/90 backdrop-blur-md text-[10px] font-black uppercase tracking-widest text-green-600 shadow-sm">
                             {recipe.category}
                         </div>
+
+                        {/* Edit Button Overlay */}
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    onEdit(recipe);
+                                }}
+                                className="px-6 py-3 bg-white text-gray-900 rounded-[20px] font-black text-xs uppercase tracking-widest flex items-center gap-3 hover:scale-110 transition-transform shadow-2xl"
+                            >
+                                <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                                Edit Masterpiece
+                            </button>
+                        </div>
                     </div>
-                    <div className="p-8 space-y-4">
-                        <h3 className="text-xl font-bold text-gray-900 line-clamp-1 group-hover:text-green-600 transition-colors uppercase tracking-tight">
+                    <div className="p-8 space-y-4 flex-grow flex flex-col justify-between">
+                        <h3 className="text-xl font-bold text-gray-900 line-clamp-2 group-hover:text-green-600 transition-colors uppercase tracking-tight">
                             {recipe.title}
                         </h3>
-                        <div className="flex items-center gap-6">
+                        <div className="flex items-center gap-6 pt-4 border-t border-black/[0.03]">
                             <div className="flex items-center gap-1.5 text-gray-400">
                                 <span className="text-sm font-bold">{recipe.prepTime}</span>
                             </div>
-                            <div className="flex items-center gap-1.5 text-gray-400">
+                            <div className="flex items-center gap-1.5 text-orange-500/60">
                                 <span className="text-sm font-bold">{recipe.calories} kcal</span>
                             </div>
                         </div>

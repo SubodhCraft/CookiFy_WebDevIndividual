@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import recipeService from '../../services/recipeService';
 import Input from '../common/Input';
 import Button from '../common/Button';
 
-const RecipeCreateModal = ({ isOpen, onClose, onSuccess }) => {
+const RecipeCreateModal = ({ isOpen, onClose, onSuccess, editRecipe = null }) => {
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -20,6 +20,40 @@ const RecipeCreateModal = ({ isOpen, onClose, onSuccess }) => {
     const [image, setImage] = useState(null);
     const [preview, setPreview] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        if (editRecipe && isOpen) {
+            setFormData({
+                title: editRecipe.title || '',
+                description: editRecipe.description || '',
+                prepTime: editRecipe.prepTime || '',
+                calories: editRecipe.calories || '',
+                difficulty: editRecipe.difficulty || 'Medium',
+                category: editRecipe.category || '',
+                tags: Array.isArray(editRecipe.tags) ? editRecipe.tags.join(', ') : (editRecipe.tags || ''),
+                instructions: editRecipe.instructions || ''
+            });
+            setIngredients(Array.isArray(editRecipe.ingredients) ? editRecipe.ingredients : (editRecipe.ingredients ? editRecipe.ingredients.split(', ') : ['']));
+            if (editRecipe.image) {
+                setPreview(editRecipe.image.startsWith('http') ? editRecipe.image : `http://localhost:5000${editRecipe.image}`);
+            }
+        } else if (!editRecipe && isOpen) {
+            // Reset for new recipe
+            setFormData({
+                title: '',
+                description: '',
+                prepTime: '',
+                calories: '',
+                difficulty: 'Medium',
+                category: '',
+                tags: '',
+                instructions: ''
+            });
+            setIngredients(['']);
+            setImage(null);
+            setPreview(null);
+        }
+    }, [editRecipe, isOpen]);
 
     if (!isOpen) return null;
 
@@ -52,7 +86,7 @@ const RecipeCreateModal = ({ isOpen, onClose, onSuccess }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!image) {
+        if (!image && !editRecipe) {
             toast.error('Please upload a recipe image');
             return;
         }
@@ -70,34 +104,25 @@ const RecipeCreateModal = ({ isOpen, onClose, onSuccess }) => {
 
         // Custom append for arrays
         data.append('ingredients', filteredIngredients.join(', '));
-        data.append('image', image);
+        if (image) {
+            data.append('image', image);
+        }
 
         setIsLoading(true);
-        const loadingToast = toast.loading('Publishing your masterpiece...');
+        const loadingToast = toast.loading(editRecipe ? 'Refining your masterpiece...' : 'Publishing your masterpiece...');
 
         try {
-            const response = await recipeService.createRecipe(data);
+            const response = editRecipe
+                ? await recipeService.updateRecipe(editRecipe.id, data)
+                : await recipeService.createRecipe(data);
+
             if (response.success) {
-                toast.success('Recipe shared with the world!', { id: loadingToast });
+                toast.success(editRecipe ? 'Recipe refined and synced!' : 'Recipe shared with the world!', { id: loadingToast });
                 onSuccess();
                 onClose();
-                // Reset form
-                setFormData({
-                    title: '',
-                    description: '',
-                    prepTime: '',
-                    calories: '',
-                    difficulty: 'Medium',
-                    category: '',
-                    tags: '',
-                    instructions: ''
-                });
-                setIngredients(['']);
-                setImage(null);
-                setPreview(null);
             }
         } catch (error) {
-            toast.error(error.message || 'Failed to share recipe', { id: loadingToast });
+            toast.error(error.response?.data?.message || error.message || 'Failed to process recipe', { id: loadingToast });
         } finally {
             setIsLoading(false);
         }
@@ -111,7 +136,16 @@ const RecipeCreateModal = ({ isOpen, onClose, onSuccess }) => {
                 {/* Header */}
                 <div className="p-10 border-b border-gray-100 flex justify-between items-center bg-white sticky top-0 z-10">
                     <div className="space-y-1">
-                        <h2 className="text-4xl font-black text-gray-900 tracking-tighter uppercase">Craft Your Recipe</h2>
+                        <div className="flex items-center gap-3">
+                            <h2 className="text-4xl font-black text-gray-900 tracking-tighter uppercase">
+                                {editRecipe ? 'Refine Your Recipe' : 'Craft Your Recipe'}
+                            </h2>
+                            {editRecipe && (
+                                <span className="px-4 py-1.5 bg-orange-500 text-white text-[10px] font-black uppercase tracking-widest rounded-lg shadow-lg shadow-orange-500/20 animate-pulse">
+                                    Edit Mode
+                                </span>
+                            )}
+                        </div>
                         <p className="text-gray-500 font-medium">Detailed precision for better cooking results.</p>
                     </div>
                     <button onClick={onClose} className="w-14 h-14 rounded-2xl hover:bg-gray-100 flex items-center justify-center transition-colors group">
@@ -247,7 +281,9 @@ const RecipeCreateModal = ({ isOpen, onClose, onSuccess }) => {
                         Discard Draft
                     </Button>
                     <Button type="submit" onClick={handleSubmit} disabled={isLoading} className="flex-grow py-6 btn-brand text-lg shadow-2xl shadow-green-500/30 font-black uppercase tracking-widest">
-                        {isLoading ? 'Encrypting & Sharing...' : 'Publish to Global Vault'}
+                        {isLoading
+                            ? (editRecipe ? 'Syncing Changes...' : 'Encrypting & Sharing...')
+                            : (editRecipe ? 'Update & Sync Masterpiece' : 'Publish to Global Vault')}
                     </Button>
                 </div>
             </div>

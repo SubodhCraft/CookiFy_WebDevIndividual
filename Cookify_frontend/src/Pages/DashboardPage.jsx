@@ -14,6 +14,12 @@ const DashboardPage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [user, setUser] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editingRecipe, setEditingRecipe] = useState(null);
+
+    const handleEdit = (recipe) => {
+        setEditingRecipe(recipe);
+        setIsModalOpen(true);
+    };
 
     // Search States
     const [searchQuery, setSearchQuery] = useState('');
@@ -257,73 +263,169 @@ const DashboardPage = () => {
                                 ))}
                             </div>
                         ) : (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
-                                {recipes.map((recipe) => (
-                                    <div
-                                        key={recipe.id}
-                                        onClick={() => navigate(`/recipe/${recipe.id}`)}
-                                        className="group glass-card bg-white overflow-hidden hover:shadow-2xl transition-all duration-700 hover:-translate-y-2 cursor-pointer border-none"
-                                    >
-                                        <div className="relative h-72 overflow-hidden">
-                                            <img
-                                                src={recipe.image.includes('http') ?
-                                                    (recipe.image.includes('cloudinary') ? recipe.image.replace('/upload/', '/upload/c_fill,g_auto,h_600,w_800/') : recipe.image) :
-                                                    `http://localhost:5000${recipe.image}`}
-                                                alt={recipe.title}
-                                                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                                            />
-                                            <div className="absolute top-6 right-6 px-4 py-2 rounded-xl bg-green-500 text-[11px] font-bold uppercase tracking-widest text-white shadow-lg">
-                                                {recipe.category}
-                                            </div>
+                            <div className="space-y-24">
+                                { /* System Recipes Section */}
+                                <div className="space-y-10">
+                                    <div className="flex items-center gap-6">
+                                        <div className="flex flex-col">
+                                            <span className="text-green-600 font-black text-[10px] uppercase tracking-[0.3em] mb-1">Cookify Originals</span>
+                                            <h2 className="text-4xl font-black text-gray-900 tracking-tighter uppercase">Executive Selections</h2>
                                         </div>
-
-                                        <div className="p-8 space-y-5">
-                                            <div className="flex items-center gap-4 text-[10px] font-bold text-orange-500 uppercase tracking-widest">
-                                                <span>{recipe.prepTime}</span>
-                                                <div className="w-1 h-1 bg-gray-300 rounded-full" />
-                                                <span>{recipe.calories} kcal</span>
-                                                <div className="w-1 h-1 bg-gray-300 rounded-full" />
-                                                <span className={
-                                                    recipe.difficulty === 'Easy' ? 'text-green-500' :
-                                                        recipe.difficulty === 'Medium' ? 'text-yellow-500' : 'text-red-500'
-                                                }>{recipe.difficulty}</span>
-                                            </div>
-
-                                            <h3 className="text-2xl font-bold text-gray-900 group-hover:text-green-600 transition-colors leading-tight">
-                                                {recipe.title}
-                                            </h3>
-
-                                            <div className="flex justify-between items-center pt-4 border-t border-gray-100">
-                                                <div className="flex flex-wrap gap-2">
-                                                    {recipe.tags?.slice(0, 2).map(tag => (
-                                                        <span key={tag} className="text-[10px] font-bold text-gray-400 bg-gray-100 px-3 py-1.5 rounded-lg uppercase tracking-tighter">
-                                                            {tag}
-                                                        </span>
-                                                    ))}
-                                                </div>
-                                                <button
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        handleBookmark(recipe);
-                                                    }}
-                                                    className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-500 group/btn ${bookmarkedRecipes.some(b => b.id === recipe.id)
-                                                        ? 'bg-orange-500 shadow-lg shadow-orange-500/20'
-                                                        : 'bg-orange-500/10 hover:bg-orange-500'
-                                                        }`}
-                                                >
-                                                    <img
-                                                        src={icons.bookmarks}
-                                                        className={`w-4 h-4 object-contain transition-all duration-500 ${bookmarkedRecipes.some(b => b.id === recipe.id)
-                                                            ? 'brightness-0 invert'
-                                                            : 'group-hover/btn:brightness-0 group-hover/btn:invert'
-                                                            }`}
-                                                        alt="save"
-                                                    />
-                                                </button>
-                                            </div>
-                                        </div>
+                                        <div className="h-[1px] flex-grow bg-black/[0.05]" />
                                     </div>
-                                ))}
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+                                        {recipes.filter(r => !r.userId).map((recipe) => (
+                                            <div
+                                                key={recipe.id}
+                                                onClick={() => navigate(`/recipe/${recipe.id}`)}
+                                                className="group glass-card bg-white overflow-hidden hover:shadow-2xl transition-all duration-700 hover:-translate-y-2 cursor-pointer border-none"
+                                            >
+                                                <div className="relative h-72 overflow-hidden">
+                                                    <img
+                                                        src={recipe.image.includes('http') ?
+                                                            (recipe.image.includes('cloudinary') ? recipe.image.replace('/upload/', '/upload/c_fill,g_auto,h_600,w_800/') : recipe.image) :
+                                                            `http://localhost:5000${recipe.image}`}
+                                                        alt={recipe.title}
+                                                        className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                                                    />
+                                                    <div className="absolute top-6 right-6 px-4 py-2 rounded-xl bg-green-500 text-[11px] font-bold uppercase tracking-widest text-white shadow-lg">
+                                                        {recipe.category}
+                                                    </div>
+                                                </div>
+
+                                                <div className="p-8 space-y-5">
+                                                    <div className="flex items-center gap-4 text-[10px] font-bold text-orange-500 uppercase tracking-widest">
+                                                        <span>{recipe.prepTime}</span>
+                                                        <div className="w-1 h-1 bg-gray-300 rounded-full" />
+                                                        <span>{recipe.calories} kcal</span>
+                                                        <div className="w-1 h-1 bg-gray-300 rounded-full" />
+                                                        <span className={
+                                                            recipe.difficulty === 'Easy' ? 'text-green-500' :
+                                                                recipe.difficulty === 'Medium' ? 'text-yellow-500' : 'text-red-500'
+                                                        }>{recipe.difficulty}</span>
+                                                    </div>
+
+                                                    <h3 className="text-2xl font-bold text-gray-900 group-hover:text-green-600 transition-colors leading-tight">
+                                                        {recipe.title}
+                                                    </h3>
+
+                                                    <div className="flex justify-between items-center pt-4 border-t border-gray-100">
+                                                        <div className="flex flex-wrap gap-2">
+                                                            {recipe.tags?.slice(0, 2).map(tag => (
+                                                                <span key={tag} className="text-[10px] font-bold text-gray-400 bg-gray-100 px-3 py-1.5 rounded-lg uppercase tracking-tighter">
+                                                                    {tag}
+                                                                </span>
+                                                            ))}
+                                                        </div>
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                handleBookmark(recipe);
+                                                            }}
+                                                            className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-500 group/btn ${bookmarkedRecipes.some(b => b.id === recipe.id)
+                                                                ? 'bg-orange-500 shadow-lg shadow-orange-500/20'
+                                                                : 'bg-orange-500/10 hover:bg-orange-500'
+                                                                }`}
+                                                        >
+                                                            <img
+                                                                src={icons.bookmarks}
+                                                                className={`w-4 h-4 object-contain transition-all duration-500 ${bookmarkedRecipes.some(b => b.id === recipe.id)
+                                                                    ? 'brightness-0 invert'
+                                                                    : 'group-hover/btn:brightness-0 group-hover/btn:invert'
+                                                                    }`}
+                                                                alt="save"
+                                                            />
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                { /* User Recipes Section */}
+                                <div className="space-y-10">
+                                    <div className="flex items-center gap-6">
+                                        <div className="flex flex-col">
+                                            <span className="text-orange-600 font-black text-[10px] uppercase tracking-[0.3em] mb-1">Member Submissions</span>
+                                            <h2 className="text-4xl font-black text-gray-900 tracking-tighter uppercase">Community Discoveries</h2>
+                                        </div>
+                                        <div className="h-[1px] flex-grow bg-black/[0.05]" />
+                                    </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+                                        {recipes.filter(r => r.userId).map((recipe) => (
+                                            <div
+                                                key={recipe.id}
+                                                onClick={() => navigate(`/recipe/${recipe.id}`)}
+                                                className="group glass-card bg-white overflow-hidden hover:shadow-2xl transition-all duration-700 hover:-translate-y-2 cursor-pointer border-none"
+                                            >
+                                                <div className="relative h-72 overflow-hidden">
+                                                    <img
+                                                        src={recipe.image.includes('http') ?
+                                                            (recipe.image.includes('cloudinary') ? recipe.image.replace('/upload/', '/upload/c_fill,g_auto,h_600,w_800/') : recipe.image) :
+                                                            `http://localhost:5000${recipe.image}`}
+                                                        alt={recipe.title}
+                                                        className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                                                    />
+                                                    <div className="absolute top-6 right-6 px-4 py-2 rounded-xl bg-green-500 text-[11px] font-bold uppercase tracking-widest text-white shadow-lg">
+                                                        {recipe.category}
+                                                    </div>
+                                                </div>
+
+                                                <div className="p-8 space-y-5">
+                                                    <div className="flex items-center gap-4 text-[10px] font-bold text-orange-500 uppercase tracking-widest">
+                                                        <span>{recipe.prepTime}</span>
+                                                        <div className="w-1 h-1 bg-gray-300 rounded-full" />
+                                                        <span>{recipe.calories} kcal</span>
+                                                        <div className="w-1 h-1 bg-gray-300 rounded-full" />
+                                                        <span className={
+                                                            recipe.difficulty === 'Easy' ? 'text-green-500' :
+                                                                recipe.difficulty === 'Medium' ? 'text-yellow-500' : 'text-red-500'
+                                                        }>{recipe.difficulty}</span>
+                                                    </div>
+
+                                                    <h3 className="text-2xl font-bold text-gray-900 group-hover:text-green-600 transition-colors leading-tight">
+                                                        {recipe.title}
+                                                    </h3>
+
+                                                    <div className="flex justify-between items-center pt-4 border-t border-gray-100">
+                                                        <div className="flex flex-wrap gap-2">
+                                                            {recipe.tags?.slice(0, 2).map(tag => (
+                                                                <span key={tag} className="text-[10px] font-bold text-gray-400 bg-gray-100 px-3 py-1.5 rounded-lg uppercase tracking-tighter">
+                                                                    {tag}
+                                                                </span>
+                                                            ))}
+                                                        </div>
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                handleBookmark(recipe);
+                                                            }}
+                                                            className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-500 group/btn ${bookmarkedRecipes.some(b => b.id === recipe.id)
+                                                                ? 'bg-orange-500 shadow-lg shadow-orange-500/20'
+                                                                : 'bg-orange-500/10 hover:bg-orange-500'
+                                                                }`}
+                                                        >
+                                                            <img
+                                                                src={icons.bookmarks}
+                                                                className={`w-4 h-4 object-contain transition-all duration-500 ${bookmarkedRecipes.some(b => b.id === recipe.id)
+                                                                    ? 'brightness-0 invert'
+                                                                    : 'group-hover/btn:brightness-0 group-hover/btn:invert'
+                                                                    }`}
+                                                                alt="save"
+                                                            />
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    {recipes.filter(r => r.userId).length === 0 && (
+                                        <div className="py-20 text-center border-2 border-dashed border-black/[0.05] rounded-[48px]">
+                                            <p className="text-gray-400 font-bold italic text-lg text-center">No community discoveries yet. Be the first to share!</p>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         )}
                     </div>
@@ -336,7 +438,7 @@ const DashboardPage = () => {
                                 <p className="text-gray-500 font-medium text-lg">Recipes shared by you that the world can now taste.</p>
                             </div>
                         </div>
-                        <MyRecipes refreshKey={isModalOpen} />
+                        <MyRecipes refreshKey={isModalOpen} onEdit={handleEdit} />
                     </div>
                 )}
 
@@ -638,7 +740,11 @@ const DashboardPage = () => {
 
             <RecipeCreateModal
                 isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
+                editRecipe={editingRecipe}
+                onClose={() => {
+                    setIsModalOpen(false);
+                    setEditingRecipe(null);
+                }}
                 onSuccess={() => {
                     fetchRecipes();
                     if (activeTab === 'myRecipes') {

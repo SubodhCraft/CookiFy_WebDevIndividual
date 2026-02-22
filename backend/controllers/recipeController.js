@@ -138,9 +138,62 @@ const createRecipe = async (req, res) => {
     }
 };
 
+const updateRecipe = async (req, res) => {
+    try {
+        let recipe = await Recipe.findByPk(req.params.id);
+
+        if (!recipe) {
+            return res.status(404).json({
+                success: false,
+                message: 'Recipe not found'
+            });
+        }
+
+        // Make sure user is recipe owner
+        if (recipe.userId !== req.user.id) {
+            return res.status(401).json({
+                success: false,
+                message: 'User not authorized to update this recipe'
+            });
+        }
+
+        const { title, description, prepTime, calories, difficulty, category, tags, ingredients, instructions } = req.body;
+
+        const updateData = {
+            title,
+            description,
+            prepTime,
+            calories: calories ? parseInt(calories) : recipe.calories,
+            difficulty,
+            category,
+            tags: typeof tags === 'string' ? tags.split(',').map(tag => tag.trim()) : tags,
+            ingredients: typeof ingredients === 'string' ? ingredients.split(',').map(ing => ing.trim()) : ingredients,
+            instructions
+        };
+
+        if (req.file) {
+            updateData.image = `/uploads/recipes/${req.file.filename}`;
+        }
+
+        recipe = await recipe.update(updateData);
+
+        res.json({
+            success: true,
+            data: recipe
+        });
+    } catch (error) {
+        console.error('Error updating recipe:', error);
+        res.status(500).json({
+            success: false,
+            message: error.message || 'Server Error'
+        });
+    }
+};
+
 module.exports = {
     getRecipes,
     getRecipeById,
     getUserRecipes,
-    createRecipe
+    createRecipe,
+    updateRecipe
 };
