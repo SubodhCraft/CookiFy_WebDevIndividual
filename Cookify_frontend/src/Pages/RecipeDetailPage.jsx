@@ -89,109 +89,109 @@ const RecipeDetailPage = () => {
     if (!recipe) return null;
 
     return (
-        <div className="min-h-screen bg-[#fafaf9] text-gray-900 font-sans pb-20">
+        <div className="min-h-screen bg-[#fafaf9] text-gray-900 font-sans pb-32">
             {/* Header / Hero */}
-            <div className="relative h-[70vh] overflow-hidden">
+            <div className="relative h-[80vh] overflow-hidden">
                 <img
                     src={recipe.image.includes('http') ?
                         (recipe.image.includes('cloudinary') ? recipe.image.replace('/upload/', '/upload/c_fill,g_auto,w_2560,h_1440/') : recipe.image) :
                         `http://localhost:5000${recipe.image}`}
                     alt={recipe.title}
-                    className="w-full h-full object-cover brightness-[0.85]"
+                    className="w-full h-full object-cover brightness-[0.8] transition-transform duration-[2s] hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#fafaf9] via-[#fafaf9]/20 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#fafaf9] via-[#fafaf9]/40 to-transparent" />
 
                 {/* Back Button */}
                 <button
                     onClick={() => navigate('/dashboard')}
-                    className="absolute top-10 left-10 p-5 rounded-[24px] bg-white shadow-2xl border border-black/[0.03] hover:bg-green-50 transition-all group z-20"
+                    className="absolute top-12 left-12 p-6 rounded-[32px] bg-white/90 backdrop-blur-xl shadow-2xl border border-black/[0.03] hover:bg-green-500 hover:scale-110 transition-all group z-20"
                 >
-                    <img src={icons.back} className="w-5 h-5 opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all" alt="back" />
+                    <img src={icons.back} className="w-6 h-6 opacity-60 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert transition-all" alt="back" />
                 </button>
 
-                <div className="absolute bottom-20 left-0 w-full page-container space-y-8 animate-fade-up">
-                    <div className="inline-flex px-5 py-2.5 rounded-full bg-green-500 text-white text-[10px] font-black tracking-[0.2em] uppercase shadow-lg shadow-green-500/20">
+                <div className="absolute bottom-24 left-0 w-full page-container space-y-10 animate-fade-up">
+                    <div className="inline-flex px-6 py-3 rounded-full bg-green-500 text-white text-[11px] font-black tracking-[0.3em] uppercase shadow-2xl shadow-green-500/30">
                         {recipe.category}
                     </div>
-                    <h1 className="text-7xl md:text-[120px] font-black tracking-tighter text-gray-900 leading-[0.85]">
+                    <h1 className="text-8xl md:text-[140px] font-black tracking-tighter text-gray-900 leading-[0.8] max-w-6xl">
                         {recipe.title}
                     </h1>
                 </div>
             </div>
 
             {/* Content Container */}
-            <div className="page-container -mt-10 relative z-10 grid lg:grid-cols-4 gap-16">
+            <div className="page-container -mt-16 relative z-10 grid lg:grid-cols-4 gap-20">
 
                 {/* Info Cards */}
-                <div className="lg:col-span-3 space-y-16">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div className="lg:col-span-3 space-y-24">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
                         {[
-                            { label: 'Prep Time', val: recipe.prepTime, icon: icons.time, color: 'text-green-600', bg: 'bg-green-50' },
-                            { label: 'Calories', val: `${recipe.calories} kcal`, icon: icons.fire, color: 'text-orange-600', bg: 'bg-orange-50' },
-                            { label: 'Difficulty', val: recipe.difficulty, icon: icons.level, color: 'text-yellow-600', bg: 'bg-yellow-50' }
+                            { label: 'Preparation', val: recipe.prepTime, icon: icons.time, color: 'text-green-600', bg: 'bg-green-500/10' },
+                            { label: 'Energy Content', val: `${recipe.calories} kcal`, icon: icons.fire, color: 'text-orange-600', bg: 'bg-orange-500/10' },
+                            { label: 'Skill Required', val: recipe.difficulty, icon: icons.level, color: 'text-yellow-600', bg: 'bg-yellow-500/10' }
                         ].map((item, i) => (
-                            <div key={i} className={`p-10 rounded-[40px] border border-black/[0.03] space-y-6 shadow-sm hover:shadow-xl transition-all bg-white`}>
-                                <div className={`w-14 h-14 rounded-2xl ${item.bg} flex items-center justify-center`}>
-                                    <img src={item.icon} className={`w-6 h-6 object-contain`} alt={item.label} />
+                            <div key={i} className={`p-12 rounded-[56px] border border-black/[0.02] space-y-8 shadow-2xl shadow-black/[0.01] hover:shadow-black/[0.05] transition-all bg-white group cursor-default`}>
+                                <div className={`w-16 h-16 rounded-[24px] ${item.bg} flex items-center justify-center group-hover:rotate-12 transition-transform duration-500`}>
+                                    <img src={item.icon} className={`w-7 h-7 object-contain`} alt={item.label} />
                                 </div>
-                                <div className="space-y-1">
-                                    <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{item.label}</div>
-                                    <div className={`text-2xl font-black ${item.color}`}>{item.val}</div>
+                                <div className="space-y-2">
+                                    <div className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">{item.label}</div>
+                                    <div className={`text-3xl font-black ${item.color} tracking-tight`}>{item.val}</div>
                                 </div>
                             </div>
                         ))}
                     </div>
 
-                    <div className="space-y-8">
-                        <div className="flex items-center gap-4">
-                            <h2 className="text-4xl font-black tracking-tighter">The Narrative</h2>
-                            <div className="h-0.5 flex-grow bg-black/[0.05]" />
+                    <div className="space-y-10">
+                        <div className="flex items-center gap-6">
+                            <h2 className="text-5xl font-black tracking-tighter uppercase italic text-gray-300">The Story</h2>
+                            <div className="h-[1px] flex-grow bg-black/[0.05]" />
                         </div>
-                        <p className="text-2xl text-gray-500 leading-relaxed font-medium italic max-w-5xl">
+                        <p className="text-3xl text-gray-600 leading-[1.6] font-medium italic max-w-6xl">
                             "{recipe.description}"
                         </p>
                     </div>
 
                     {/* Ingredients Section */}
-                    <div className="space-y-8">
-                        <div className="flex items-center gap-4">
-                            <h2 className="text-4xl font-black tracking-tighter">Ingredients</h2>
-                            <div className="h-0.5 flex-grow bg-black/[0.05]" />
+                    <div className="space-y-12">
+                        <div className="flex items-center gap-6">
+                            <h2 className="text-5xl font-black tracking-tighter uppercase italic text-gray-300">Elements</h2>
+                            <div className="h-[1px] flex-grow bg-black/[0.05]" />
                         </div>
-                        <div className="flex flex-wrap gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {recipe.ingredients && recipe.ingredients.length > 0 ? (
                                 recipe.ingredients.map((ing, i) => (
-                                    <div key={i} className="px-8 py-5 rounded-[28px] bg-white border border-black/[0.03] shadow-sm flex items-center gap-4 group hover:border-green-500 transition-all">
-                                        <div className="w-2.5 h-2.5 rounded-full bg-green-500 group-hover:scale-150 transition-transform" />
-                                        <span className="text-lg font-bold text-gray-700">{ing}</span>
+                                    <div key={i} className="px-10 py-7 rounded-[32px] bg-white border border-black/[0.02] shadow-sm flex items-center gap-6 group hover:border-green-500 transition-all">
+                                        <div className="w-3 h-3 rounded-full bg-green-500 group-hover:scale-[2] transition-transform duration-500" />
+                                        <span className="text-xl font-bold text-gray-800 tracking-tight">{ing}</span>
                                     </div>
                                 ))
                             ) : (
-                                <p className="text-gray-400 font-medium">No specific ingredients listed.</p>
+                                <p className="text-gray-400 font-bold text-xl italic">No elements listed.</p>
                             )}
                         </div>
                     </div>
 
                     {/* Instructions */}
-                    <div className="bg-white rounded-[56px] p-16 shadow-2xl shadow-black/[0.02] border border-black/[0.01] space-y-12">
-                        <h3 className="text-3xl font-black tracking-tighter uppercase">Preparation Method</h3>
-                        <div className="space-y-12">
+                    <div className="bg-white rounded-[72px] p-20 shadow-2xl shadow-black/[0.02] border border-black/[0.01] space-y-16">
+                        <h3 className="text-4xl font-black tracking-tighter uppercase italic text-gray-400">Mastery Steps</h3>
+                        <div className="space-y-16">
                             {recipe.instructions ? (
                                 recipe.instructions.split('\n').filter(step => step.trim() !== '').map((step, index) => (
-                                    <div key={index} className="flex gap-12 group">
-                                        <div className="flex-shrink-0 w-16 h-16 rounded-[24px] bg-green-500 flex items-center justify-center text-2xl font-black text-white shadow-xl shadow-green-500/20 transform group-hover:rotate-6 transition-transform">
-                                            {index + 1}
+                                    <div key={index} className="flex gap-16 group">
+                                        <div className="flex-shrink-0 w-20 h-20 rounded-[32px] bg-green-500 flex items-center justify-center text-3xl font-black text-white shadow-2xl shadow-green-500/40 transition-all group-hover:rotate-[12deg] group-hover:scale-110">
+                                            {(index + 1).toString().padStart(2, '0')}
                                         </div>
-                                        <div className="space-y-3 pt-2">
-                                            <p className="text-xl text-gray-600 leading-relaxed font-bold">
+                                        <div className="space-y-4 pt-4">
+                                            <p className="text-2xl text-gray-800 leading-[1.5] font-bold tracking-tight">
                                                 {step.replace(/^Step \d+:? /i, '')}
                                             </p>
                                         </div>
                                     </div>
                                 ))
                             ) : (
-                                <div className="p-10 rounded-[32px] bg-gray-50 border border-dashed border-gray-200 text-center text-gray-400 font-bold">
-                                    The preparation method is currently a guarded secret.
+                                <div className="p-16 rounded-[48px] bg-gray-50 border border-dashed border-gray-200 text-center text-gray-400 font-black uppercase tracking-widest">
+                                    Confidential Preparation Method
                                 </div>
                             )}
                         </div>
@@ -199,23 +199,23 @@ const RecipeDetailPage = () => {
                 </div>
 
                 {/* Sidebar Info */}
-                <div className="space-y-10 lg:pt-16">
-                    <div className="bg-white rounded-[40px] p-10 shadow-2xl border border-black/[0.01] space-y-10 sticky top-32">
-                        <div className="flex items-center gap-6 pb-10 border-b border-black/[0.05]">
-                            <div className="w-16 h-16 rounded-2xl bg-orange-500 flex items-center justify-center p-4 shadow-lg shadow-orange-500/20">
+                <div className="space-y-12 lg:pt-24">
+                    <div className="bg-white rounded-[56px] p-12 shadow-[0_32px_80px_rgba(0,0,0,0.04)] border border-black/[0.01] space-y-12 sticky top-36">
+                        <div className="flex items-center gap-8 pb-12 border-b border-black/[0.05]">
+                            <div className="w-20 h-20 rounded-[28px] bg-orange-500 flex items-center justify-center p-5 shadow-2xl shadow-orange-500/30">
                                 <img src={icons.chef} className="w-full h-full object-contain brightness-0 invert" alt="chef" />
                             </div>
-                            <div>
-                                <div className="text-lg font-black text-gray-900">{recipe.User?.fullName || 'Master Chef'}</div>
-                                <div className="text-[10px] text-green-600 font-bold uppercase tracking-widest">Verified Creator</div>
+                            <div className="space-y-1">
+                                <div className="text-2xl font-black text-gray-900 tracking-tight leading-none">{recipe.User?.fullName || 'Master Chef'}</div>
+                                <div className="text-[11px] text-green-600 font-black uppercase tracking-[0.2em]">Verified Creator</div>
                             </div>
                         </div>
 
-                        <div className="space-y-6">
-                            <div className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">Culinary Tags</div>
-                            <div className="flex flex-wrap gap-3">
+                        <div className="space-y-8">
+                            <div className="text-[11px] font-black uppercase tracking-[0.3em] text-gray-400 italic">Culinary Taxonomy</div>
+                            <div className="flex flex-wrap gap-4">
                                 {recipe.tags?.map(tag => (
-                                    <span key={tag} className="px-5 py-2.5 rounded-2xl bg-gray-50 border border-black/[0.02] text-xs font-bold text-gray-500 hover:bg-green-50 hover:text-green-600 transition-colors cursor-default">
+                                    <span key={tag} className="px-6 py-3 rounded-2xl bg-gray-50 border border-black/[0.02] text-[11px] font-black uppercase tracking-widest text-gray-500 hover:bg-green-500 hover:text-white transition-all cursor-default">
                                         #{tag}
                                     </span>
                                 ))}
@@ -225,12 +225,12 @@ const RecipeDetailPage = () => {
                         <button
                             onClick={handleToggleBookmark}
                             disabled={isToggling}
-                            className={`w-full py-6 rounded-[24px] font-black text-lg shadow-2xl transition-all active:scale-95 disabled:opacity-50 ${isBookmarked
-                                ? 'bg-orange-500 text-white shadow-orange-500/30'
-                                : 'bg-green-500 text-white shadow-green-500/30'
+                            className={`w-full py-7 rounded-[32px] font-black text-xl shadow-2xl transition-all active:scale-95 disabled:opacity-50 ring-8 ring-transparent hover:ring-black/[0.02] ${isBookmarked
+                                ? 'bg-orange-500 text-white shadow-orange-500/40'
+                                : 'bg-green-500 text-white shadow-green-500/40'
                                 }`}
                         >
-                            {isToggling ? 'Syncing...' : isBookmarked ? 'Remove from Vault' : 'Save to Vault'}
+                            {isToggling ? 'Syncing...' : isBookmarked ? 'Remove from Vault' : 'Secure to Vault'}
                         </button>
                     </div>
                 </div>

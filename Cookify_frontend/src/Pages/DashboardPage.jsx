@@ -170,17 +170,19 @@ const DashboardPage = () => {
     const TabButton = ({ id, label, icon }) => (
         <button
             onClick={() => setActiveTab(id)}
-            className={`flex items-center gap-3 px-6 py-3 rounded-xl transition-all duration-300 ${activeTab === id
-                ? 'bg-green-500 text-white shadow-lg shadow-green-500/20'
-                : 'text-gray-400 hover:bg-gray-100'
+            className={`flex items-center gap-3 px-5 py-3 rounded-xl transition-all duration-500 group ${activeTab === id
+                ? 'bg-green-500 text-white shadow-2xl shadow-green-500/30 -translate-y-0.5'
+                : 'text-gray-400 hover:bg-gray-100/80 hover:text-gray-900'
                 }`}
         >
             <img
                 src={icon}
                 alt={label}
-                className={`w-5 h-5 object-contain transition-all ${activeTab === id ? 'brightness-0 invert' : 'opacity-60'}`}
+                className={`w-4 h-4 object-contain transition-all duration-500 ${activeTab === id ? 'brightness-0 invert scale-110' : 'opacity-40 group-hover:opacity-100 group-hover:scale-110'}`}
             />
-            <span className="font-bold tracking-tight text-sm">{label}</span>
+            <span className={`text-[10px] font-black uppercase tracking-[0.2em] transition-all ${activeTab === id ? 'opacity-100' : 'opacity-60 group-hover:opacity-100'}`}>
+                {label}
+            </span>
         </button>
     );
 
@@ -327,14 +329,14 @@ const DashboardPage = () => {
                     </div>
                 )}
                 {activeTab === 'myRecipes' && (
-                    <div className="space-y-12 animate-fade-in">
+                    <div className="space-y-12 animate-fade-in relative">
                         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-black/[0.05] pb-10">
                             <div className="space-y-2">
                                 <h1 className="text-5xl font-black text-gray-900 tracking-tighter uppercase">My Culinary Legacy</h1>
                                 <p className="text-gray-500 font-medium text-lg">Recipes shared by you that the world can now taste.</p>
                             </div>
                         </div>
-                        <MyRecipes />
+                        <MyRecipes refreshKey={isModalOpen} />
                     </div>
                 )}
 
@@ -614,23 +616,25 @@ const DashboardPage = () => {
                 )}
             </main>
 
-            {/* Floating Action Button - Bottom Right */}
-            <div className="fixed bottom-12 right-12 z-[90] group">
-                <div className="absolute -inset-4 bg-green-500/20 rounded-[32px] blur-2xl group-hover:bg-green-500/40 transition-all duration-500 opacity-0 group-hover:opacity-100" />
-                <button
-                    onClick={() => setIsModalOpen(true)}
-                    className="relative w-20 h-20 bg-green-500 rounded-[28px] shadow-2xl shadow-green-500/40 flex items-center justify-center group-hover:-translate-y-2 transition-all duration-500 active:scale-95"
-                >
-                    <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 4v16m8-8H4" />
-                    </svg>
+            {/* Conditional Floating Action Button - Only for My Recipes */}
+            {activeTab === 'myRecipes' && (
+                <div className="fixed bottom-12 right-12 z-[90] group animate-fade-in">
+                    <div className="absolute -inset-4 bg-green-500/20 rounded-[32px] blur-2xl group-hover:bg-green-500/40 transition-all duration-500 opacity-0 group-hover:opacity-100" />
+                    <button
+                        onClick={() => setIsModalOpen(true)}
+                        className="relative w-20 h-20 bg-green-500 rounded-[28px] shadow-2xl shadow-green-500/40 flex items-center justify-center group-hover:-translate-y-2 transition-all duration-500 active:scale-95"
+                    >
+                        <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 4v16m8-8H4" />
+                        </svg>
 
-                    {/* Tooltip */}
-                    <div className="absolute right-full mr-6 px-6 py-3 bg-gray-900 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-xl whitespace-nowrap opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all pointer-events-none shadow-2xl">
-                        Share New Recipe
-                    </div>
-                </button>
-            </div>
+                        {/* Tooltip */}
+                        <div className="absolute right-full mr-6 px-6 py-3 bg-gray-900 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-xl whitespace-nowrap opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all pointer-events-none shadow-2xl">
+                            Share New Recipe
+                        </div>
+                    </button>
+                </div>
+            )}
 
             <RecipeCreateModal
                 isOpen={isModalOpen}
