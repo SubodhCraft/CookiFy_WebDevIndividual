@@ -79,7 +79,7 @@ const SigninPage = () => {
                         <div className="flex -space-x-3">
                             {[1, 2, 3, 4].map(i => (
                                 <div key={i} className="w-12 h-12 rounded-full border-4 border-white bg-gray-100 flex items-center justify-center overflow-hidden shadow-sm">
-                                    <img src={`https://res.cloudinary.com/demo/image/upload/w_100,h_100,c_face,g_face/v1/samples/people/smiling-man.jpg`} alt="user" />
+                                    <img src={`https://images.unsplash.com/photo-${i === 1 ? '1535713875002-d1d0cf377fde' : i === 2 ? '1599566150163-29194dcaad36' : i === 3 ? '1527980965255-d3b416303d12' : '1438761681033-6461ffad8d80'}?q=80&w=100&h=100&auto=format&fit=crop`} alt="user" />
                                 </div>
                             ))}
                         </div>

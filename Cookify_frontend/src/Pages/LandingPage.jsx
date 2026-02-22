@@ -98,7 +98,7 @@ const LandingPage = () => {
                     <div className="relative group hidden lg:block">
                         <div className="relative glass-card border-none overflow-hidden p-4 bg-white shadow-2xl">
                             <img
-                                src="https://res.cloudinary.com/demo/image/upload/v1/samples/food/fish-vegetables.jpg"
+                                src="https://images.unsplash.com/photo-1547592166-23ac45744acd?q=80&w=1200&h=800&auto=format&fit=crop"
                                 className="rounded-2xl w-full h-[700px] object-cover"
                                 alt="Chef work"
                             />

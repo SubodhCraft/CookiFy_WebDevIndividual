@@ -34,26 +34,26 @@ const getLandingPageData = async (req, res) => {
                     quote: "CookiFy has completely transformed how I approach cooking. The quality of recipes and attention to detail is unmatched.",
                     author: "Alexandra Chen",
                     role: "Culinary Director, The Modern Kitchen",
-                    image: "https://res.cloudinary.com/demo/image/upload/v1/samples/people/smiling-man.jpg"
+                    image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&h=200&auto=format&fit=crop"
                 },
                 {
                     quote: "As a professional chef, I'm impressed by the depth and authenticity of recipes. This is the gold standard for culinary platforms.",
                     author: "Marcus Williams",
                     role: "Executive Chef, Eleven Madison Park",
-                    image: "https://res.cloudinary.com/demo/image/upload/v1/samples/people/boy-snow-hoodie.jpg"
+                    image: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=200&h=200&auto=format&fit=crop"
                 },
                 {
                     quote: "The personalized recommendations have helped me discover cuisines I never knew I'd love. Absolutely brilliant platform.",
                     author: "Sarah Mitchell",
                     role: "Food Writer, Bon Appétit",
-                    image: "https://res.cloudinary.com/demo/image/upload/v1/samples/people/kitchen-bar.jpg"
+                    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&h=200&auto=format&fit=crop"
                 }
             ],
             categories: [
-                { name: 'Artisanal', image: 'https://res.cloudinary.com/demo/image/upload/v1/samples/food/fish-vegetables.jpg', count: '2,400+ recipes' },
-                { name: 'Patisserie', image: 'https://res.cloudinary.com/demo/image/upload/v1/samples/food/dessert.jpg', count: '3,100+ recipes' },
-                { name: 'Gourmet', image: 'https://res.cloudinary.com/demo/image/upload/v1/samples/food/spices.jpg', count: '1,800+ recipes' },
-                { name: 'Molecular', image: 'https://res.cloudinary.com/demo/image/upload/v1/samples/food/pot-mussels.jpg', count: '2,200+ recipes' }
+                { name: 'Artisanal', image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=600&h=800&auto=format&fit=crop', count: '2,400+ recipes' },
+                { name: 'Patisserie', image: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?q=80&w=600&h=800&auto=format&fit=crop', count: '3,100+ recipes' },
+                { name: 'Gourmet', image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=80&w=600&h=800&auto=format&fit=crop', count: '1,800+ recipes' },
+                { name: 'Molecular', image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=600&h=800&auto=format&fit=crop', count: '2,200+ recipes' }
             ],
             heroContent: {
                 title: 'Where Culinary Excellence Meets Home',

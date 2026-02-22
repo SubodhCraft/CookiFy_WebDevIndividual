@@ -214,7 +214,9 @@ const DashboardPage = () => {
                             onClick={() => setActiveTab('profile')}
                         >
                             <img
-                                src={user?.profilePicture?.startsWith('http') ? user.profilePicture : `http://localhost:5000${user.profilePicture}`}
+                                src={user?.profilePicture ?
+                                    (user.profilePicture.startsWith('http') ? user.profilePicture : `http://localhost:5000${user.profilePicture}`) :
+                                    icons.profile}
                                 className="w-full h-full object-cover"
                                 alt="profile"
                             />
@@ -353,7 +355,9 @@ const DashboardPage = () => {
                                         <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin" />
                                     ) : (
                                         <img
-                                            src={user?.profilePicture?.startsWith('http') ? user.profilePicture : `http://localhost:5000${user.profilePicture}`}
+                                            src={user?.profilePicture ?
+                                                (user.profilePicture.startsWith('http') ? user.profilePicture : `http://localhost:5000${user.profilePicture}`) :
+                                                icons.profile}
                                             className="w-full h-full object-cover"
                                             alt="avatar"
                                         />
