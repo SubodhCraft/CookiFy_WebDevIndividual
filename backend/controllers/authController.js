@@ -194,7 +194,8 @@ const forgotPassword = async (req, res) => {
 
         const user = await User.findOne({ where: { email } });
 
-        // Always return success to prevent email enumeration attacks
+        // For security, do not reveal if a user exists or not, 
+        // BUT we need to handle the case where we actually attempt to send an email.
         if (!user) {
             return res.status(200).json({
                 success: true,
@@ -210,40 +211,47 @@ const forgotPassword = async (req, res) => {
         user.passwordResetToken = hashedToken;
         user.passwordResetExpires = expires;
 
-        // Bypass validation hooks when saving reset token
+        // Save token without triggering password hashing/validation hooks
         await user.save({ validate: false });
 
         const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
         const resetUrl = `${frontendUrl}/reset-password?token=${rawToken}`;
 
         // Check if email credentials are configured
-        const emailConfigured = process.env.EMAIL_USER && process.env.EMAIL_PASS;
-        const isDev = process.env.NODE_ENV !== 'production';
+        const emailUser = process.env.EMAIL_USER;
+        const emailPass = process.env.EMAIL_PASS;
+        const emailConfigured = emailUser && emailPass;
 
         if (emailConfigured) {
-            // Send the actual email
-            await sendPasswordResetEmail(user.email, resetUrl, user.fullName || user.username);
-            console.log(`✅ Password reset email sent to: ${user.email}`);
+            try {
+                // Send the actual email
+                await sendPasswordResetEmail(user.email, resetUrl, user.fullName || user.username);
+
+                return res.status(200).json({
+                    success: true,
+                    message: 'A password reset link has been sent to your actual email address.'
+                });
+            } catch (emailError) {
+                console.error('❌ Failed to send email via Nodemailer:', emailError.message);
+                return res.status(500).json({
+                    success: false,
+                    message: 'Email delivery failed. Please check backend logs or try again later.'
+                });
+            }
         } else {
-            // No email credentials — log link to console for development use
-            console.log('\n⚠️  EMAIL not configured. Reset link (dev mode only):');
-            console.log(`🔗 ${resetUrl}\n`);
-            console.log('👉 Add EMAIL_USER and EMAIL_PASS to your backend .env to enable real emails.\n');
+            // Critical fallback for the user: specifically tell them what is missing in the console
+            console.log('\n--- EMAIL SERVICE CONFIGURATION MISSING ---');
+            if (!emailUser) console.log('❌ process.env.EMAIL_USER is undefined');
+            if (!emailPass) console.log('❌ process.env.EMAIL_PASS is undefined');
+            console.log('🔗 Link produced anyway (Dev mode):', resetUrl);
+            console.log('-------------------------------------------\n');
+
+            return res.status(200).json({
+                success: true,
+                message: 'Email configuration missing on server. Link logged to console.',
+                devResetLink: process.env.NODE_ENV === 'development' ? resetUrl : undefined
+            });
         }
-
-        const responseData = {
-            success: true,
-            message: emailConfigured
-                ? 'If an account with that email exists, a reset link has been sent.'
-                : 'Email service not configured. Reset link has been logged to the server console.'
-        };
-
-        // In development, expose the reset link directly in the response for easy testing
-        if (isDev && !emailConfigured) {
-            responseData.devResetLink = resetUrl;
-        }
-
-        res.status(200).json(responseData);
     } catch (error) {
         console.error('Forgot Password Error:', error);
         res.status(500).json({
