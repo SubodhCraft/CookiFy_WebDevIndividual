@@ -116,7 +116,7 @@ const SigninPage = () => {
                         <div className="space-y-2 group">
                             <div className="flex justify-between ml-1">
                                 <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 group-focus-within:text-green-600 transition-colors">Password</label>
-                                <button type="button" className="text-[10px] font-black uppercase tracking-widest text-green-600 hover:text-green-700 transition-colors">Forgot?</button>
+                                <Link to="/forgot-password" className="text-[10px] font-black uppercase tracking-widest text-green-600 hover:text-green-700 transition-colors">Forgot?</Link>
                             </div>
                             <div className="relative">
                                 <input
