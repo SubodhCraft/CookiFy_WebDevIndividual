@@ -12,8 +12,8 @@ const seedRecipes = async () => {
         const recipes = [
             {
                 title: 'Supreme Avocado Tartine',
-                description: 'A masterpiece of texture and taste featuring Cloudinary-optimized visual fidelity. Creamy avocado on sourdough with micro-greens.',
-                image: 'https://res.cloudinary.com/demo/image/upload/v1612455744/sample.jpg', // Cloudinary Sample
+                description: 'A masterpiece of texture and taste. Creamy avocado on sourdough with micro-greens and a sprinkle of sea salt.',
+                image: 'https://images.unsplash.com/photo-1588137378633-dea1336ce1e2?w=800&auto=format&fit=crop',
                 prepTime: '15 min',
                 calories: 320,
                 difficulty: 'Easy',
@@ -23,7 +23,7 @@ const seedRecipes = async () => {
             {
                 title: 'Truffle-Infused Risotto',
                 description: 'Slow-cooked Arborio rice with wild forest mushrooms and authentic Italian truffle oil.',
-                image: 'https://res.cloudinary.com/demo/image/upload/c_fill,h_800,w_1200/v1/samples/food/fish-vegetables.jpg',
+                image: 'https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=800&auto=format&fit=crop',
                 prepTime: '45 min',
                 calories: 480,
                 difficulty: 'Hard',
@@ -32,8 +32,8 @@ const seedRecipes = async () => {
             },
             {
                 title: 'Blueberry Zen Bowl',
-                description: 'A vibrant collection of antioxidants and superfoods. Optimized for visual clarity via Cloudinary CDN.',
-                image: 'https://res.cloudinary.com/demo/image/upload/v1/samples/food/dessert.jpg',
+                description: 'A vibrant collection of antioxidants and superfoods. Fresh blueberries, granola, coconut yogurt, and honey.',
+                image: 'https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?w=800&auto=format&fit=crop',
                 prepTime: '10 min',
                 calories: 210,
                 difficulty: 'Easy',
@@ -43,7 +43,7 @@ const seedRecipes = async () => {
             {
                 title: 'Seared Scallops Port',
                 description: 'Perfectly caramelized scallops served with a light lemon-butter reduction and garden peas.',
-                image: 'https://res.cloudinary.com/demo/image/upload/v1/samples/food/spices.jpg',
+                image: 'https://images.unsplash.com/photo-1519984388953-d2406bc725e1?w=800&auto=format&fit=crop',
                 prepTime: '25 min',
                 calories: 340,
                 difficulty: 'Medium',

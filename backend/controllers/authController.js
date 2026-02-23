@@ -1,6 +1,8 @@
+const crypto = require('crypto');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const { Op } = require('sequelize');
+const { sendPasswordResetEmail } = require('../services/emailService');
 
 const generateToken = (userId) => {
     return jwt.sign(
@@ -182,10 +184,131 @@ const updateProfilePicture = async (req, res) => {
     }
 };
 
+const forgotPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        if (!email) {
+            return res.status(400).json({ success: false, message: 'Please provide your email address' });
+        }
+
+        const user = await User.findOne({ where: { email } });
+
+        // Always return success to prevent email enumeration attacks
+        if (!user) {
+            return res.status(200).json({
+                success: true,
+                message: 'If an account with that email exists, a reset link has been sent.'
+            });
+        }
+
+        // Generate raw token and its hashed version
+        const rawToken = crypto.randomBytes(32).toString('hex');
+        const hashedToken = crypto.createHash('sha256').update(rawToken).digest('hex');
+        const expires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+
+        user.passwordResetToken = hashedToken;
+        user.passwordResetExpires = expires;
+
+        // Bypass validation hooks when saving reset token
+        await user.save({ validate: false });
+
+        const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+        const resetUrl = `${frontendUrl}/reset-password?token=${rawToken}`;
+
+        // Check if email credentials are configured
+        const emailConfigured = process.env.EMAIL_USER && process.env.EMAIL_PASS;
+        const isDev = process.env.NODE_ENV !== 'production';
+
+        if (emailConfigured) {
+            // Send the actual email
+            await sendPasswordResetEmail(user.email, resetUrl, user.fullName || user.username);
+            console.log(`✅ Password reset email sent to: ${user.email}`);
+        } else {
+            // No email credentials — log link to console for development use
+            console.log('\n⚠️  EMAIL not configured. Reset link (dev mode only):');
+            console.log(`🔗 ${resetUrl}\n`);
+            console.log('👉 Add EMAIL_USER and EMAIL_PASS to your backend .env to enable real emails.\n');
+        }
+
+        const responseData = {
+            success: true,
+            message: emailConfigured
+                ? 'If an account with that email exists, a reset link has been sent.'
+                : 'Email service not configured. Reset link has been logged to the server console.'
+        };
+
+        // In development, expose the reset link directly in the response for easy testing
+        if (isDev && !emailConfigured) {
+            responseData.devResetLink = resetUrl;
+        }
+
+        res.status(200).json(responseData);
+    } catch (error) {
+        console.error('Forgot Password Error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Could not process password reset. Please try again.',
+            error: error.message
+        });
+    }
+};
+
+const resetPassword = async (req, res) => {
+    try {
+        const { token, password } = req.body;
+
+        if (!token || !password) {
+            return res.status(400).json({ success: false, message: 'Token and new password are required' });
+        }
+
+        if (password.length < 6) {
+            return res.status(400).json({ success: false, message: 'Password must be at least 6 characters' });
+        }
+
+        // Hash the incoming raw token to compare with the stored hash
+        const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+        const user = await User.findOne({
+            where: {
+                passwordResetToken: hashedToken,
+                passwordResetExpires: { [Op.gt]: new Date() }
+            }
+        });
+
+        if (!user) {
+            return res.status(400).json({
+                success: false,
+                message: 'Reset link is invalid or has expired. Please request a new one.'
+            });
+        }
+
+        // Update password and clear reset token fields
+        user.password = password;
+        user.passwordResetToken = null;
+        user.passwordResetExpires = null;
+        await user.save();
+
+        res.status(200).json({
+            success: true,
+            message: 'Password reset successfully! You can now sign in with your new password.'
+        });
+    } catch (error) {
+        console.error('Reset Password Error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Password reset failed. Please try again.',
+            error: error.message
+        });
+    }
+};
+
 module.exports = {
     register,
     login,
     getMe,
     logout,
-    updateProfilePicture
+    updateProfilePicture,
+    forgotPassword,
+    resetPassword
 };

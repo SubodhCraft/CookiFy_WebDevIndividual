@@ -5,6 +5,8 @@ import SignupPage from './Pages/SignupPage';
 import SigninPage from './Pages/SigninPage';
 import DashboardPage from './Pages/DashboardPage';
 import RecipeDetailPage from './Pages/RecipeDetailPage';
+import ForgotPasswordPage from './Pages/ForgotPasswordPage';
+import ResetPasswordPage from './Pages/ResetPasswordPage';
 
 function App() {
   return (
@@ -37,6 +39,8 @@ function App() {
         <Route path="/signin" element={<SigninPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/recipe/:id" element={<RecipeDetailPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
       </Routes>
     </Router>
   );

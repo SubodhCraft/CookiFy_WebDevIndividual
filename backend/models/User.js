@@ -53,6 +53,16 @@ const User = sequelize.define('User', {
     role: {
         type: DataTypes.ENUM('user', 'admin', 'chef'),
         defaultValue: 'user'
+    },
+    passwordResetToken: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        field: 'password_reset_token'
+    },
+    passwordResetExpires: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        field: 'password_reset_expires'
     }
 }, {
     tableName: 'users',
