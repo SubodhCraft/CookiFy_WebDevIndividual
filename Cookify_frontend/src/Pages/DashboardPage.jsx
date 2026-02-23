@@ -176,71 +176,85 @@ const DashboardPage = () => {
     const TabButton = ({ id, label, icon }) => (
         <button
             onClick={() => setActiveTab(id)}
-            className={`flex items-center gap-3 px-5 py-3 rounded-xl transition-all duration-500 group ${activeTab === id
-                ? 'bg-green-500 text-white shadow-2xl shadow-green-500/30 -translate-y-0.5'
-                : 'text-gray-400 hover:bg-gray-100/80 hover:text-gray-900'
+            className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl transition-all duration-300 group ${activeTab === id
+                ? 'bg-white text-emerald-600 shadow-sm'
+                : 'text-slate-500 hover:text-slate-900'
                 }`}
         >
             <img
                 src={icon}
                 alt={label}
-                className={`w-4 h-4 object-contain transition-all duration-500 ${activeTab === id ? 'brightness-0 invert scale-110' : 'opacity-40 group-hover:opacity-100 group-hover:scale-110'}`}
+                className={`w-3.5 h-3.5 object-contain transition-all duration-300 ${activeTab === id ? '' : 'grayscale opacity-60 group-hover:opacity-100 group-hover:grayscale-0'}`}
             />
-            <span className={`text-[10px] font-black uppercase tracking-[0.2em] transition-all ${activeTab === id ? 'opacity-100' : 'opacity-60 group-hover:opacity-100'}`}>
+            <span className={`text-[10px] font-bold uppercase tracking-widest transition-all ${activeTab === id ? 'opacity-100' : 'opacity-60 group-hover:opacity-100'}`}>
                 {label}
             </span>
         </button>
     );
 
     return (
-        <div className="min-h-screen bg-[#fafaf9] text-[#111827] font-sans">
-            {/* Header / Top Nav */}
-            <div className="fixed top-0 left-0 right-0 z-[100] bg-white/90 backdrop-blur-3xl border-b border-black/[0.03]">
-                <div className="page-container h-24 flex items-center justify-between">
-                    <div className="flex items-center gap-4 cursor-pointer" onClick={() => setActiveTab('home')}>
-                        <div className="w-12 h-12 bg-green-500 rounded-[18px] flex items-center justify-center p-2.5 shadow-xl shadow-green-500/20">
-                            <img src="https://cdn-icons-png.flaticon.com/512/3461/3461901.png" className="w-full h-full object-contain brightness-0 invert" alt="logo" />
+        <div className="min-h-screen bg-[#fafaf9] text-slate-900 font-sans">
+            {/* Premium Fixed Header */}
+            <header className="fixed top-0 left-0 right-0 z-[100] bg-white/80 backdrop-blur-xl border-b border-slate-100 h-20">
+                <div className="page-container h-full flex items-center justify-between gap-8">
+                    {/* Brand Slot */}
+                    <div className="flex items-center gap-4 cursor-pointer shrink-0" onClick={() => setActiveTab('home')}>
+                        <div className="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20 active:scale-95 transition-transform">
+                            <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
                         </div>
-                        <span className="text-2xl font-black tracking-tighter text-gray-900 uppercase">COOKIFY</span>
+                        <span className="text-xl font-black tracking-tighter text-slate-950 uppercase hidden min-[400px]:block">COOKIFY</span>
                     </div>
 
-                    <div className="flex items-center gap-1 bg-gray-100/50 p-1.5 rounded-2xl overflow-x-auto no-scrollbar max-w-[50%] md:max-w-none">
+                    {/* Navigation Pills - More Adjustable/Responsive */}
+                    <nav className="flex items-center bg-slate-100/80 p-1 rounded-2xl overflow-x-auto no-scrollbar scroll-smooth shadow-inner border border-slate-200/50 max-w-[160px] min-[450px]:max-w-[280px] md:max-w-none">
                         <TabButton id="home" label="Home" icon={icons.home} />
                         <TabButton id="search" label="Search" icon={icons.search} />
-                        <TabButton id="bookmarks" label={`Bookmarks ${bookmarkedRecipes.length > 0 ? `(${bookmarkedRecipes.length})` : ''}`} icon={icons.bookmarks} />
-                        <TabButton id="myRecipes" label="My Recipes" icon={icons.chef} />
+                        <TabButton id="bookmarks" label="Saved" icon={icons.bookmarks} />
+                        <TabButton id="myRecipes" label="Studio" icon={icons.chef} />
                         <TabButton id="profile" label="Profile" icon={icons.profile} />
-                    </div>
+                    </nav>
 
-                    <div className="flex items-center gap-6">
-                        <div className="hidden sm:block text-right">
-                            <div className="text-sm font-black text-gray-900 leading-none">{user?.fullName}</div>
-                            <div className="text-[10px] text-green-600 font-black uppercase tracking-[0.2em] mt-1.5">Master Chef</div>
+                    {/* Meta/Profile Slot */}
+                    <div className="flex items-center gap-4 shrink-0">
+                        <div className="hidden lg:flex flex-col items-end">
+                            <span className="text-sm font-bold text-slate-900 leading-none">{user?.fullName}</span>
+                            <span className="text-[10px] text-emerald-600 font-extrabold uppercase tracking-widest mt-1 opacity-70">Master Chef</span>
                         </div>
-                        <div
-                            className="w-12 h-12 rounded-2xl bg-gray-100 overflow-hidden cursor-pointer border-2 border-white shadow-xl hover:scale-110 transition-transform"
-                            onClick={() => setActiveTab('profile')}
-                        >
-                            <img
-                                src={user?.profilePicture ?
-                                    (user.profilePicture.startsWith('http') ? user.profilePicture : `http://localhost:5000${user.profilePicture}`) :
-                                    icons.profile}
-                                className="w-full h-full object-cover"
-                                alt="profile"
-                            />
+
+                        <div className="h-8 w-px bg-slate-200 hidden lg:block" />
+
+                        <div className="flex items-center gap-3">
+                            <div
+                                className="w-10 h-10 rounded-xl bg-slate-100 overflow-hidden cursor-pointer border border-slate-200 hover:ring-2 hover:ring-emerald-500/20 transition-all shadow-sm"
+                                onClick={() => setActiveTab('profile')}
+                            >
+                                <img
+                                    src={user?.profilePicture ?
+                                        (user.profilePicture.startsWith('http') ? user.profilePicture : `http://localhost:5000${user.profilePicture}`) :
+                                        icons.profile}
+                                    className="w-full h-full object-cover"
+                                    alt="profile"
+                                />
+                            </div>
+
+                            <button
+                                onClick={handleLogout}
+                                className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center hover:bg-red-500 transition-all duration-300 shadow-md shadow-slate-900/10 active:scale-95 group"
+                                title="Sign Out"
+                            >
+                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                                    <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                </svg>
+                            </button>
                         </div>
-                        <button
-                            onClick={handleLogout}
-                            className="w-12 h-12 rounded-2xl bg-orange-500/10 border border-orange-500/10 flex items-center justify-center group hover:bg-orange-500 transition-all duration-500 shadow-sm"
-                        >
-                            <img src={icons.logout} className="w-5 h-5 object-contain group-hover:brightness-0 group-hover:invert" alt="logout" />
-                        </button>
                     </div>
                 </div>
-            </div>
+            </header>
 
             {/* Main Content Area */}
-            <main className="pt-48 pb-32 page-container">
+            <main className="pt-32 pb-32 page-container flex flex-col gap-16">
                 {activeTab === 'home' && (
                     <div className="space-y-12 animate-fade-in">
                         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-black/[0.05] pb-10">

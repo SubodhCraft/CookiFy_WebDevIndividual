@@ -17,7 +17,6 @@ const SignupPage = () => {
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const handleChange = (e) => {
@@ -30,6 +29,7 @@ const SignupPage = () => {
         const newErrors = {};
         if (!formData.fullName.trim()) newErrors.fullName = 'Please enter your name';
         if (!formData.username.trim()) newErrors.username = 'Please choose a username';
+        else if (formData.username.length < 3 || formData.username.length > 30) newErrors.username = 'Username must be between 3 and 30 characters';
         if (!formData.email.trim()) newErrors.email = 'Please enter your email';
         if (!formData.password) newErrors.password = 'Please create a password';
         else if (formData.password.length < 6) newErrors.password = 'Must be at least 6 characters';
@@ -58,123 +58,159 @@ const SignupPage = () => {
     };
 
     return (
-        <div className="min-h-screen grid lg:grid-cols-2 bg-white text-gray-900 overflow-hidden font-sans">
-            {/* Form Side */}
-            <div className="flex items-center justify-center p-12 lg:p-20 relative overflow-y-auto w-full">
-                <div className="w-full max-w-md mx-auto space-y-16 animate-fade-in relative z-10 py-10">
-                    <div className="space-y-6">
-                        <Link to="/" className="inline-flex items-center gap-3 text-green-600 mb-8 group">
-                            <div className="w-12 h-12 rounded-none bg-green-50 flex items-center justify-center group-hover:-translate-x-1 transition-transform border border-green-100">
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                                </svg>
-                            </div>
-                            <span className="text-xs font-bold tracking-widest uppercase text-gray-400">Back Home</span>
-                        </Link>
-                        <h1 className="text-6xl font-bold text-gray-900 tracking-tight leading-none">
-                            Create <br />
-                            <span className="text-green-600">Account.</span>
-                        </h1>
-                        <p className="text-gray-500 font-medium text-lg">Join us to start sharing and finding great recipes.</p>
+        <div className="min-h-screen grid lg:grid-cols-2 bg-white text-slate-900 font-sans overflow-hidden">
+            {/* Left Narrative Column */}
+            <div className="hidden lg:flex flex-col justify-center items-center p-24 bg-slate-50 border-r border-slate-100 relative group overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-emerald-500/5 to-transparent pointer-events-none" />
+
+                <div className="relative z-10 max-w-lg w-full space-y-16 animate-reveal">
+                    <div className="flex items-center gap-4 cursor-pointer" onClick={() => navigate('/')}>
+                        <div className="w-14 h-14 bg-slate-900 rounded-2xl flex items-center justify-center shadow-xl group-hover:bg-emerald-600 transition-colors">
+                            <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                        </div>
+                        <span className="text-3xl font-extrabold tracking-tighter text-slate-900">Cookify</span>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-10">
-                        <div className="grid grid-cols-2 gap-8">
-                            <Input label="Full Name" name="fullName" value={formData.fullName} onChange={handleChange} error={errors.fullName} placeholder="Your Name" />
-                            <Input label="Username" name="username" value={formData.username} onChange={handleChange} error={errors.username} placeholder="Username" />
-                        </div>
-                        <Input label="Email Address" type="email" name="email" value={formData.email} onChange={handleChange} error={errors.email} placeholder="your@email.com" />
-
-                        <div className="relative">
-                            <Input
-                                label="Password"
-                                type={showPassword ? 'text' : 'password'}
-                                name="password"
-                                value={formData.password}
-                                onChange={handleChange}
-                                error={errors.password}
-                                placeholder="Create password"
-                            />
-                            <button
-                                type="button"
-                                onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-5 top-[52px] text-gray-400 hover:text-green-600 transition-colors"
-                            >
-                                {showPassword ? (
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path></svg>
-                                ) : (
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                                )}
-                            </button>
-                        </div>
-
-                        <div className="relative">
-                            <Input
-                                label="Confirm Password"
-                                type={showConfirmPassword ? 'text' : 'password'}
-                                name="confirmPassword"
-                                value={formData.confirmPassword}
-                                onChange={handleChange}
-                                error={errors.confirmPassword}
-                                placeholder="Type it again"
-                            />
-                            <button
-                                type="button"
-                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                className="absolute right-5 top-[52px] text-gray-400 hover:text-green-600 transition-colors"
-                            >
-                                {showConfirmPassword ? (
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path></svg>
-                                ) : (
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                                )}
-                            </button>
-                        </div>
-
-                        <Button type="submit" disabled={isLoading} className="w-full mt-6 py-6 text-xl">
-                            {isLoading ? 'Creating Account...' : 'Sign Up'}
-                        </Button>
-                    </form>
-
-                    <div className="text-center pt-4">
-                        <p className="text-gray-500 font-bold text-base">
-                            Already have an account? {' '}
-                            <Link to="/signin" className="text-green-600 hover:text-green-700 transition-colors underline underline-offset-8 decoration-green-500/20">Login here</Link>
+                    <div className="space-y-8">
+                        <h1 className="text-8xl font-black leading-[0.9] tracking-tighter text-slate-900">
+                            Join the <br />
+                            <span className="text-emerald-600">Circle.</span>
+                        </h1>
+                        <p className="text-xl text-slate-500 font-medium leading-relaxed max-w-md">
+                            Start your journey as a master chef. Share recipes, learn techniques, and grow.
                         </p>
                     </div>
+
+                    <div className="grid grid-cols-2 gap-10 pt-8 border-t border-slate-200">
+                        <div className="space-y-2">
+                            <div className="text-4xl font-black text-slate-900 tracking-tighter">50k+</div>
+                            <div className="text-[10px] text-slate-400 font-black uppercase tracking-widest">Active Chefs</div>
+                        </div>
+                        <div className="space-y-2">
+                            <div className="text-4xl font-black text-slate-900 tracking-tighter">12k+</div>
+                            <div className="text-[10px] text-slate-400 font-black uppercase tracking-widest">Fresh Recipes</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="absolute bottom-12 left-24 text-[10px] text-slate-300 font-black tracking-[0.3em] uppercase">
+                    © 2026 Cookify System
                 </div>
             </div>
 
-            {/* Content Side */}
-            <div className="hidden lg:flex flex-col justify-center items-center p-20 relative bg-gray-50 overflow-hidden border-l border-black/[0.1]">
-                <div className="relative z-10 max-w-lg w-full space-y-12">
-                    <div className="bg-white rounded-none p-16 space-y-10 border border-black shadow-xl">
-                        <div className="w-20 h-20 bg-green-600 rounded-none flex items-center justify-center shadow-lg p-5">
-                            <svg className="w-10 h-10 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M6 13.87A4 4 0 0 1 7.41 6a5.11 5.11 0 0 1 1.05-1.54 5 5 0 0 1 7.08 0A5.11 5.11 0 0 1 16.59 6 4 4 0 0 1 18 13.87V21H6Z" /><line x1="6" y1="17" x2="18" y2="17" />
-                            </svg>
-                        </div>
-                        <h3 className="text-5xl font-bold text-gray-900 tracking-tight leading-tight">Master <br />Chef Plan</h3>
-                        <p className="text-gray-500 text-xl font-medium leading-relaxed">
-                            Share your best recipes, build a following, and explore new flavors every day.
-                        </p>
-                        <div className="flex flex-wrap items-center gap-10 text-xs font-bold text-green-600 tracking-widest uppercase">
-                            <span>Share</span>
-                            <span>Discover</span>
-                            <span>Connect</span>
-                        </div>
+            {/* Right Auth Column */}
+            <div className="flex items-center justify-center p-12 lg:p-24 relative overflow-y-auto w-full bg-white">
+                <div className="w-full max-w-md mx-auto space-y-12 animate-reveal delay-100 py-12">
+                    <div className="space-y-4">
+                        <h2 className="text-5xl font-black text-slate-900 tracking-tighter">Create Account</h2>
+                        <p className="text-slate-500 font-medium text-lg leading-relaxed">Let's set up your professional kitchen profile.</p>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-10">
-                        {[
-                            { label: 'Total Recipes', val: '2,500+' },
-                            { label: 'Cooking Now', val: '800+' }
-                        ].map((stat, i) => (
-                            <div key={i} className="bg-white rounded-none p-10 border border-black text-center shadow-md">
-                                <div className="text-4xl font-bold text-gray-900">{stat.val}</div>
-                                <div className="text-xs text-gray-400 font-bold uppercase tracking-widest mt-3">{stat.label}</div>
+                    <form onSubmit={handleSubmit} className="space-y-8">
+                        <Input
+                            label="Full Name"
+                            name="fullName"
+                            value={formData.fullName}
+                            onChange={handleChange}
+                            error={errors.fullName}
+                            placeholder="Chef Jamie Oliver"
+                        />
+                        <Input
+                            label="Username"
+                            name="username"
+                            value={formData.username}
+                            onChange={handleChange}
+                            error={errors.username}
+                            placeholder="chef_jamie"
+                        />
+                        <Input
+                            label="Email Address"
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            error={errors.email}
+                            placeholder="your@email.com"
+                        />
+                        <div className="space-y-2 group">
+                            <label className="text-sm font-semibold text-slate-700 ml-0.5">Password</label>
+                            <div className="relative">
+                                <input
+                                    type={showPassword ? 'text' : 'password'}
+                                    name="password"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    className={`w-full bg-white border border-slate-200 rounded-lg px-5 py-3.5 focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all duration-200 text-slate-900 font-medium placeholder:text-slate-400 shadow-sm ${errors.password ? 'border-red-400' : ''}`}
+                                    placeholder="Create a strong password"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-600 transition-colors"
+                                >
+                                    {showPassword ? (
+                                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                                            <path d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268-2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                                        </svg>
+                                    ) : (
+                                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                                            <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268-2.943-9.542-7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                    )}
+                                </button>
                             </div>
-                        ))}
+                            {errors.password && <p className="text-xs text-red-500 font-medium mt-1.5 ml-0.5">{errors.password}</p>}
+                        </div>
+
+                        <div className="space-y-2 group">
+                            <label className="text-sm font-semibold text-slate-700 ml-0.5">Confirm Password</label>
+                            <div className="relative">
+                                <input
+                                    type={showConfirmPassword ? 'text' : 'password'}
+                                    name="confirmPassword"
+                                    value={formData.confirmPassword}
+                                    onChange={handleChange}
+                                    className={`w-full bg-white border border-slate-200 rounded-lg px-5 py-3.5 focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all duration-200 text-slate-900 font-medium placeholder:text-slate-400 shadow-sm ${errors.confirmPassword ? 'border-red-400' : ''}`}
+                                    placeholder="Repeat your password"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                    className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-600 transition-colors"
+                                >
+                                    {showConfirmPassword ? (
+                                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                                            <path d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268-2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                                        </svg>
+                                    ) : (
+                                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                                            <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268-2.943-9.542-7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                    )}
+                                </button>
+                            </div>
+                            {errors.confirmPassword && <p className="text-xs text-red-500 font-medium mt-1.5 ml-0.5">{errors.confirmPassword}</p>}
+                        </div>
+
+                        <Button type="submit" disabled={isLoading} variant="secondary" className="w-full py-5 text-lg shadow-xl shadow-slate-900/10">
+                            {isLoading ? (
+                                <div className="flex items-center gap-3">
+                                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                    <span>Syncing...</span>
+                                </div>
+                            ) : 'Establish Profile'}
+                        </Button>
+                    </form>
+
+                    <div className="text-center pt-8 border-t border-slate-100">
+                        <p className="text-slate-500 font-semibold text-sm">
+                            Already a member? {' '}
+                            <Link to="/signin" className="text-emerald-600 hover:text-emerald-700 transition-colors underline underline-offset-8 decoration-emerald-500/30">
+                                Enter Portal
+                            </Link>
+                        </p>
                     </div>
                 </div>
             </div>
