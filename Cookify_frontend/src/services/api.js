@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // API base URL - can be overridden by environment variable
-export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+export const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000/api';
 
 // Create axios instance with default config
 const api = axios.create({
@@ -29,10 +29,11 @@ api.interceptors.request.use(
 api.interceptors.response.use(
     (response) => response,
     (error) => {
-        // Only redirect to signin if we're not already trying to login
+        // Only redirect to signin if we're not already trying to login or change password
         const isLoginAttempt = error.config?.url?.includes('/auth/login');
+        const isChangePasswordAttempt = error.config?.url?.includes('/auth/change-password');
 
-        if (error.response?.status === 401 && !isLoginAttempt) {
+        if (error.response?.status === 401 && !isLoginAttempt && !isChangePasswordAttempt) {
             // Token expired or invalid
             localStorage.removeItem('cookify_token');
             localStorage.removeItem('cookify_user');

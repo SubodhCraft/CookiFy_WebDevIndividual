@@ -29,6 +29,9 @@ const DashboardPage = () => {
 
     // Profile
     const [isUploadingProfile, setIsUploadingProfile] = useState(false);
+    const [isChangingPassword, setIsChangingPassword] = useState(false);
+    const [showPasswordForm, setShowPasswordForm] = useState(false);
+    const [passwordData, setPasswordData] = useState({ currentPassword: '', newPassword: '' });
 
     useEffect(() => {
         const currentUser = authService.getUser();
@@ -91,6 +94,32 @@ const DashboardPage = () => {
         } catch { toast.error('Failed to update bookmark'); }
     };
 
+    const handlePasswordChange = async (e) => {
+        e.preventDefault();
+        if (!passwordData.currentPassword || !passwordData.newPassword) {
+            toast.error('Please fill in both fields');
+            return;
+        }
+        if (passwordData.newPassword.length < 6) {
+            toast.error('New password must be at least 6 characters');
+            return;
+        }
+
+        setIsChangingPassword(true);
+        try {
+            const res = await authService.changePassword(passwordData);
+            if (res.success) {
+                toast.success('Password updated successfully!');
+                setShowPasswordForm(false);
+                setPasswordData({ currentPassword: '', newPassword: '' });
+            }
+        } catch (error) {
+            toast.error(error.response?.data?.message || 'Failed to update password');
+        } finally {
+            setIsChangingPassword(false);
+        }
+    };
+
     const handleProfilePictureChange = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -114,7 +143,7 @@ const DashboardPage = () => {
                 <img
                     src={recipe.image.includes('http') ?
                         (recipe.image.includes('cloudinary') ? recipe.image.replace('/upload/', '/upload/c_fill,g_auto,h_600,w_800/') : recipe.image) :
-                        `http://localhost:5000${recipe.image}`}
+                        `http://127.0.0.1:5000${recipe.image}`}
                     alt={recipe.title}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
@@ -238,7 +267,7 @@ const DashboardPage = () => {
                             onClick={() => setActiveTab('profile')}
                         >
                             <img
-                                src={user?.profilePicture ? (user.profilePicture.startsWith('http') ? user.profilePicture : `http://localhost:5000${user.profilePicture}`) : 'https://cdn-icons-png.flaticon.com/512/1077/1077063.png'}
+                                src={user?.profilePicture ? (user.profilePicture.startsWith('http') ? user.profilePicture : `http://127.0.0.1:5000${user.profilePicture}`) : 'https://cdn-icons-png.flaticon.com/512/1077/1077063.png'}
                                 className="w-full h-full object-cover"
                                 alt="profile"
                             />
@@ -412,7 +441,7 @@ const DashboardPage = () => {
                                                 </div>
                                             ) : (
                                                 <img
-                                                    src={user?.profilePicture ? (user.profilePicture.startsWith('http') ? user.profilePicture : `http://localhost:5000${user.profilePicture}`) : 'https://cdn-icons-png.flaticon.com/512/1077/1077063.png'}
+                                                    src={user?.profilePicture ? (user.profilePicture.startsWith('http') ? user.profilePicture : `http://127.0.0.1:5000${user.profilePicture}`) : 'https://cdn-icons-png.flaticon.com/512/1077/1077063.png'}
                                                     className="w-full h-full object-cover rounded-[32px] shadow-sm transform group-hover:scale-105 transition-transform duration-500"
                                                     alt="profile"
                                                 />
@@ -513,19 +542,60 @@ const DashboardPage = () => {
                                             </button>
                                         </div>
 
-                                        <div className="flex items-center justify-between p-6 bg-gray-50/50 rounded-2xl border border-gray-100 opacity-60">
-                                            <div className="flex items-center gap-4">
-                                                <div className="w-12 h-12 bg-gray-100 text-gray-400 rounded-xl flex items-center justify-center">
-                                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                                        <div className="bg-gray-50/50 rounded-2xl border border-gray-100 overflow-hidden transition-all duration-300">
+                                            <div className="flex items-center justify-between p-6">
+                                                <div className="flex items-center gap-4">
+                                                    <div className={`w-12 h-12 ${showPasswordForm ? 'bg-[#2E7D32] text-white' : 'bg-gray-100 text-gray-400'} rounded-xl flex items-center justify-center transition-colors`}>
+                                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="text-base font-bold text-gray-900">Change Password</h4>
+                                                        <p className="text-xs text-gray-400 font-medium">Improve your vault security easily.</p>
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <h4 className="text-base font-bold text-gray-900">Change Password</h4>
-                                                    <p className="text-xs text-gray-400 font-medium">Improve your vault security easily.</p>
-                                                </div>
+                                                <button
+                                                    onClick={() => setShowPasswordForm(!showPasswordForm)}
+                                                    className={`px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest transition-all ${showPasswordForm ? 'bg-gray-200 text-gray-600' : 'bg-white border border-gray-200 text-gray-600 hover:border-[#2E7D32] hover:text-[#2E7D32]'}`}
+                                                >
+                                                    {showPasswordForm ? 'Cancel' : 'Change'}
+                                                </button>
                                             </div>
-                                            <button disabled className="px-6 py-2.5 bg-gray-100 text-gray-400 rounded-xl font-bold text-xs uppercase tracking-widest cursor-not-allowed">
-                                                Soon
-                                            </button>
+
+                                            {showPasswordForm && (
+                                                <form onSubmit={handlePasswordChange} className="px-6 pb-6 pt-2 space-y-4 animate-reveal">
+                                                    <div className="grid sm:grid-cols-2 gap-4">
+                                                        <div className="space-y-1.5">
+                                                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Current Password</label>
+                                                            <input
+                                                                type="password"
+                                                                required
+                                                                value={passwordData.currentPassword}
+                                                                onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
+                                                                className="w-full px-4 py-3 bg-white border border-gray-100 rounded-xl text-sm focus:border-[#2E7D32] focus:ring-4 focus:ring-[#2E7D32]/5 outline-none transition-all"
+                                                                placeholder="••••••••"
+                                                            />
+                                                        </div>
+                                                        <div className="space-y-1.5">
+                                                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">New Password</label>
+                                                            <input
+                                                                type="password"
+                                                                required
+                                                                value={passwordData.newPassword}
+                                                                onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
+                                                                className="w-full px-4 py-3 bg-white border border-gray-100 rounded-xl text-sm focus:border-[#2E7D32] focus:ring-4 focus:ring-[#2E7D32]/5 outline-none transition-all"
+                                                                placeholder="Min. 6 characters"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <button
+                                                        type="submit"
+                                                        disabled={isChangingPassword}
+                                                        className="w-full py-3 bg-[#2E7D32] text-white rounded-xl font-bold text-sm shadow-lg shadow-green-500/10 hover:bg-[#1B5E20] transition-all disabled:opacity-50"
+                                                    >
+                                                        {isChangingPassword ? 'Updating...' : 'Update Password'}
+                                                    </button>
+                                                </form>
+                                            )}
                                         </div>
                                     </div>
                                 </div>

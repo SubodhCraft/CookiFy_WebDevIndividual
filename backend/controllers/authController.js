@@ -292,10 +292,15 @@ const resetPassword = async (req, res) => {
         }
 
         // Update password and clear reset token fields
-        user.password = password;
+        console.log(`[AuthCtrl] Resetting password for: ${user.email}`);
+        user.set('password', password);
+        console.log(`[AuthCtrl] Password changed status (reset): ${user.changed('password')}`);
+
         user.passwordResetToken = null;
         user.passwordResetExpires = null;
+
         await user.save();
+        console.log(`[AuthCtrl] Password reset and saved successfully for: ${user.email}`);
 
         res.status(200).json({
             success: true,
@@ -311,6 +316,66 @@ const resetPassword = async (req, res) => {
     }
 };
 
+const changePassword = async (req, res) => {
+    try {
+        const { currentPassword, newPassword } = req.body;
+        const userId = req.user.id;
+
+        if (!currentPassword || !newPassword) {
+            return res.status(400).json({
+                success: false,
+                message: 'Both current and new passwords are required'
+            });
+        }
+
+        if (newPassword.length < 6) {
+            return res.status(400).json({
+                success: false,
+                message: 'New password must be at least 6 characters'
+            });
+        }
+
+        const user = await User.findByPk(userId);
+        if (!user) {
+            console.log('Change Password: User not found', userId);
+            return res.status(404).json({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        console.log('Change Password: Found user', user.email);
+        const isMatch = await user.comparePassword(currentPassword);
+        if (!isMatch) {
+            console.log('Change Password: Current password mismatch for', user.email);
+            return res.status(401).json({
+                success: false,
+                message: 'Current password is incorrect'
+            });
+        }
+
+        // Update password explicitly
+        console.log(`[AuthCtrl] Attempting password update for: ${user.email}`);
+        user.set('password', newPassword);
+        console.log(`[AuthCtrl] Password changed status: ${user.changed('password')}`);
+
+        await user.save();
+        console.log(`[AuthCtrl] Password saved successfully for: ${user.email}`);
+
+        res.status(200).json({
+            success: true,
+            message: 'Password updated successfully!'
+        });
+    } catch (error) {
+        console.error('Change Password Error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to update password',
+            error: error.message
+        });
+    }
+};
+
 module.exports = {
     register,
     login,
@@ -318,5 +383,6 @@ module.exports = {
     logout,
     updateProfilePicture,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    changePassword
 };

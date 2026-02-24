@@ -72,21 +72,29 @@ const User = sequelize.define('User', {
     hooks: {
         beforeCreate: async (user) => {
             if (user.password) {
+                console.log(`[User Hook] Hashing password for new user: ${user.email}`);
                 const salt = await bcrypt.genSalt(12);
                 user.password = await bcrypt.hash(user.password, salt);
+                console.log(`[User Hook] Password hashed for new user: ${user.email}`);
             }
         },
         beforeUpdate: async (user) => {
+            console.log(`[User Hook] beforeUpdate for user: ${user.email}. Password changed? ${user.changed('password')}`);
             if (user.changed('password')) {
+                console.log(`[User Hook] Hashing new password for existing user: ${user.email}`);
                 const salt = await bcrypt.genSalt(12);
                 user.password = await bcrypt.hash(user.password, salt);
+                console.log(`[User Hook] New password hashed for user: ${user.email}`);
             }
         }
     }
 });
 
 User.prototype.comparePassword = async function (candidatePassword) {
-    return await bcrypt.compare(candidatePassword, this.password);
+    console.log(`[User Model] Comparing password for: ${this.email}`);
+    const isMatch = await bcrypt.compare(candidatePassword, this.password);
+    console.log(`[User Model] Comparison result for ${this.email}: ${isMatch}`);
+    return isMatch;
 };
 
 User.prototype.getPublicProfile = function () {

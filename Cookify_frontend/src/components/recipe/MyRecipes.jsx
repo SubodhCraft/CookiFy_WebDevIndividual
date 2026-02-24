@@ -57,7 +57,7 @@ const MyRecipes = ({ onEdit }) => {
                 >
                     <div className="relative h-56 overflow-hidden">
                         <img
-                            src={recipe.image.startsWith('http') ? recipe.image : `http://localhost:5000${recipe.image}`}
+                            src={recipe.image.startsWith('http') ? recipe.image : `http://127.0.0.1:5000${recipe.image}`}
                             alt={recipe.title}
                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />

@@ -24,7 +24,7 @@ const RecipeCreateModal = ({ isOpen, onClose, onSuccess, editRecipe = null }) =>
                 instructions: editRecipe.instructions || ''
             });
             setIngredients(Array.isArray(editRecipe.ingredients) ? editRecipe.ingredients : (editRecipe.ingredients ? editRecipe.ingredients.split(', ') : ['']));
-            if (editRecipe.image) setPreview(editRecipe.image.startsWith('http') ? editRecipe.image : `http://localhost:5000${editRecipe.image}`);
+            if (editRecipe.image) setPreview(editRecipe.image.startsWith('http') ? editRecipe.image : `http://127.0.0.1:5000${editRecipe.image}`);
         } else if (!editRecipe && isOpen) {
             setFormData({ title: '', description: '', prepTime: '', calories: '', difficulty: 'Medium', category: '', tags: '', instructions: '' });
             setIngredients(['']);

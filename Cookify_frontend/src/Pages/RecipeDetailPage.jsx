@@ -125,7 +125,7 @@ const RecipeDetailPage = () => {
                 {/* Banner Image */}
                 <div className="rounded-2xl overflow-hidden shadow-lg mb-10 aspect-[21/9] bg-gray-100">
                     <img
-                        src={recipe.image.includes('http') ? recipe.image : `http://localhost:5000${recipe.image}`}
+                        src={recipe.image.includes('http') ? recipe.image : `http://127.0.0.1:5000${recipe.image}`}
                         alt={recipe.title}
                         className="w-full h-full object-cover"
                     />
@@ -254,7 +254,13 @@ const RecipeDetailPage = () => {
                                 {comments.length > 0 ? comments.map((comment) => (
                                     <div key={comment.id} className="flex gap-3 group">
                                         <div className="w-9 h-9 rounded-full overflow-hidden bg-gray-100 flex-shrink-0 border border-gray-200">
-                                            <img src={comment.User?.profilePicture || defaultAvatar} className="w-full h-full object-cover" alt="user" />
+                                            <img
+                                                src={comment.User?.profilePicture
+                                                    ? (comment.User.profilePicture.startsWith('http') ? comment.User.profilePicture : `http://127.0.0.1:5000${comment.User.profilePicture}`)
+                                                    : defaultAvatar}
+                                                className="w-full h-full object-cover"
+                                                alt="user"
+                                            />
                                         </div>
                                         <div className="flex-grow">
                                             <div className="bg-gray-50 rounded-xl rounded-tl-sm p-4">

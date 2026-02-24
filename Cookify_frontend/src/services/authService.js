@@ -127,6 +127,15 @@ const authService = {
     resetPassword: async (token, password) => {
         const response = await api.post('/auth/reset-password', { token, password });
         return response.data;
+    },
+
+    /**
+     * Change user password (needs current password)
+     * @param {Object} data - { currentPassword, newPassword }
+     */
+    changePassword: async (data) => {
+        const response = await api.post('/auth/change-password', data);
+        return response.data;
     }
 };
 
