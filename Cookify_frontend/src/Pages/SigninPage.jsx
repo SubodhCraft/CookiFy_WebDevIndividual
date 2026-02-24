@@ -49,66 +49,71 @@ const SigninPage = () => {
 
     return (
         <div className="min-h-screen grid lg:grid-cols-2 bg-white text-[#2C2C2C] font-sans overflow-hidden">
-            {/* Left Panel */}
+            {/* Left Panel - Premium Brand Showcase */}
             <div className="hidden lg:flex flex-col justify-center items-center p-16 bg-[#F5F7F4] relative overflow-hidden">
+                {/* Dynamic Background Elements */}
                 <div className="absolute inset-0 bg-gradient-to-br from-[#E8F5E9]/60 via-transparent to-[#FFF9C4]/20 pointer-events-none" />
+                <div className="absolute top-0 right-0 w-96 h-96 bg-[#2E7D32]/5 rounded-full -mr-32 -mt-32 blur-3xl" />
+                <div className="absolute bottom-0 left-0 w-64 h-64 bg-yellow-400/5 rounded-full -ml-20 -mb-20 blur-2xl" />
 
-                <div className="relative z-10 max-w-md w-full space-y-10 animate-reveal">
-                    <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => navigate('/')}>
-                        <div className="w-10 h-10 bg-[#2E7D32] rounded-lg flex items-center justify-center">
-                            <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <div className="relative z-10 max-w-sm w-full space-y-12 animate-reveal">
+                    {/* Brand Identity */}
+                    <div className="flex items-center gap-3 cursor-pointer group" onClick={() => navigate('/')}>
+                        <div className="w-12 h-12 bg-[#2E7D32] rounded-2xl flex items-center justify-center shadow-xl shadow-green-900/20 group-hover:scale-110 transition-transform duration-300">
+                            <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                        </div>
+                        <span className="text-2xl font-bold text-gray-900 font-heading tracking-tight">Cookify</span>
+                    </div>
+
+                    {/* Value Proposition */}
+                    <div className="space-y-6">
+                        <h1 className="text-6xl font-extrabold text-gray-900 leading-[1.1] font-heading">
+                            Welcome<br />
+                            <span className="text-[#2E7D32]">Back.</span>
+                        </h1>
+                        <p className="text-xl text-gray-500 leading-relaxed font-medium">
+                            Continue your culinary exploration. Access your favorite recipes and keep sharing your unique flavors.
+                        </p>
+                    </div>
+
+                    {/* Subtle Trust Indicator */}
+                    <div className="pt-8 border-t border-gray-200/60">
+                        <div className="flex items-center gap-3">
+                            <div className="flex -space-x-3">
+                                {[1, 2, 3].map(i => (
+                                    <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-gray-100 overflow-hidden shadow-sm">
+                                        <img src={`https://images.unsplash.com/photo-${i === 1 ? '1535713875002-d1d0cf377fde' : i === 2 ? '1599566150163-29194dcaad36' : '1438761681033-6461ffad8d80'}?q=80&w=100&h=100&auto=format&fit=crop`} alt="chef" className="w-full h-full object-cover" />
+                                    </div>
+                                ))}
+                            </div>
+                            <p className="text-sm text-gray-400 font-semibold italic">Join 50k+ active home chefs</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="absolute bottom-10 left-16 text-xs text-gray-400 font-medium tracking-widest uppercase italic">
+                    © 2026 Cookify — Culinary Excellence
+                </div>
+            </div>
+
+            {/* Right Panel - Form Area */}
+            <div className="flex items-center justify-center p-8 lg:p-16 bg-white">
+                <div className="w-full max-w-md space-y-10 animate-reveal">
+                    {/* Mobile Branding */}
+                    <div className="lg:hidden flex items-center gap-2.5 mb-8 cursor-pointer" onClick={() => navigate('/')}>
+                        <div className="w-10 h-10 bg-[#2E7D32] rounded-xl flex items-center justify-center shadow-lg shadow-green-900/10">
+                            <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                                 <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                         </div>
                         <span className="text-xl font-bold text-gray-900 font-heading">Cookify</span>
                     </div>
 
-                    <div className="space-y-4">
-                        <h1 className="text-5xl font-extrabold text-gray-900 leading-tight font-heading">
-                            Welcome<br />
-                            <span className="text-[#2E7D32]">Back.</span>
-                        </h1>
-                        <p className="text-lg text-gray-500 leading-relaxed max-w-sm">
-                            Sign in to find new recipes, save your favorites, and share your own dishes with the community.
-                        </p>
-                    </div>
-
-                    <div className="flex items-center gap-4 pt-6 border-t border-gray-200">
-                        <div className="flex -space-x-2">
-                            {[1, 2, 3, 4].map(i => (
-                                <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-gray-100 overflow-hidden shadow-sm">
-                                    <img src={`https://images.unsplash.com/photo-${i === 1 ? '1535713875002-d1d0cf377fde' : i === 2 ? '1599566150163-29194dcaad36' : i === 3 ? '1527980965255-d3b416303d12' : '1438761681033-6461ffad8d80'}?q=80&w=100&h=100&auto=format&fit=crop`} alt="chef" className="w-full h-full object-cover" />
-                                </div>
-                            ))}
-                        </div>
-                        <p className="text-sm text-gray-500 font-medium">
-                            <span className="font-semibold text-[#2E7D32]">50k+</span> chefs active
-                        </p>
-                    </div>
-                </div>
-
-                <div className="absolute bottom-8 left-16 text-xs text-gray-300">
-                    © 2026 Cookify
-                </div>
-            </div>
-
-            {/* Right Panel */}
-            <div className="flex items-center justify-center p-8 lg:p-16 bg-white">
-                <div className="w-full max-w-md space-y-8 animate-reveal">
-                    <div className="lg:hidden mb-4">
-                        <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => navigate('/')}>
-                            <div className="w-9 h-9 bg-[#2E7D32] rounded-lg flex items-center justify-center">
-                                <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg>
-                            </div>
-                            <span className="text-lg font-bold text-gray-900 font-heading">Cookify</span>
-                        </div>
-                    </div>
-
-                    <div className="space-y-2">
-                        <h2 className="text-3xl font-bold text-gray-900 font-heading">Sign In</h2>
-                        <p className="text-gray-500">Enter your email and password to continue.</p>
+                    <div className="space-y-3">
+                        <h2 className="text-4xl font-bold text-gray-900 font-heading tracking-tight">Sign In</h2>
+                        <p className="text-gray-500 text-lg">Enter your details to continue your journey.</p>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-6">
@@ -125,7 +130,7 @@ const SigninPage = () => {
                         <div className="space-y-1.5">
                             <div className="flex justify-between items-center">
                                 <label className="text-sm font-medium text-gray-700">Password</label>
-                                <Link to="/forgot-password" className="text-xs font-medium text-[#2E7D32] hover:text-[#1B5E20] transition-colors">
+                                <Link to="/forgot-password" className="text-xs font-semibold text-[#2E7D32] hover:text-[#1B5E20] transition-colors underline decoration-1 underline-offset-2">
                                     Forgot password?
                                 </Link>
                             </div>
@@ -136,7 +141,7 @@ const SigninPage = () => {
                                     value={formData.password}
                                     onChange={handleChange}
                                     className={`w-full bg-white border border-gray-200 rounded-lg px-4 py-3 text-sm font-medium text-gray-900 placeholder:text-gray-400 outline-none transition-all duration-200 focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/10 ${errors.password ? 'border-red-400' : ''}`}
-                                    placeholder="Enter your password"
+                                    placeholder="••••••••"
                                 />
                                 <button
                                     type="button"
@@ -158,21 +163,21 @@ const SigninPage = () => {
                             {errors.password && <p className="text-xs text-red-500 font-medium mt-1">{errors.password}</p>}
                         </div>
 
-                        <Button type="submit" disabled={isLoading} variant="primary" className="w-full py-3.5">
+                        <Button type="submit" disabled={isLoading} variant="primary" className="w-full py-4 rounded-2xl shadow-xl shadow-green-900/10 hover:shadow-green-900/20 active:scale-[0.98] transition-all">
                             {isLoading ? (
-                                <div className="flex items-center gap-2">
-                                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                    <span>Signing in...</span>
+                                <div className="flex items-center justify-center gap-3">
+                                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                    <span>Signing In...</span>
                                 </div>
-                            ) : 'Sign In'}
+                            ) : 'Sign In to Cookify'}
                         </Button>
                     </form>
 
-                    <div className="text-center pt-6 border-t border-gray-100">
-                        <p className="text-sm text-gray-500">
-                            Don't have an account?{' '}
-                            <Link to="/signup" className="font-semibold text-[#2E7D32] hover:text-[#1B5E20] transition-colors">
-                                Create one
+                    <div className="text-center pt-8 border-t border-gray-100">
+                        <p className="text-gray-500 font-medium">
+                            New to the garden?{' '}
+                            <Link to="/signup" className="font-bold text-[#2E7D32] hover:text-[#1B5E20] transition-colors underline decoration-2 underline-offset-4 decoration-green-100 hover:decoration-green-500">
+                                Create Account
                             </Link>
                         </p>
                     </div>

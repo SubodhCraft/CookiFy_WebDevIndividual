@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getRecipes, getRecipeById, getUserRecipes, createRecipe, updateRecipe } = require('../controllers/recipeController');
+const { getRecipes, getRecipeById, getUserRecipes, createRecipe, updateRecipe, deleteRecipe } = require('../controllers/recipeController');
 const { protect } = require('../middleware/authMiddleware');
 const upload = require('../middleware/multerMiddleware');
 
@@ -16,6 +16,7 @@ router.get('/public-debug', (req, res) => res.json({ status: 'Recipe Router Is R
 router.get('/my/all', protect, getUserRecipes);
 router.post('/', protect, upload.single('image'), createRecipe);
 router.put('/:id', protect, upload.single('image'), updateRecipe);
+router.delete('/:id', protect, deleteRecipe);
 
 // Public routes
 router.get('/', getRecipes);

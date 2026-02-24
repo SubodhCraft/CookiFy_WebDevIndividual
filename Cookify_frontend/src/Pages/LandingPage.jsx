@@ -64,20 +64,6 @@ const LandingPage = () => {
                                 Sign In
                             </Button>
                         </div>
-
-                        {/* Stats Strip */}
-                        {data.stats && data.stats.length > 0 && (
-                            <div className="grid grid-cols-3 gap-8 pt-10 border-t border-gray-100">
-                                {data.stats.map((stat, i) => (
-                                    <div key={i} className="space-y-1">
-                                        <div className="text-3xl font-bold text-gray-900">{stat.value}</div>
-                                        <div className="text-sm text-gray-400 font-medium tracking-wide border-l-2 border-[#2E7D32] pl-3 italic">
-                                            {stat.label}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
                     </div>
 
                     <div className="relative hidden lg:block animate-reveal">
@@ -97,39 +83,41 @@ const LandingPage = () => {
                         </div>
                     </div>
                 </div>
-            </section>
+            </section >
 
             {/* Categories Section */}
-            {data.categories?.length > 0 && (
-                <section className="py-24 bg-white">
-                    <div className="max-w-[1280px] mx-auto px-6 space-y-16">
-                        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-                            <div className="max-w-xl">
-                                <h2 className="text-4xl font-bold text-gray-900 font-heading">Browse by Category</h2>
-                                <p className="text-gray-500 mt-4 text-lg">Find recipes that match your mood and taste. From quick snacks to elaborate dinners.</p>
-                            </div>
-                            <Button variant="outline" size="md" className="rounded-xl">View All</Button>
-                        </div>
-
-                        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                            {data.categories.map((cat, i) => (
-                                <div key={i} className="group relative rounded-3xl overflow-hidden aspect-[4/5] cursor-pointer shadow-md hover:shadow-2xl transition-all duration-500">
-                                    <img
-                                        src={cat.image}
-                                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                        alt={cat.name}
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90" />
-                                    <div className="absolute bottom-8 left-8 right-8 transform group-hover:-translate-y-2 transition-transform duration-500">
-                                        <h3 className="text-2xl font-bold text-white mb-1">{cat.name}</h3>
-                                        <p className="text-sm text-green-400 font-bold tracking-widest uppercase">{cat.count}</p>
-                                    </div>
+            {
+                data.categories?.length > 0 && (
+                    <section className="py-24 bg-white">
+                        <div className="max-w-[1280px] mx-auto px-6 space-y-16">
+                            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                                <div className="max-w-xl">
+                                    <h2 className="text-4xl font-bold text-gray-900 font-heading">Browse by Category</h2>
+                                    <p className="text-gray-500 mt-4 text-lg">Find recipes that match your mood and taste. From quick snacks to elaborate dinners.</p>
                                 </div>
-                            ))}
+                                <Button variant="outline" size="md" className="rounded-xl">View All</Button>
+                            </div>
+
+                            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                                {data.categories.map((cat, i) => (
+                                    <div key={i} className="group relative rounded-3xl overflow-hidden aspect-[4/5] cursor-pointer shadow-md hover:shadow-2xl transition-all duration-500">
+                                        <img
+                                            src={cat.image}
+                                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                            alt={cat.name}
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90" />
+                                        <div className="absolute bottom-8 left-8 right-8 transform group-hover:-translate-y-2 transition-transform duration-500">
+                                            <h3 className="text-2xl font-bold text-white mb-1">{cat.name}</h3>
+                                            <p className="text-sm text-green-400 font-bold tracking-widest uppercase">{cat.count}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                </section>
-            )}
+                    </section>
+                )
+            }
 
             {/* CTA Section */}
             <section className="py-24 px-6 bg-[#FAFAFA]">
@@ -164,7 +152,7 @@ const LandingPage = () => {
             </section>
 
             <Footer />
-        </div>
+        </div >
     );
 };
 

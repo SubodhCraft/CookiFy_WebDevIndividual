@@ -1,11 +1,6 @@
 const getLandingPageData = async (req, res) => {
     try {
         const landingData = {
-            stats: [
-                { value: '50K+', label: 'Handpicked Recipes' },
-                { value: '150+', label: 'Countries' },
-                { value: '500K+', label: 'Active Members' }
-            ],
             features: [
                 {
                     number: '01',

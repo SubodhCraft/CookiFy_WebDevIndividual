@@ -190,10 +190,45 @@ const updateRecipe = async (req, res) => {
     }
 };
 
+const deleteRecipe = async (req, res) => {
+    try {
+        const recipe = await Recipe.findByPk(req.params.id);
+
+        if (!recipe) {
+            return res.status(404).json({
+                success: false,
+                message: 'Recipe not found'
+            });
+        }
+
+        // Make sure user is recipe owner
+        if (recipe.userId !== req.user.id) {
+            return res.status(401).json({
+                success: false,
+                message: 'User not authorized to delete this recipe'
+            });
+        }
+
+        await recipe.destroy();
+
+        res.json({
+            success: true,
+            message: 'Recipe removed'
+        });
+    } catch (error) {
+        console.error('Error deleting recipe:', error);
+        res.status(500).json({
+            success: false,
+            message: error.message || 'Server Error'
+        });
+    }
+};
+
 module.exports = {
     getRecipes,
     getRecipeById,
     getUserRecipes,
     createRecipe,
-    updateRecipe
+    updateRecipe,
+    deleteRecipe
 };

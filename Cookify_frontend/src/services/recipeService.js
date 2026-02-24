@@ -60,6 +60,16 @@ const recipeService = {
             }
         });
         return response.data;
+    },
+
+    /**
+     * Delete a recipe
+     * @param {string} id - Recipe ID
+     * @returns {Promise} API response
+     */
+    deleteRecipe: async (id) => {
+        const response = await api.delete(`/recipes/${id}`);
+        return response.data;
     }
 };
 
