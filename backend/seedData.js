@@ -4,56 +4,54 @@ const seedRecipes = async () => {
     try {
         const count = await Recipe.count();
         if (count > 0) {
-            // Optional: Update existing recipes to use Cloudinary if needed
-            // For now, only seed if empty
             return;
         }
 
         const recipes = [
             {
-                title: 'Supreme Avocado Tartine',
-                description: 'A masterpiece of texture and taste. Creamy avocado on sourdough with micro-greens and a sprinkle of sea salt.',
+                title: 'Avocado Toast',
+                description: 'Creamy avocado on toasted sourdough with greens and a sprinkle of sea salt. Simple, fresh, and filling.',
                 image: 'https://images.unsplash.com/photo-1588137378633-dea1336ce1e2?w=800&auto=format&fit=crop',
                 prepTime: '15 min',
                 calories: 320,
                 difficulty: 'Easy',
-                category: 'Gourmet Breakfast',
-                tags: ['Artisanal', 'Healthy', 'Vegan']
+                category: 'Breakfast',
+                tags: ['Healthy', 'Quick', 'Vegan']
             },
             {
-                title: 'Truffle-Infused Risotto',
-                description: 'Slow-cooked Arborio rice with wild forest mushrooms and authentic Italian truffle oil.',
+                title: 'Mushroom Risotto',
+                description: 'Slow-cooked rice with mixed mushrooms and a touch of truffle oil. Rich, creamy, and comforting.',
                 image: 'https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=800&auto=format&fit=crop',
                 prepTime: '45 min',
                 calories: 480,
                 difficulty: 'Hard',
-                category: 'Signature Main',
-                tags: ['Luxury', 'Vegetarian', 'Italian']
+                category: 'Main Course',
+                tags: ['Vegetarian', 'Italian', 'Comfort Food']
             },
             {
-                title: 'Blueberry Zen Bowl',
-                description: 'A vibrant collection of antioxidants and superfoods. Fresh blueberries, granola, coconut yogurt, and honey.',
+                title: 'Blueberry Smoothie Bowl',
+                description: 'A colorful breakfast bowl with fresh blueberries, granola, coconut yogurt, and a drizzle of honey.',
                 image: 'https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?w=800&auto=format&fit=crop',
                 prepTime: '10 min',
                 calories: 210,
                 difficulty: 'Easy',
-                category: 'Vibrant Snacks',
-                tags: ['Superfood', 'Raw', 'Sweet']
+                category: 'Breakfast',
+                tags: ['Healthy', 'Quick', 'Sweet']
             },
             {
-                title: 'Seared Scallops Port',
-                description: 'Perfectly caramelized scallops served with a light lemon-butter reduction and garden peas.',
+                title: 'Pan-Seared Scallops',
+                description: 'Golden seared scallops with a light lemon-butter sauce and fresh garden peas on the side.',
                 image: 'https://images.unsplash.com/photo-1519984388953-d2406bc725e1?w=800&auto=format&fit=crop',
                 prepTime: '25 min',
                 calories: 340,
                 difficulty: 'Medium',
                 category: 'Seafood',
-                tags: ['Protein', 'Gourmet', 'Coastal']
+                tags: ['Dinner', 'Seafood', 'High Protein']
             }
         ];
 
         await Recipe.bulkCreate(recipes);
-        console.log('✅ Recipes seeded successfully with Cloudinary Assets');
+        console.log('✅ Recipes seeded successfully');
     } catch (error) {
         console.error('❌ Error seeding recipes:', error);
     }

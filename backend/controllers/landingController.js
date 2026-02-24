@@ -2,63 +2,62 @@ const getLandingPageData = async (req, res) => {
     try {
         const landingData = {
             stats: [
-                { value: '50K+', label: 'Curated Recipes' },
+                { value: '50K+', label: 'Handpicked Recipes' },
                 { value: '150+', label: 'Countries' },
-                { value: '500K+', label: 'Active Members' },
-                { value: '4.9', label: 'App Store Rating' }
+                { value: '500K+', label: 'Active Members' }
             ],
             features: [
                 {
                     number: '01',
-                    title: 'Curated Collection',
-                    description: 'Access over 50,000 professionally tested recipes from award-winning chefs and culinary experts worldwide.'
+                    title: 'Thousands of Recipes',
+                    description: 'Browse a huge collection of recipes shared by home cooks and food lovers from around the world.'
                 },
                 {
                     number: '02',
-                    title: 'Personalized Experience',
-                    description: 'AI-powered recommendations tailored to your dietary preferences, skill level, and available ingredients.'
+                    title: 'Easy to Follow',
+                    description: 'Every recipe comes with clear steps, ingredient lists, and helpful tips so anyone can cook along.'
                 },
                 {
                     number: '03',
-                    title: 'Step-by-Step Guidance',
-                    description: 'Detailed instructions with video tutorials, timing guides, and pro tips for flawless execution.'
+                    title: 'Save Your Favorites',
+                    description: 'Keep the recipes you love in your own personal collection to come back to anytime.'
                 },
                 {
                     number: '04',
-                    title: 'Community & Sharing',
-                    description: 'Connect with passionate food lovers, share your creations, and discover trending recipes.'
+                    title: 'Share & Connect',
+                    description: 'Post your own recipes, get feedback from others, and discover what the community is making.'
                 }
             ],
             testimonials: [
                 {
-                    quote: "CookiFy has completely transformed how I approach cooking. The quality of recipes and attention to detail is unmatched.",
+                    quote: "Cookify made cooking so much easier for me. I find new recipes every day and the community is super helpful!",
                     author: "Alexandra Chen",
-                    role: "Culinary Director, The Modern Kitchen",
+                    role: "Home Cook",
                     image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&h=200&auto=format&fit=crop"
                 },
                 {
-                    quote: "As a professional chef, I'm impressed by the depth and authenticity of recipes. This is the gold standard for culinary platforms.",
+                    quote: "I love how simple it is to share my recipes and see what others are making. Great app for food lovers.",
                     author: "Marcus Williams",
-                    role: "Executive Chef, Eleven Madison Park",
+                    role: "Food Enthusiast",
                     image: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=200&h=200&auto=format&fit=crop"
                 },
                 {
-                    quote: "The personalized recommendations have helped me discover cuisines I never knew I'd love. Absolutely brilliant platform.",
+                    quote: "The recipe search is amazing. I always find something new to try based on what I have in my kitchen.",
                     author: "Sarah Mitchell",
-                    role: "Food Writer, Bon Appétit",
+                    role: "Home Chef",
                     image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&h=200&auto=format&fit=crop"
                 }
             ],
             categories: [
-                { name: 'Artisanal', image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=600&h=800&auto=format&fit=crop', count: '2,400+ recipes' },
-                { name: 'Patisserie', image: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?q=80&w=600&h=800&auto=format&fit=crop', count: '3,100+ recipes' },
-                { name: 'Gourmet', image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=80&w=600&h=800&auto=format&fit=crop', count: '1,800+ recipes' },
-                { name: 'Molecular', image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=600&h=800&auto=format&fit=crop', count: '2,200+ recipes' }
+                { name: 'Breakfast & Brunch', image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=600&h=800&auto=format&fit=crop', count: '120+ recipes' },
+                { name: 'Desserts', image: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?q=80&w=600&h=800&auto=format&fit=crop', count: '95+ recipes' },
+                { name: 'Quick Meals', image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=80&w=600&h=800&auto=format&fit=crop', count: '80+ recipes' },
+                { name: 'Healthy Bowls', image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=600&h=800&auto=format&fit=crop', count: '60+ recipes' }
             ],
             heroContent: {
-                title: 'Where Culinary Excellence Meets Home',
-                subtitle: 'The Art of Cooking, Reimagined',
-                description: 'Discover a refined collection of world-class recipes, curated by professional chefs and delivered via Cloudinary CDN.'
+                title: 'The Art of Cooking, Reimagined',
+                subtitle: 'Fresh recipes daily',
+                description: 'Browse thousands of handpicked recipes, save your favorites, and share your own creations with a global community of food lovers.'
             }
         };
 

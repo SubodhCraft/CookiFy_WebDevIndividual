@@ -31,7 +31,7 @@ const SigninPage = () => {
         e.preventDefault();
         if (!validateForm()) return;
         setIsLoading(true);
-        const loadingToast = toast.loading('Logging you in...');
+        const loadingToast = toast.loading('Signing in...');
         try {
             const response = await authService.signin(formData);
             if (response.success) {
@@ -40,7 +40,7 @@ const SigninPage = () => {
                 navigate('/dashboard');
             }
         } catch (error) {
-            const message = error.response?.data?.message || 'Login failed. Please check your email and password.';
+            const message = error.response?.data?.message || 'Login failed. Please check your credentials.';
             toast.error(message, { id: loadingToast });
         } finally {
             setIsLoading(false);
@@ -48,60 +48,70 @@ const SigninPage = () => {
     };
 
     return (
-        <div className="min-h-screen grid lg:grid-cols-2 bg-white text-slate-900 font-sans overflow-hidden">
-            {/* Left Narrative Column */}
-            <div className="hidden lg:flex flex-col justify-center items-center p-24 bg-slate-50 border-r border-slate-100 relative group overflow-hidden">
-                <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-emerald-500/5 to-transparent pointer-events-none" />
+        <div className="min-h-screen grid lg:grid-cols-2 bg-white text-[#2C2C2C] font-sans overflow-hidden">
+            {/* Left Panel */}
+            <div className="hidden lg:flex flex-col justify-center items-center p-16 bg-[#F5F7F4] relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-[#E8F5E9]/60 via-transparent to-[#FFF9C4]/20 pointer-events-none" />
 
-                <div className="relative z-10 max-w-lg w-full space-y-16 animate-reveal">
-                    <div className="flex items-center gap-4 cursor-pointer" onClick={() => navigate('/')}>
-                        <div className="w-14 h-14 bg-slate-900 rounded-2xl flex items-center justify-center shadow-xl group-hover:bg-emerald-600 transition-colors">
-                            <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <div className="relative z-10 max-w-md w-full space-y-10 animate-reveal">
+                    <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => navigate('/')}>
+                        <div className="w-10 h-10 bg-[#2E7D32] rounded-lg flex items-center justify-center">
+                            <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                                 <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                         </div>
-                        <span className="text-3xl font-extrabold tracking-tighter text-slate-900">Cookify</span>
+                        <span className="text-xl font-bold text-gray-900 font-heading">Cookify</span>
                     </div>
 
-                    <div className="space-y-8">
-                        <h1 className="text-8xl font-black leading-[0.9] tracking-tighter text-slate-900">
-                            Back in the <br />
-                            <span className="text-emerald-600">Kitchen.</span>
+                    <div className="space-y-4">
+                        <h1 className="text-5xl font-extrabold text-gray-900 leading-tight font-heading">
+                            Welcome<br />
+                            <span className="text-[#2E7D32]">Back.</span>
                         </h1>
-                        <p className="text-xl text-slate-500 font-medium leading-relaxed max-w-md">
-                            Your culinary adventure continues here. Discover new flavors and master your craft.
+                        <p className="text-lg text-gray-500 leading-relaxed max-w-sm">
+                            Sign in to find new recipes, save your favorites, and share your own dishes with the community.
                         </p>
                     </div>
 
-                    <div className="flex items-center gap-6 pt-8">
-                        <div className="flex -space-x-3">
+                    <div className="flex items-center gap-4 pt-6 border-t border-gray-200">
+                        <div className="flex -space-x-2">
                             {[1, 2, 3, 4].map(i => (
-                                <div key={i} className="w-14 h-14 rounded-full border-4 border-white bg-slate-100 overflow-hidden shadow-sm">
+                                <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-gray-100 overflow-hidden shadow-sm">
                                     <img src={`https://images.unsplash.com/photo-${i === 1 ? '1535713875002-d1d0cf377fde' : i === 2 ? '1599566150163-29194dcaad36' : i === 3 ? '1527980965255-d3b416303d12' : '1438761681033-6461ffad8d80'}?q=80&w=100&h=100&auto=format&fit=crop`} alt="chef" className="w-full h-full object-cover" />
                                 </div>
                             ))}
                         </div>
-                        <div className="h-10 w-px bg-slate-200" />
-                        <p className="text-sm text-slate-500 font-bold uppercase tracking-widest">
-                            <span className="text-emerald-600">50k+</span> Chefs Active
+                        <p className="text-sm text-gray-500 font-medium">
+                            <span className="font-semibold text-[#2E7D32]">50k+</span> chefs active
                         </p>
                     </div>
                 </div>
 
-                <div className="absolute bottom-12 left-24 text-[10px] text-slate-300 font-black tracking-[0.3em] uppercase">
-                    © 2026 Cookify System
+                <div className="absolute bottom-8 left-16 text-xs text-gray-300">
+                    © 2026 Cookify
                 </div>
             </div>
 
-            {/* Right Auth Column */}
-            <div className="flex items-center justify-center p-12 lg:p-24 relative overflow-y-auto w-full bg-white">
-                <div className="w-full max-w-md mx-auto space-y-12 animate-reveal delay-100">
-                    <div className="space-y-4">
-                        <h2 className="text-5xl font-black text-slate-900 tracking-tighter">Sign In</h2>
-                        <p className="text-slate-500 font-medium text-lg leading-relaxed">Please enter your credentials to access your portal.</p>
+            {/* Right Panel */}
+            <div className="flex items-center justify-center p-8 lg:p-16 bg-white">
+                <div className="w-full max-w-md space-y-8 animate-reveal">
+                    <div className="lg:hidden mb-4">
+                        <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => navigate('/')}>
+                            <div className="w-9 h-9 bg-[#2E7D32] rounded-lg flex items-center justify-center">
+                                <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                            </div>
+                            <span className="text-lg font-bold text-gray-900 font-heading">Cookify</span>
+                        </div>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-8">
+                    <div className="space-y-2">
+                        <h2 className="text-3xl font-bold text-gray-900 font-heading">Sign In</h2>
+                        <p className="text-gray-500">Enter your email and password to continue.</p>
+                    </div>
+
+                    <form onSubmit={handleSubmit} className="space-y-6">
                         <Input
                             label="Email Address"
                             type="email"
@@ -109,13 +119,15 @@ const SigninPage = () => {
                             value={formData.email}
                             onChange={handleChange}
                             error={errors.email}
-                            placeholder="your@email.com"
+                            placeholder="you@example.com"
                         />
 
-                        <div className="space-y-2 group">
-                            <div className="flex justify-between items-end mb-1">
-                                <label className="text-sm font-semibold text-slate-700">Password</label>
-                                <Link to="/forgot-password" className="text-emerald-600 hover:text-emerald-700 transition-colors text-xs font-bold uppercase tracking-widest">Forgot?</Link>
+                        <div className="space-y-1.5">
+                            <div className="flex justify-between items-center">
+                                <label className="text-sm font-medium text-gray-700">Password</label>
+                                <Link to="/forgot-password" className="text-xs font-medium text-[#2E7D32] hover:text-[#1B5E20] transition-colors">
+                                    Forgot password?
+                                </Link>
                             </div>
                             <div className="relative">
                                 <input
@@ -123,43 +135,44 @@ const SigninPage = () => {
                                     name="password"
                                     value={formData.password}
                                     onChange={handleChange}
-                                    className={`w-full bg-white border border-slate-200 rounded-lg px-5 py-3.5 focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all duration-200 text-slate-900 font-medium placeholder:text-slate-400 shadow-sm ${errors.password ? 'border-red-400' : ''}`}
+                                    className={`w-full bg-white border border-gray-200 rounded-lg px-4 py-3 text-sm font-medium text-gray-900 placeholder:text-gray-400 outline-none transition-all duration-200 focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/10 ${errors.password ? 'border-red-400' : ''}`}
                                     placeholder="Enter your password"
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-600 transition-colors"
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#2E7D32] transition-colors"
                                 >
-                                    {showPassword ? (
-                                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                                            <path d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268-2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
-                                        </svg>
-                                    ) : (
-                                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                                            <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268-2.943-9.542-7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                        </svg>
-                                    )}
+                                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                        {showPassword ? (
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                                        ) : (
+                                            <>
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                            </>
+                                        )}
+                                    </svg>
                                 </button>
                             </div>
-                            {errors.password && <p className="text-xs text-red-500 font-medium mt-1.5 ml-0.5">{errors.password}</p>}
+                            {errors.password && <p className="text-xs text-red-500 font-medium mt-1">{errors.password}</p>}
                         </div>
 
-                        <Button type="submit" disabled={isLoading} variant="secondary" className="w-full py-5 text-lg shadow-xl shadow-slate-900/10">
+                        <Button type="submit" disabled={isLoading} variant="primary" className="w-full py-3.5">
                             {isLoading ? (
-                                <div className="flex items-center gap-3">
-                                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                    <span>Syncing...</span>
+                                <div className="flex items-center gap-2">
+                                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                    <span>Signing in...</span>
                                 </div>
-                            ) : 'Enter Portal'}
+                            ) : 'Sign In'}
                         </Button>
                     </form>
 
-                    <div className="text-center pt-8 border-t border-slate-100">
-                        <p className="text-slate-500 font-semibold text-sm">
-                            New to the community? {' '}
-                            <Link to="/signup" className="text-emerald-600 hover:text-emerald-700 transition-colors underline underline-offset-8 decoration-emerald-500/30">
-                                Create an Account
+                    <div className="text-center pt-6 border-t border-gray-100">
+                        <p className="text-sm text-gray-500">
+                            Don't have an account?{' '}
+                            <Link to="/signup" className="font-semibold text-[#2E7D32] hover:text-[#1B5E20] transition-colors">
+                                Create one
                             </Link>
                         </p>
                     </div>
