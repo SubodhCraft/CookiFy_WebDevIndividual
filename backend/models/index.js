@@ -2,6 +2,7 @@ const { sequelize } = require('../database/db');
 const User = require('./User');
 const Recipe = require('./Recipe');
 const Bookmark = require('./Bookmark');
+const Comment = require('./Comment');
 
 // User <-> Recipe (Creation)
 User.hasMany(Recipe, { foreignKey: 'userId' });
@@ -11,6 +12,12 @@ Recipe.belongsTo(User, { foreignKey: 'userId' });
 User.belongsToMany(Recipe, { through: Bookmark, as: 'bookmarkedRecipes', foreignKey: 'userId' });
 Recipe.belongsToMany(User, { through: Bookmark, as: 'bookmarkedBy', foreignKey: 'recipeId' });
 
+// User <-> Recipe (Commenting)
+User.hasMany(Comment, { foreignKey: 'userId' });
+Comment.belongsTo(User, { foreignKey: 'userId' });
+Recipe.hasMany(Comment, { foreignKey: 'recipeId', onDelete: 'CASCADE' });
+Comment.belongsTo(Recipe, { foreignKey: 'recipeId' });
+
 // direct associations for Bookmark model
 Bookmark.belongsTo(User, { foreignKey: 'userId' });
 Bookmark.belongsTo(Recipe, { foreignKey: 'recipeId' });
@@ -19,5 +26,6 @@ module.exports = {
     sequelize,
     User,
     Recipe,
-    Bookmark
+    Bookmark,
+    Comment
 };

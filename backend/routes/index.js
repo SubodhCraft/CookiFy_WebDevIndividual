@@ -10,10 +10,12 @@ const authRoutes = require('./authRoutes');
 const landingRoutes = require('./landingRoutes');
 const recipeRoutes = require('./recipeRoutes');
 const bookmarkRoutes = require('./bookmarkRoutes');
+const commentRoutes = require('./commentRoutes');
 
 router.use('/auth', authRoutes);
 router.use('/landing', landingRoutes);
 router.use('/recipes', recipeRoutes);
 router.use('/bookmarks', bookmarkRoutes);
+router.use('/comments', commentRoutes);
 
 module.exports = router;

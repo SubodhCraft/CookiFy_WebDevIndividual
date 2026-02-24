@@ -176,7 +176,7 @@ const DashboardPage = () => {
     const TabButton = ({ id, label, icon }) => (
         <button
             onClick={() => setActiveTab(id)}
-            className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl transition-all duration-300 group ${activeTab === id
+            className={`flex items-center gap-3 px-5 py-3 rounded-xl transition-all duration-300 group ${activeTab === id
                 ? 'bg-white text-emerald-600 shadow-sm'
                 : 'text-slate-500 hover:text-slate-900'
                 }`}
@@ -184,9 +184,9 @@ const DashboardPage = () => {
             <img
                 src={icon}
                 alt={label}
-                className={`w-3.5 h-3.5 object-contain transition-all duration-300 ${activeTab === id ? '' : 'grayscale opacity-60 group-hover:opacity-100 group-hover:grayscale-0'}`}
+                className={`w-4 h-4 object-contain transition-all duration-300 ${activeTab === id ? '' : 'grayscale opacity-60 group-hover:opacity-100 group-hover:grayscale-0'}`}
             />
-            <span className={`text-[10px] font-bold uppercase tracking-widest transition-all ${activeTab === id ? 'opacity-100' : 'opacity-60 group-hover:opacity-100'}`}>
+            <span className={`text-[11px] font-bold uppercase tracking-widest transition-all ${activeTab === id ? 'opacity-100' : 'opacity-60 group-hover:opacity-100'}`}>
                 {label}
             </span>
         </button>
@@ -195,20 +195,20 @@ const DashboardPage = () => {
     return (
         <div className="min-h-screen bg-[#fafaf9] text-slate-900 font-sans">
             {/* Premium Fixed Header */}
-            <header className="fixed top-0 left-0 right-0 z-[100] bg-white/80 backdrop-blur-xl border-b border-slate-100 h-20">
-                <div className="page-container h-full flex items-center justify-between gap-8">
+            <header className="fixed top-0 left-0 right-0 z-[100] bg-white/80 backdrop-blur-xl border-b border-slate-100 h-24">
+                <div className="page-container h-full flex items-center justify-between gap-16">
                     {/* Brand Slot */}
-                    <div className="flex items-center gap-4 cursor-pointer shrink-0" onClick={() => setActiveTab('home')}>
-                        <div className="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20 active:scale-95 transition-transform">
+                    <div className="flex items-center gap-10 cursor-pointer shrink-0" onClick={() => setActiveTab('home')}>
+                        <div className="w-11 h-11 bg-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20 active:scale-95 transition-transform">
                             <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                                 <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                         </div>
-                        <span className="text-xl font-black tracking-tighter text-slate-950 uppercase hidden min-[400px]:block">COOKIFY</span>
+                        <span className="text-2xl font-black tracking-tighter text-slate-950 uppercase hidden min-[400px]:block">COOKIFY</span>
                     </div>
 
                     {/* Navigation Pills - More Adjustable/Responsive */}
-                    <nav className="flex items-center bg-slate-100/80 p-1 rounded-2xl overflow-x-auto no-scrollbar scroll-smooth shadow-inner border border-slate-200/50 max-w-[160px] min-[450px]:max-w-[280px] md:max-w-none">
+                    <nav className="flex items-center bg-slate-100/80 p-1.5 rounded-[20px] overflow-x-auto no-scrollbar scroll-smooth shadow-inner border border-slate-200/50 max-w-[160px] min-[450px]:max-w-[280px] md:max-w-none">
                         <TabButton id="home" label="Home" icon={icons.home} />
                         <TabButton id="search" label="Search" icon={icons.search} />
                         <TabButton id="bookmarks" label="Saved" icon={icons.bookmarks} />
@@ -217,10 +217,10 @@ const DashboardPage = () => {
                     </nav>
 
                     {/* Meta/Profile Slot */}
-                    <div className="flex items-center gap-4 shrink-0">
-                        <div className="hidden lg:flex flex-col items-end">
-                            <span className="text-sm font-bold text-slate-900 leading-none">{user?.fullName}</span>
-                            <span className="text-[10px] text-emerald-600 font-extrabold uppercase tracking-widest mt-1 opacity-70">Master Chef</span>
+                    <div className="flex items-center gap-10 shrink-0">
+                        <div className="hidden lg:flex flex-col items-end gap-2">
+                            <span className="text-sm font-bold text-slate-900 leading-none tracking-tight">{user?.fullName}</span>
+                            <span className="text-[11px] text-emerald-600 font-black uppercase tracking-[0.2em] opacity-80">Master Chef</span>
                         </div>
 
                         <div className="h-8 w-px bg-slate-200 hidden lg:block" />
@@ -254,7 +254,7 @@ const DashboardPage = () => {
             </header>
 
             {/* Main Content Area */}
-            <main className="pt-32 pb-32 page-container flex flex-col gap-16">
+            <main className="pt-44 pb-32 page-container flex flex-col gap-16">
                 {activeTab === 'home' && (
                     <div className="space-y-12 animate-fade-in">
                         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-black/[0.05] pb-10">
@@ -294,7 +294,7 @@ const DashboardPage = () => {
                                                 onClick={() => navigate(`/recipe/${recipe.id}`)}
                                                 className="group glass-card bg-white overflow-hidden hover:shadow-2xl transition-all duration-700 hover:-translate-y-2 cursor-pointer border-none"
                                             >
-                                                <div className="relative h-72 overflow-hidden">
+                                                <div className="relative h-64 overflow-hidden">
                                                     <img
                                                         src={recipe.image.includes('http') ?
                                                             (recipe.image.includes('cloudinary') ? recipe.image.replace('/upload/', '/upload/c_fill,g_auto,h_600,w_800/') : recipe.image) :
@@ -302,28 +302,25 @@ const DashboardPage = () => {
                                                         alt={recipe.title}
                                                         className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                                                     />
-                                                    <div className="absolute top-6 right-6 px-4 py-2 rounded-xl bg-green-500 text-[11px] font-bold uppercase tracking-widest text-white shadow-lg">
-                                                        {recipe.category}
-                                                    </div>
                                                 </div>
 
-                                                <div className="p-8 space-y-5">
-                                                    <div className="flex items-center gap-4 text-[10px] font-bold text-orange-500 uppercase tracking-widest">
-                                                        <span>{recipe.prepTime}</span>
-                                                        <div className="w-1 h-1 bg-gray-300 rounded-full" />
-                                                        <span>{recipe.calories} kcal</span>
-                                                        <div className="w-1 h-1 bg-gray-300 rounded-full" />
-                                                        <span className={
-                                                            recipe.difficulty === 'Easy' ? 'text-green-500' :
-                                                                recipe.difficulty === 'Medium' ? 'text-yellow-500' : 'text-red-500'
-                                                        }>{recipe.difficulty}</span>
+                                                <div className="p-10 flex flex-col gap-10">
+                                                    <div className="space-y-6">
+                                                        <div className="flex items-center gap-6 text-[11px] font-black text-orange-500 uppercase tracking-[0.15em]">
+                                                            <span>{recipe.prepTime}</span>
+                                                            <span>{recipe.calories} kcal</span>
+                                                            <span className={
+                                                                recipe.difficulty === 'Easy' ? 'text-green-500' :
+                                                                    recipe.difficulty === 'Medium' ? 'text-yellow-500' : 'text-red-500'
+                                                            }>{recipe.difficulty}</span>
+                                                        </div>
+
+                                                        <h3 className="text-2xl font-black text-slate-900 group-hover:text-emerald-600 transition-colors leading-[1.15] tracking-tight">
+                                                            {recipe.title}
+                                                        </h3>
                                                     </div>
 
-                                                    <h3 className="text-2xl font-bold text-gray-900 group-hover:text-green-600 transition-colors leading-tight">
-                                                        {recipe.title}
-                                                    </h3>
-
-                                                    <div className="flex justify-between items-center pt-4 border-t border-gray-100">
+                                                    <div className="flex justify-between items-center pt-8 border-t border-slate-100 mt-auto">
                                                         <div className="flex flex-wrap gap-2">
                                                             {recipe.tags?.slice(0, 2).map(tag => (
                                                                 <span key={tag} className="text-[10px] font-bold text-gray-400 bg-gray-100 px-3 py-1.5 rounded-lg uppercase tracking-tighter">
@@ -402,7 +399,7 @@ const DashboardPage = () => {
                                                         {recipe.title}
                                                     </h3>
 
-                                                    <div className="flex justify-between items-center pt-4 border-t border-gray-100">
+                                                    <div className="flex justify-between items-center pt-8 border-t border-slate-100 mt-auto">
                                                         <div className="flex flex-wrap gap-2">
                                                             {recipe.tags?.slice(0, 2).map(tag => (
                                                                 <span key={tag} className="text-[10px] font-bold text-gray-400 bg-gray-100 px-3 py-1.5 rounded-lg uppercase tracking-tighter">
@@ -457,55 +454,120 @@ const DashboardPage = () => {
                 )}
 
                 {activeTab === 'profile' && (
-                    <div className="animate-fade-in w-full space-y-12">
-                        <div className="glass-card bg-white p-16 flex flex-col items-center text-center space-y-8 border-none shadow-xl">
-                            <div className="relative group cursor-pointer" onClick={() => document.getElementById('profile-upload').click()}>
-                                <input
-                                    type="file"
-                                    id="profile-upload"
-                                    className="hidden"
-                                    accept="image/*"
-                                    onChange={handleProfilePictureChange}
+                    <div className="animate-fade-in w-full pb-44 -mx-4 md:-mx-8 lg:-mx-12">
+                        {/* Immersive Profile Header */}
+                        <div className="relative w-full h-[450px] overflow-hidden bg-slate-100">
+                            <div className="absolute inset-0 opacity-20">
+                                <img
+                                    src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&w=2400&auto=format&fit=crop"
+                                    className="w-full h-full object-cover"
+                                    alt="kitchen"
                                 />
-                                <div className="absolute inset-0 bg-green-500/20 rounded-[40px] blur-2xl group-hover:bg-green-500/40 transition-all" />
-                                <div className="w-44 h-44 rounded-[40px] bg-green-500 p-1 flex items-center justify-center text-5xl relative z-10 overflow-hidden transform group-hover:scale-105 transition-transform duration-500">
-                                    {isUploadingProfile ? (
-                                        <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin" />
-                                    ) : (
-                                        <img
-                                            src={user?.profilePicture ?
-                                                (user.profilePicture.startsWith('http') ? user.profilePicture : `http://localhost:5000${user.profilePicture}`) :
-                                                icons.profile}
-                                            className="w-full h-full object-cover"
-                                            alt="avatar"
-                                        />
-                                    )}
-                                </div>
-                                <div className="absolute -bottom-2 -right-2 w-12 h-12 bg-orange-500 rounded-2xl border-4 border-white flex items-center justify-center text-white z-20 shadow-2xl group-hover:scale-110 transition-transform">
-                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                                </div>
                             </div>
+                            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-100/40 to-[#fafaf9]" />
 
-                            <div className="space-y-3">
-                                <h1 className="text-5xl font-bold text-gray-900 tracking-tight">{user?.fullName}</h1>
-                                <div className="flex items-center justify-center gap-4">
-                                    <span className="text-green-600 font-bold tracking-[0.3em] uppercase text-xs">Fresh Food Advocate</span>
-                                    <div className="w-1.5 h-1.5 bg-gray-200 rounded-full" />
-                                    <span className="text-orange-500 font-bold tracking-[0.3em] uppercase text-xs">Elite Level 42</span>
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-3 gap-10 md:gap-20 pt-12 border-t border-gray-100 w-full max-w-2xl">
-                                {[
-                                    { label: 'Recipes', val: '24' },
-                                    { label: 'Followers', val: '1.2k' },
-                                    { label: 'Saves', val: '450' }
-                                ].map((s, i) => (
-                                    <div key={i} className="space-y-1">
-                                        <div className="text-4xl font-black text-gray-900">{s.val}</div>
-                                        <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{s.label}</div>
+                            <div className="absolute inset-0 page-container flex flex-col md:flex-row items-end pb-16 gap-16">
+                                <div className="relative shrink-0 translate-y-10" onClick={() => document.getElementById('profile-upload').click()}>
+                                    <input
+                                        type="file" id="profile-upload" className="hidden" accept="image/*"
+                                        onChange={handleProfilePictureChange}
+                                    />
+                                    <div className="w-64 h-64 rounded-[40px] bg-white p-1.5 flex items-center justify-center text-8xl relative z-10 overflow-hidden transform hover:scale-[1.02] cursor-pointer transition-transform duration-500 border-8 border-white shadow-2xl">
+                                        {isUploadingProfile ? (
+                                            <div className="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+                                        ) : (
+                                            <img
+                                                src={user?.profilePicture ?
+                                                    (user.profilePicture.startsWith('http') ? user.profilePicture : `http://localhost:5000${user.profilePicture}`) :
+                                                    icons.profile}
+                                                className="w-full h-full object-cover"
+                                                alt="avatar"
+                                            />
+                                        )}
                                     </div>
-                                ))}
+                                    <div className="absolute bottom-4 right-4 w-14 h-14 bg-emerald-600 rounded-2xl border-4 border-white flex items-center justify-center text-white z-20 shadow-xl hover:scale-110 transition-all cursor-pointer">
+                                        <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                                    </div>
+                                </div>
+
+                                <div className="flex-grow space-y-5 pb-4">
+                                    <span className="inline-flex px-4 py-1.5 bg-emerald-100 text-emerald-700 rounded-xl text-[11px] font-black uppercase tracking-[0.2em] border border-emerald-200">
+                                        Member Since 2024
+                                    </span>
+                                    <h1 className="text-7xl font-black text-slate-900 tracking-tighter leading-none">{user?.fullName}</h1>
+                                    <p className="text-2xl text-slate-500 font-medium tracking-tight">@{user?.username}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Profile Content Grid */}
+                        <div className="page-container mt-32">
+                            <div className="grid lg:grid-cols-12 gap-20">
+                                {/* Left Side: Quick Stats */}
+                                <div className="lg:col-span-4 space-y-16">
+                                    <div className="bg-white rounded-[48px] p-12 shadow-[0_32px_80px_rgba(0,0,0,0.03)] border border-slate-100 divide-y divide-slate-50">
+                                        {[
+                                            { label: 'Recipes Posted', val: recipes.filter(r => r.userId === user?.id).length || '0', icon: '🍳' },
+                                            { label: 'Saved Recipes', val: bookmarkedRecipes.length || '0', icon: '🔖' },
+                                            { label: 'Likes Received', val: '124', icon: '❤️' }
+                                        ].map((s, i) => (
+                                            <div key={i} className="flex items-center justify-between py-8 first:pt-0 last:pb-0 group">
+                                                <div className="flex items-center gap-6">
+                                                    <div className="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center text-2xl group-hover:scale-110 group-hover:bg-emerald-50 transition-all duration-500">
+                                                        {s.icon}
+                                                    </div>
+                                                    <span className="text-xs font-black text-slate-400 uppercase tracking-[0.2em]">{s.label}</span>
+                                                </div>
+                                                <div className="text-3xl font-black text-slate-900 tracking-tight">{s.val}</div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Right Side: Account Details */}
+                                <div className="lg:col-span-8 space-y-16">
+                                    <div className="bg-white rounded-[48px] p-16 shadow-[0_32px_80px_rgba(0,0,0,0.03)] border border-slate-100 space-y-16">
+                                        <div className="flex items-center gap-6">
+                                            <h3 className="text-3xl font-black text-slate-900 tracking-tighter uppercase">Account Information</h3>
+                                            <div className="h-px flex-grow bg-slate-100" />
+                                        </div>
+
+                                        <div className="grid md:grid-cols-2 gap-12">
+                                            {[
+                                                { label: 'Full Name', val: user?.fullName, icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z' },
+                                                { label: 'Username', val: `@${user?.username}`, icon: 'M7 20l4-16m2 16l4-16M6 9h14M4 15h14' },
+                                                { label: 'Email Address', val: user?.email, icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' },
+                                                { label: 'Account Status', val: 'Active Member', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' }
+                                            ].map((field, i) => (
+                                                <div key={i} className="p-8 rounded-[32px] bg-slate-50/50 border border-slate-100 group hover:bg-white hover:shadow-xl hover:border-emerald-100 transition-all duration-500">
+                                                    <div className="flex items-start justify-between">
+                                                        <div className="space-y-2">
+                                                            <span className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em]">{field.label}</span>
+                                                            <p className="text-xl font-black text-slate-800 tracking-tight">{field.val}</p>
+                                                        </div>
+                                                        <div className="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center group-hover:text-emerald-500 transition-colors">
+                                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d={field.icon} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* Danger Zone */}
+                                    <div className="bg-white rounded-[48px] p-12 shadow-[0_32px_80px_rgba(0,0,0,0.03)] border border-red-50 flex flex-col md:flex-row items-center justify-between gap-12">
+                                        <div className="space-y-2 text-center md:text-left">
+                                            <h4 className="text-2xl font-black text-slate-900 tracking-tight">Sign Out</h4>
+                                            <p className="text-lg text-slate-500 font-medium">Log out of your current session on this device.</p>
+                                        </div>
+                                        <button
+                                            onClick={handleLogout}
+                                            className="w-full md:w-auto px-12 py-6 rounded-2xl bg-red-50 text-red-600 font-black uppercase tracking-[0.2em] text-[11px] hover:bg-red-600 hover:text-white transition-all shadow-sm active:scale-95"
+                                        >
+                                            Sign Out
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -577,24 +639,23 @@ const DashboardPage = () => {
                                             onClick={() => navigate(`/recipe/${recipe.id}`)}
                                             className="group bg-white rounded-[48px] overflow-hidden hover:shadow-2xl transition-all duration-700 cursor-pointer border border-black/[0.01]"
                                         >
-                                            <div className="relative h-72 overflow-hidden">
+                                            <div className="relative h-64 overflow-hidden">
                                                 <img
                                                     src={recipe.image.startsWith('http') ? recipe.image : `http://localhost:5000${recipe.image}`}
                                                     className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                                                     alt={recipe.title}
                                                 />
-                                                <div className="absolute top-6 left-6 px-6 py-3 rounded-2xl bg-white/90 backdrop-blur-xl text-[10px] font-black uppercase tracking-[0.2em] text-green-600 shadow-2xl">
-                                                    {recipe.category}
-                                                </div>
                                             </div>
-                                            <div className="p-10 space-y-6">
-                                                <h3 className="text-2xl font-black text-gray-900 group-hover:text-green-600 transition-colors uppercase tracking-tighter leading-none">
-                                                    {recipe.title}
-                                                </h3>
-                                                <div className="flex items-center justify-between pt-4 border-t border-black/[0.03]">
-                                                    <div className="flex gap-4">
-                                                        <span className="text-xs font-black text-gray-400">{recipe.prepTime}</span>
-                                                        <span className="text-xs font-black text-gray-400">{recipe.calories} kcal</span>
+                                            <div className="p-10 flex flex-col gap-10">
+                                                <div className="space-y-6">
+                                                    <h3 className="text-2xl font-black text-slate-900 group-hover:text-emerald-600 transition-colors uppercase tracking-tighter leading-none">
+                                                        {recipe.title}
+                                                    </h3>
+                                                </div>
+                                                <div className="flex items-center justify-between pt-8 border-t border-slate-100 mt-auto">
+                                                    <div className="flex gap-8 text-[11px] font-black text-orange-500 uppercase tracking-[0.15em]">
+                                                        <span>{recipe.prepTime}</span>
+                                                        <span>{recipe.calories} kcal</span>
                                                     </div>
                                                     <button
                                                         onClick={(e) => {
@@ -665,7 +726,7 @@ const DashboardPage = () => {
                                         onClick={() => navigate(`/recipe/${recipe.id}`)}
                                         className="group glass-card bg-white overflow-hidden hover:shadow-2xl transition-all duration-700 hover:-translate-y-2 cursor-pointer border-none"
                                     >
-                                        <div className="relative h-72 overflow-hidden">
+                                        <div className="relative h-64 overflow-hidden">
                                             <img
                                                 src={recipe.image.includes('http') ?
                                                     (recipe.image.includes('cloudinary') ? recipe.image.replace('/upload/', '/upload/c_fill,g_auto,h_600,w_800/') : recipe.image) :
@@ -673,23 +734,21 @@ const DashboardPage = () => {
                                                 alt={recipe.title}
                                                 className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                                             />
-                                            <div className="absolute top-6 right-6 px-4 py-2 rounded-xl bg-green-500 text-[11px] font-bold uppercase tracking-widest text-white shadow-lg">
-                                                {recipe.category}
-                                            </div>
                                         </div>
 
-                                        <div className="p-8 space-y-5">
-                                            <div className="flex items-center gap-4 text-[10px] font-bold text-orange-500 uppercase tracking-widest">
-                                                <span>{recipe.prepTime}</span>
-                                                <div className="w-1 h-1 bg-gray-300 rounded-full" />
-                                                <span>{recipe.calories} kcal</span>
+                                        <div className="p-10 flex flex-col gap-10">
+                                            <div className="space-y-6">
+                                                <div className="flex items-center gap-8 text-[11px] font-black text-orange-500 uppercase tracking-[0.15em]">
+                                                    <span>{recipe.prepTime}</span>
+                                                    <span>{recipe.calories} kcal</span>
+                                                </div>
+
+                                                <h3 className="text-2xl font-black text-slate-900 group-hover:text-emerald-600 transition-colors leading-[1.15] tracking-tight">
+                                                    {recipe.title}
+                                                </h3>
                                             </div>
 
-                                            <h3 className="text-2xl font-bold text-gray-900 group-hover:text-green-600 transition-colors leading-tight">
-                                                {recipe.title}
-                                            </h3>
-
-                                            <div className="flex justify-between items-center pt-4 border-t border-gray-100">
+                                            <div className="flex justify-between items-center pt-8 border-t border-slate-100 mt-auto">
                                                 <div className="flex flex-wrap gap-2">
                                                     {recipe.tags?.slice(0, 2).map(tag => (
                                                         <span key={tag} className="text-[10px] font-bold text-gray-400 bg-gray-100 px-3 py-1.5 rounded-lg uppercase tracking-tighter">
