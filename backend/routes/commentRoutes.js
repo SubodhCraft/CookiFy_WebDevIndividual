@@ -12,4 +12,7 @@ router.post('/recipe/:recipeId', protect, commentController.addComment);
 // Delete a comment (protected)
 router.delete('/:id', protect, commentController.deleteComment);
 
+// Update a comment (protected)
+router.put('/:id', protect, commentController.updateComment);
+
 module.exports = router;

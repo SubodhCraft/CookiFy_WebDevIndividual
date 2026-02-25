@@ -115,3 +115,62 @@ exports.deleteComment = async (req, res) => {
         });
     }
 };
+
+/**
+ * Update a comment
+ */
+exports.updateComment = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { content } = req.body;
+        const userId = req.user.id;
+
+        if (!content) {
+            return res.status(400).json({
+                success: false,
+                message: 'Comment content is required'
+            });
+        }
+
+        const comment = await Comment.findByPk(id);
+
+        if (!comment) {
+            return res.status(404).json({
+                success: false,
+                message: 'Comment not found'
+            });
+        }
+
+        // Check if the user is the owner of the comment
+        if (comment.userId !== userId) {
+            return res.status(403).json({
+                success: false,
+                message: 'You are not authorized to update this comment'
+            });
+        }
+
+        comment.content = content;
+        await comment.save();
+
+        // Fetch the updated comment with User info
+        const updatedComment = await Comment.findByPk(id, {
+            include: [{
+                model: User,
+                attributes: ['fullName', 'profilePicture', 'username']
+            }]
+        });
+
+        res.status(200).json({
+            success: true,
+            message: 'Comment updated successfully',
+            data: updatedComment
+        });
+    } catch (error) {
+        console.error('Update comment error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to update comment',
+            error: error.message
+        });
+    }
+};

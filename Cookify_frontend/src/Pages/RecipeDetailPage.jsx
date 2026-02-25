@@ -16,6 +16,11 @@ const RecipeDetailPage = () => {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [isCommenting, setIsCommenting] = useState(false);
+    const [editingCommentId, setEditingCommentId] = useState(null);
+    const [editingContent, setEditingContent] = useState('');
+    const [isUpdating, setIsUpdating] = useState(false);
+    const [commentToDelete, setCommentToDelete] = useState(null);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const currentUser = authService.getUser();
 
     const defaultAvatar = "https://cdn-icons-png.flaticon.com/512/3461/3461901.png";
@@ -70,11 +75,53 @@ const RecipeDetailPage = () => {
         finally { setIsCommenting(false); }
     };
 
-    const handleDeleteComment = async (commentId) => {
+    const confirmDelete = (commentId) => {
+        setCommentToDelete(commentId);
+        setShowDeleteModal(true);
+    };
+
+    const handleDeleteComment = async () => {
+        if (!commentToDelete) return;
         try {
-            const res = await commentService.deleteComment(commentId);
-            if (res.success) { setComments(comments.filter(c => c.id !== commentId)); toast.success('Comment deleted'); }
-        } catch { toast.error('Delete failed'); }
+            const res = await commentService.deleteComment(commentToDelete);
+            if (res.success) {
+                setComments(comments.filter(c => c.id !== commentToDelete));
+                toast.success('Comment deleted');
+            }
+        } catch {
+            toast.error('Delete failed');
+        } finally {
+            setShowDeleteModal(false);
+            setCommentToDelete(null);
+        }
+    };
+
+    const handleUpdateComment = async (commentId) => {
+        if (!editingContent.trim()) return;
+        setIsUpdating(true);
+        try {
+            const res = await commentService.updateComment(commentId, editingContent);
+            if (res.success) {
+                setComments(comments.map(c => c.id === commentId ? res.data : c));
+                setEditingCommentId(null);
+                setEditingContent('');
+                toast.success('Comment updated');
+            }
+        } catch {
+            toast.error('Failed to update comment');
+        } finally {
+            setIsUpdating(false);
+        }
+    };
+
+    const startEditing = (comment) => {
+        setEditingCommentId(comment.id);
+        setEditingContent(comment.content);
+    };
+
+    const cancelEditing = () => {
+        setEditingCommentId(null);
+        setEditingContent('');
     };
 
     if (isLoading) {
@@ -94,6 +141,38 @@ const RecipeDetailPage = () => {
 
     return (
         <div className="min-h-screen bg-[#FAFAFA] text-[#2C2C2C] font-sans pb-20">
+            {/* Custom Delete Confirmation Modal */}
+            {showDeleteModal && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
+                    <div className="absolute inset-0 bg-black/40 backdrop-blur-sm animate-fadeIn" onClick={() => setShowDeleteModal(false)} />
+                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden animate-slideUp relative z-10">
+                        <div className="p-6 text-center">
+                            <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                            </div>
+                            <h3 className="text-lg font-bold text-gray-900 mb-2">Delete Comment?</h3>
+                            <p className="text-sm text-gray-500">This action cannot be undone. Are you sure you want to remove your thoughts on this recipe?</p>
+                        </div>
+                        <div className="flex border-t border-gray-100">
+                            <button
+                                onClick={() => setShowDeleteModal(false)}
+                                className="flex-1 py-4 text-sm font-semibold text-gray-500 hover:bg-gray-50 transition-colors border-r border-gray-100"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleDeleteComment}
+                                className="flex-1 py-4 text-sm font-semibold text-red-500 hover:bg-red-50 transition-colors"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Sticky Nav */}
             <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-xs">
                 <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
@@ -267,17 +346,56 @@ const RecipeDetailPage = () => {
                                                 <div className="flex items-center justify-between mb-1">
                                                     <span className="text-sm font-semibold text-gray-900">{comment.User?.fullName}</span>
                                                     {currentUser?.id === comment.userId && (
-                                                        <button
-                                                            onClick={() => handleDeleteComment(comment.id)}
-                                                            className="text-gray-300 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
-                                                        >
-                                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                            </svg>
-                                                        </button>
+                                                        <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                            <button
+                                                                onClick={() => startEditing(comment)}
+                                                                className="text-gray-400 hover:text-[#2E7D32] transition-colors"
+                                                                title="Edit comment"
+                                                            >
+                                                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                                </svg>
+                                                            </button>
+                                                            <button
+                                                                onClick={() => confirmDelete(comment.id)}
+                                                                className="text-gray-400 hover:text-red-500 transition-colors"
+                                                                title="Delete comment"
+                                                            >
+                                                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                                </svg>
+                                                            </button>
+                                                        </div>
                                                     )}
                                                 </div>
-                                                <p className="text-sm text-gray-600">{comment.content}</p>
+
+                                                {editingCommentId === comment.id ? (
+                                                    <div className="mt-2 space-y-2">
+                                                        <textarea
+                                                            value={editingContent}
+                                                            onChange={(e) => setEditingContent(e.target.value)}
+                                                            rows="2"
+                                                            className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-700 outline-none focus:border-[#2E7D32] resize-none transition-all"
+                                                        />
+                                                        <div className="flex justify-end gap-2">
+                                                            <button
+                                                                onClick={cancelEditing}
+                                                                className="px-3 py-1 text-xs font-medium text-gray-500 hover:text-gray-700"
+                                                            >
+                                                                Cancel
+                                                            </button>
+                                                            <button
+                                                                onClick={() => handleUpdateComment(comment.id)}
+                                                                disabled={isUpdating || !editingContent.trim() || editingContent === comment.content}
+                                                                className="px-3 py-1 bg-[#2E7D32] text-white rounded-md text-xs font-semibold hover:bg-[#1B5E20] disabled:opacity-50 transition-colors"
+                                                            >
+                                                                {isUpdating ? 'Saving...' : 'Save Changes'}
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                ) : (
+                                                    <p className="text-sm text-gray-600 leading-relaxed">{comment.content}</p>
+                                                )}
                                             </div>
                                             <span className="text-[11px] text-gray-400 mt-1 ml-1 inline-block">
                                                 {new Date(comment.created_at).toLocaleDateString()}
