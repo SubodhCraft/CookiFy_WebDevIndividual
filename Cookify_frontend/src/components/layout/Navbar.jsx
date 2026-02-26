@@ -1,21 +1,34 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Button from '../common/Button';
+import authService from '../../services/authService';
 
 const Navbar = () => {
     const navigate = useNavigate();
     const [isMobileOpen, setIsMobileOpen] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(authService.isAuthenticated());
+
+    useEffect(() => {
+        // Simple interval to check auth state (or could use a state manager/context)
+        const checkAuth = () => {
+            setIsAuthenticated(authService.isAuthenticated());
+        };
+        const interval = setInterval(checkAuth, 1000);
+        return () => clearInterval(interval);
+    }, []);
+
+    const handleLogout = () => {
+        authService.clearAuthData();
+        setIsAuthenticated(false);
+        navigate('/');
+    };
 
     return (
         <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
             <div className="max-w-[1280px] mx-auto px-6 h-16 flex items-center justify-between">
                 {/* Logo */}
                 <Link to="/" className="flex items-center gap-2.5">
-                    <div className="w-9 h-9 bg-[#2E7D32] rounded-lg flex items-center justify-center">
-                        <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                    </div>
+                    <img src="/Cookify.png" alt="Cookify Logo" className="w-9 h-9 object-contain" />
                     <span className="text-xl font-bold text-gray-900 font-heading">Cookify</span>
                 </Link>
 
@@ -30,12 +43,25 @@ const Navbar = () => {
 
                 {/* Auth Actions */}
                 <div className="hidden md:flex items-center gap-3">
-                    <Link to="/signin" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors px-4 py-2">
-                        Sign In
-                    </Link>
-                    <Button onClick={() => navigate('/signup')} variant="primary" size="sm">
-                        Get Started
-                    </Button>
+                    {isAuthenticated ? (
+                        <>
+                            <Link to="/dashboard" className="text-sm font-bold text-[#2E7D32] hover:text-[#1B5E20] transition-colors px-4 py-2">
+                                Dashboard
+                            </Link>
+                            <Button onClick={handleLogout} variant="outline" size="sm">
+                                Sign Out
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                            <Link to="/signin" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors px-4 py-2">
+                                Sign In
+                            </Link>
+                            <Button onClick={() => navigate('/signup')} variant="primary" size="sm">
+                                Get Started
+                            </Button>
+                        </>
+                    )}
                 </div>
 
                 {/* Mobile hamburger */}
@@ -62,10 +88,21 @@ const Navbar = () => {
                         </a>
                     ))}
                     <div className="pt-3 border-t border-gray-100 flex flex-col gap-2">
-                        <Link to="/signin" className="text-sm font-medium text-gray-600 py-2">Sign In</Link>
-                        <Button onClick={() => navigate('/signup')} variant="primary" size="sm" className="w-full">
-                            Get Started
-                        </Button>
+                        {isAuthenticated ? (
+                            <>
+                                <Link to="/dashboard" className="text-sm font-bold text-[#2E7D32] py-2">Dashboard</Link>
+                                <Button onClick={handleLogout} variant="outline" size="sm" className="w-full">
+                                    Sign Out
+                                </Button>
+                            </>
+                        ) : (
+                            <>
+                                <Link to="/signin" className="text-sm font-medium text-gray-600 py-2">Sign In</Link>
+                                <Button onClick={() => navigate('/signup')} variant="primary" size="sm" className="w-full">
+                                    Get Started
+                                </Button>
+                            </>
+                        )}
                     </div>
                 </div>
             )}

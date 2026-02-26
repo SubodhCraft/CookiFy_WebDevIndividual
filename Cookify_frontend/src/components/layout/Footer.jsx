@@ -10,11 +10,7 @@ const Footer = () => {
                     {/* Brand Description - spans 2 columns */}
                     <div className="col-span-2 lg:col-span-2 space-y-6">
                         <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-[#2E7D32] rounded-xl flex items-center justify-center shadow-lg shadow-green-500/20">
-                                <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                                </svg>
-                            </div>
+                            <img src="/Cookify.png" alt="Cookify Logo" className="w-10 h-10 object-contain" />
                             <span className="text-2xl font-bold text-gray-900 font-heading tracking-tight">Cookify</span>
                         </div>
                         <p className="text-gray-500 leading-relaxed text-sm max-w-sm">

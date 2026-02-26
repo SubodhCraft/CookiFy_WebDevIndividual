@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import LandingPage from './Pages/LandingPage';
 import SignupPage from './Pages/SignupPage';
@@ -7,6 +7,8 @@ import DashboardPage from './Pages/DashboardPage';
 import RecipeDetailPage from './Pages/RecipeDetailPage';
 import ForgotPasswordPage from './Pages/ForgotPasswordPage';
 import ResetPasswordPage from './Pages/ResetPasswordPage';
+import ProtectedRoute from './components/common/ProtectedRoute';
+import PublicRoute from './components/common/PublicRoute';
 
 function App() {
   return (
@@ -34,15 +36,22 @@ function App() {
         }}
       />
       <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/signin" element={<SigninPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/recipe/:id" element={<RecipeDetailPage />} />
-        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-        <Route path="/reset-password" element={<ResetPasswordPage />} />
-        <Route path="/myRecipes" element={<DashboardPage />} />
-        <Route path="*" element={<LandingPage />} />
+        {/* Public Routes - Landing page is public but redirects to dashboard if logged in */}
+        <Route path="/" element={<PublicRoute><LandingPage /></PublicRoute>} />
+
+        {/* Auth Routes - Redirect to dashboard if already logged in */}
+        <Route path="/signup" element={<PublicRoute><SignupPage /></PublicRoute>} />
+        <Route path="/signin" element={<PublicRoute><SigninPage /></PublicRoute>} />
+        <Route path="/forgot-password" element={<PublicRoute><ForgotPasswordPage /></PublicRoute>} />
+        <Route path="/reset-password" element={<PublicRoute><ResetPasswordPage /></PublicRoute>} />
+
+        {/* Protected Routes - Only accessible when logged in */}
+        <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+        <Route path="/recipe/:id" element={<ProtectedRoute><RecipeDetailPage /></ProtectedRoute>} />
+        <Route path="/myRecipes" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+
+        {/* Catch-all route */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   );

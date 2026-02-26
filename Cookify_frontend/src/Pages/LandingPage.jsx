@@ -43,10 +43,6 @@ const LandingPage = () => {
                 <div className="absolute inset-0 bg-gradient-to-br from-[#E8F5E9]/40 via-transparent to-[#FFF9C4]/20 pointer-events-none" />
                 <div className="max-w-[1280px] mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center relative z-10">
                     <div className="space-y-8 animate-reveal">
-                        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#E8F5E9] border border-[#2E7D32]/10 text-[#2E7D32] text-xs font-semibold">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#2E7D32]" />
-                            {data.heroContent?.subtitle || 'Fresh recipes daily'}
-                        </div>
 
                         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-[1.1] font-heading">
                             {data.heroContent?.title || 'Discover & Share Delicious Recipes'}

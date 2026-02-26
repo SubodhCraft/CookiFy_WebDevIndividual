@@ -230,11 +230,7 @@ const DashboardPage = () => {
                 <div className="max-w-[1280px] mx-auto px-6 h-16 flex items-center justify-between gap-4">
                     {/* Logo */}
                     <div className="flex items-center gap-2.5 cursor-pointer flex-shrink-0" onClick={() => setActiveTab('home')}>
-                        <div className="w-9 h-9 bg-[#2E7D32] rounded-lg flex items-center justify-center">
-                            <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                        </div>
+                        <img src="/Cookify.png" alt="Cookify Logo" className="w-9 h-9 object-contain" />
                         <span className="text-lg font-bold text-gray-900 font-heading hidden sm:block">Cookify</span>
                     </div>
 

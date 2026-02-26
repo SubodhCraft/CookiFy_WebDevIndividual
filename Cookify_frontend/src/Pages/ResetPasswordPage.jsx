@@ -131,11 +131,7 @@ const ResetPasswordPage = () => {
 
                 <div className="relative z-10 max-w-md w-full space-y-10 animate-reveal">
                     <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => navigate('/')}>
-                        <div className="w-10 h-10 bg-[#2E7D32] rounded-lg flex items-center justify-center">
-                            <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                        </div>
+                        <img src="/Cookify.png" alt="Cookify Logo" className="w-10 h-10 object-contain" />
                         <span className="text-xl font-bold text-gray-900 font-heading">Cookify</span>
                     </div>
 

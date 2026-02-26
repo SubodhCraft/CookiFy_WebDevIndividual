@@ -50,7 +50,8 @@ const authService = {
      * @returns {boolean}
      */
     isAuthenticated: () => {
-        return !!localStorage.getItem('cookify_token');
+        const token = localStorage.getItem('cookify_token');
+        return !!token && token !== 'undefined' && token !== 'null';
     },
 
     /**

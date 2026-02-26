@@ -5,7 +5,7 @@ const path = require('path');
 
 dotenv.config();
 
-const { connectDB } = require('./database/db');
+const { connectDB, sequelize } = require('./database/db');
 require('./models');
 const routes = require('./routes');
 
@@ -19,12 +19,7 @@ app.use((req, res, next) => {
     next();
 });
 
-const startServer = async () => {
-    await connectDB();
-    await seedRecipes();
-};
-
-startServer();
+// Initial server startup logic moved to bottom
 
 const allowedOrigins = [
     'http://localhost:5173',
@@ -95,10 +90,36 @@ app.use((err, req, res, next) => {
     });
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server is running on port ${PORT}`);
-    console.log(`API available at http://127.0.0.1:${PORT}/api`);
-});
+const startServer = async () => {
+    try {
+        await connectDB();
+
+        if (process.env.NODE_ENV === 'test') {
+            await sequelize.sync({ force: true });
+            // Re-seed since force:true clears it
+            await seedRecipes();
+            console.log('Database Synchronized (Test Mode: Force + Seeded)');
+        } else {
+            await sequelize.sync({ alter: true });
+            await seedRecipes();
+            console.log('Database Synchronized (Sync/Alter Mode)');
+        }
+
+        if (process.env.NODE_ENV !== 'test') {
+            const PORT = process.env.PORT || 5000;
+            app.listen(PORT, '0.0.0.0', () => {
+                console.log(`Server is running on port ${PORT}`);
+                console.log(`API available at http://127.0.0.1:${PORT}/api`);
+            });
+        }
+
+    } catch (error) {
+        console.error("Failed to start server:", error);
+    }
+};
+
+if (process.env.NODE_ENV !== 'test') {
+    startServer();
+}
 
 module.exports = app;

@@ -96,11 +96,7 @@ const SignupPage = () => {
                 <div className="relative z-10 max-w-sm w-full space-y-12 animate-reveal">
                     {/* Brand Identity */}
                     <div className="flex items-center gap-3 cursor-pointer group" onClick={() => navigate('/')}>
-                        <div className="w-12 h-12 bg-[#2E7D32] rounded-2xl flex items-center justify-center shadow-xl shadow-green-900/20 group-hover:scale-110 transition-transform duration-300">
-                            <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                        </div>
+                        <img src="/Cookify.png" alt="Cookify Logo" className="w-12 h-12 object-contain group-hover:scale-110 transition-transform duration-300" />
                         <span className="text-2xl font-bold text-gray-900 font-heading tracking-tight">Cookify</span>
                     </div>
 
@@ -115,19 +111,6 @@ const SignupPage = () => {
                         </p>
                     </div>
 
-                    {/* Subtle Trust Indicator */}
-                    <div className="pt-8 border-t border-gray-200/60">
-                        <div className="flex items-center gap-3">
-                            <div className="flex -space-x-3">
-                                {[1, 2, 3].map(i => (
-                                    <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-gray-100 overflow-hidden shadow-sm">
-                                        <img src={`https://images.unsplash.com/photo-${i === 1 ? '1535713875002-d1d0cf377fde' : i === 2 ? '1599566150163-29194dcaad36' : '1438761681033-6461ffad8d80'}?q=80&w=100&h=100&auto=format&fit=crop`} alt="chef" className="w-full h-full object-cover" />
-                                    </div>
-                                ))}
-                            </div>
-                            <p className="text-sm text-gray-400 font-semibold italic">Trusted by thousands of chefs</p>
-                        </div>
-                    </div>
                 </div>
 
                 <div className="absolute bottom-10 left-16 text-xs text-gray-400 font-medium tracking-widest uppercase italic">
@@ -140,11 +123,7 @@ const SignupPage = () => {
                 <div className="w-full max-w-md space-y-10 animate-reveal py-8">
                     {/* Mobile Branding */}
                     <div className="lg:hidden flex items-center gap-2.5 mb-8 cursor-pointer" onClick={() => navigate('/')}>
-                        <div className="w-10 h-10 bg-[#2E7D32] rounded-xl flex items-center justify-center shadow-lg shadow-green-900/10">
-                            <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                        </div>
+                        <img src="/Cookify.png" alt="Cookify Logo" className="w-10 h-10 object-contain" />
                         <span className="text-xl font-bold text-gray-900 font-heading">Cookify</span>
                     </div>
 

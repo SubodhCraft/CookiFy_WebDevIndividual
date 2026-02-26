@@ -44,11 +44,7 @@ const ForgotPasswordPage = () => {
 
                 <div className="relative z-10 max-w-sm w-full space-y-12 animate-reveal">
                     <div className="flex items-center gap-3 cursor-pointer group" onClick={() => navigate('/')}>
-                        <div className="w-12 h-12 bg-[#2E7D32] rounded-2xl flex items-center justify-center shadow-xl shadow-green-900/20 group-hover:scale-110 transition-transform duration-300">
-                            <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                        </div>
+                        <img src="/Cookify.png" alt="Cookify Logo" className="w-12 h-12 object-contain group-hover:scale-110 transition-transform duration-300" />
                         <span className="text-2xl font-bold text-gray-900 font-heading tracking-tight">Cookify</span>
                     </div>
 
@@ -132,11 +128,7 @@ const ForgotPasswordPage = () => {
                     ) : (
                         <>
                             <div className="lg:hidden flex items-center gap-2.5 mb-8" onClick={() => navigate('/')}>
-                                <div className="w-10 h-10 bg-[#2E7D32] rounded-xl flex items-center justify-center">
-                                    <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
-                                </div>
+                                <img src="/Cookify.png" alt="Cookify Logo" className="w-10 h-10 object-contain" />
                                 <span className="text-xl font-bold text-gray-900 font-heading">Cookify</span>
                             </div>
 
