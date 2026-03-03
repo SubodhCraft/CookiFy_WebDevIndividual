@@ -6,6 +6,7 @@ import recipeService from '../services/recipeService';
 import bookmarkService from '../services/bookmarkService';
 import RecipeCreateModal from '../components/recipe/RecipeCreateModal';
 import MyRecipes from '../components/recipe/MyRecipes';
+import './Dashboard.css';
 
 const DashboardPage = () => {
     const navigate = useNavigate();
@@ -263,7 +264,7 @@ const DashboardPage = () => {
                             onClick={() => setActiveTab('profile')}
                         >
                             <img
-                                src={user?.profilePicture ? (user.profilePicture.startsWith('http') ? user.profilePicture : `http://127.0.0.1:5000${user.profilePicture}`) : 'https://cdn-icons-png.flaticon.com/512/1077/1077063.png'}
+                                src={user?.profilePicture ? (user.profilePicture.startsWith('http') ? user.profilePicture : `http://127.0.0.1:5000${user.profilePicture}`) : 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg'}
                                 className="w-full h-full object-cover"
                                 alt="profile"
                             />
@@ -437,7 +438,7 @@ const DashboardPage = () => {
                                                 </div>
                                             ) : (
                                                 <img
-                                                    src={user?.profilePicture ? (user.profilePicture.startsWith('http') ? user.profilePicture : `http://127.0.0.1:5000${user.profilePicture}`) : 'https://cdn-icons-png.flaticon.com/512/1077/1077063.png'}
+                                                    src={user?.profilePicture ? (user.profilePicture.startsWith('http') ? user.profilePicture : `http://127.0.0.1:5000${user.profilePicture}`) : 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg'}
                                                     className="w-full h-full object-cover rounded-[32px] shadow-sm transform group-hover:scale-105 transition-transform duration-500"
                                                     alt="profile"
                                                 />
