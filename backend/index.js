@@ -93,17 +93,7 @@ app.use((err, req, res, next) => {
 const startServer = async () => {
     try {
         await connectDB();
-
-        if (process.env.NODE_ENV === 'test') {
-            await sequelize.sync({ force: true });
-            // Re-seed since force:true clears it
-            await seedRecipes();
-            console.log('Database Synchronized (Test Mode: Force + Seeded)');
-        } else {
-            await sequelize.sync({ alter: true });
-            await seedRecipes();
-            console.log('Database Synchronized (Sync/Alter Mode)');
-        }
+        await seedRecipes();
 
         if (process.env.NODE_ENV !== 'test') {
             const PORT = process.env.PORT || 5000;
@@ -112,7 +102,6 @@ const startServer = async () => {
                 console.log(`API available at http://127.0.0.1:${PORT}/api`);
             });
         }
-
     } catch (error) {
         console.error("Failed to start server:", error);
     }

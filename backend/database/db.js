@@ -37,17 +37,23 @@ const connectDB = async () => {
         await sequelize.authenticate();
         console.log('PostgreSQL Connected');
 
-        if (process.env.NODE_ENV === 'development') {
-            await sequelize.sync({ alter: true });
-            console.log('Database Synchronized');
+        const isTest = process.env.NODE_ENV === 'test';
+        const isUsingTestDB = sequelize.getDatabaseName() === process.env.TEST_DB_NAME;
+
+        if (isTest && isUsingTestDB) {
+            // ONLY use force:true if we are sure we are on the test database
+            await sequelize.sync({ force: true });
+            console.log('Database Synchronized (TEST MODE - DATA RESET)');
         } else {
-            await sequelize.sync();
+            // Preservation mode for development/production
+            await sequelize.sync({ alter: true });
+            console.log('Database Synchronized (Preservation Mode)');
         }
 
         return sequelize;
     } catch (error) {
         console.error('PostgreSQL Connection Error:', error.message);
-        throw error; // Let the caller handle it instead of exiting
+        throw error;
     }
 };
 

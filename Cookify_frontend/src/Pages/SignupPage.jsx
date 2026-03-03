@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import authService from '../services/authService';
 import Input from '../components/common/Input';
 import Button from '../components/common/Button';
+import './Auth.css';
 
 const PasswordField = ({ label, name, value, show, onToggle, error, placeholder, onChange }) => (
     <div className="space-y-1.5">

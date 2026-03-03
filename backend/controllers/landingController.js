@@ -28,19 +28,19 @@ const getLandingPageData = async (req, res) => {
                     quote: "Cookify made cooking so much easier for me. I find new recipes every day and the community is super helpful!",
                     author: "Alexandra Chen",
                     role: "Home Cook",
-                    image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&h=200&auto=format&fit=crop"
+                    image: "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"
                 },
                 {
                     quote: "I love how simple it is to share my recipes and see what others are making. Great app for food lovers.",
                     author: "Marcus Williams",
                     role: "Food Enthusiast",
-                    image: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=200&h=200&auto=format&fit=crop"
+                    image: "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"
                 },
                 {
                     quote: "The recipe search is amazing. I always find something new to try based on what I have in my kitchen.",
                     author: "Sarah Mitchell",
                     role: "Home Chef",
-                    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&h=200&auto=format&fit=crop"
+                    image: "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"
                 }
             ],
             categories: [

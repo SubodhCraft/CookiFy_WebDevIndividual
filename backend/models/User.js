@@ -47,7 +47,7 @@ const User = sequelize.define('User', {
     profilePicture: {
         type: DataTypes.STRING,
         allowNull: true,
-        defaultValue: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&h=200&auto=format&fit=crop',
+        defaultValue: 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg',
         field: 'profile_picture'
     },
     role: {

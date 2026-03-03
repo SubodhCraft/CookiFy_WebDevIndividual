@@ -51,9 +51,9 @@ const seedRecipes = async () => {
         ];
 
         await Recipe.bulkCreate(recipes);
-        console.log('✅ Recipes seeded successfully');
+        console.log('Recipes seeded successfully');
     } catch (error) {
-        console.error('❌ Error seeding recipes:', error);
+        console.error('Error seeding recipes:', error);
     }
 };
 
