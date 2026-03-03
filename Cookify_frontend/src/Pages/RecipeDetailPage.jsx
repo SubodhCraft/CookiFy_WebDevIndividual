@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import recipeService from '../services/recipeService';
 import bookmarkService from '../services/bookmarkService';
+import './RecipeDetail.css';
 import authService from '../services/authService';
 import commentService from '../services/commentService';
 
@@ -23,7 +24,7 @@ const RecipeDetailPage = () => {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const currentUser = authService.getUser();
 
-    const defaultAvatar = "https://cdn-icons-png.flaticon.com/512/3461/3461901.png";
+    const defaultAvatar = "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg";
 
     useEffect(() => {
         if (!authService.isAuthenticated()) { navigate('/signin'); return; }
