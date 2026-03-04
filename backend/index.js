@@ -90,20 +90,25 @@ app.use((err, req, res, next) => {
     });
 });
 
+/* =======================
+   START SERVER
+======================= */
 const startServer = async () => {
     try {
         await connectDB();
         await seedRecipes();
+        console.log("Database connected & synced");
 
         if (process.env.NODE_ENV !== 'test') {
             const PORT = process.env.PORT || 5000;
             app.listen(PORT, '0.0.0.0', () => {
                 console.log(`Server is running on port ${PORT}`);
-                console.log(`API available at http://127.0.0.1:${PORT}/api`);
+                console.log(`API available at http://localhost:${PORT}/api`);
             });
         }
     } catch (error) {
-        console.error("Failed to start server:", error);
+        console.error("Server startup failed:", error);
+        process.exit(1);
     }
 };
 

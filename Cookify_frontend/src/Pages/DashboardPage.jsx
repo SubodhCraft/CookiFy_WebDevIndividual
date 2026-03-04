@@ -6,7 +6,8 @@ import recipeService from '../services/recipeService';
 import bookmarkService from '../services/bookmarkService';
 import RecipeCreateModal from '../components/recipe/RecipeCreateModal';
 import MyRecipes from '../components/recipe/MyRecipes';
-import './Dashboard.css';
+import ConfirmModal from '../components/common/ConfirmModal';
+import '../styles/Dashboard.css';
 
 const DashboardPage = () => {
     const navigate = useNavigate();
@@ -15,6 +16,7 @@ const DashboardPage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [user, setUser] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
     const [editingRecipe, setEditingRecipe] = useState(null);
 
     const handleEdit = (recipe) => { setEditingRecipe(recipe); setIsModalOpen(true); };
@@ -79,7 +81,11 @@ const DashboardPage = () => {
         finally { setIsSearching(false); }
     };
 
-    const handleLogout = () => {
+    const handleLogoutClick = () => {
+        setShowLogoutConfirm(true);
+    };
+
+    const confirmLogout = () => {
         authService.clearAuthData();
         toast.success('Signed out successfully');
         navigate('/');
@@ -270,7 +276,7 @@ const DashboardPage = () => {
                             />
                         </div>
                         <button
-                            onClick={handleLogout}
+                            onClick={handleLogoutClick}
                             className="w-9 h-9 rounded-lg bg-gray-100 text-gray-500 flex items-center justify-center hover:bg-red-50 hover:text-red-500 transition-all"
                             title="Sign Out"
                         >
@@ -532,7 +538,7 @@ const DashboardPage = () => {
                                                 </div>
                                             </div>
                                             <button
-                                                onClick={handleLogout}
+                                                onClick={handleLogoutClick}
                                                 className="px-6 py-2.5 bg-white border border-gray-200 text-gray-600 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-red-600 hover:border-red-600 hover:text-white transition-all shadow-sm"
                                             >
                                                 Logout
@@ -628,6 +634,17 @@ const DashboardPage = () => {
                         setTimeout(() => setActiveTab('myRecipes'), 10);
                     }
                 }}
+            />
+
+            {/* Logout Confirmation Modal */}
+            <ConfirmModal
+                isOpen={showLogoutConfirm}
+                onClose={() => setShowLogoutConfirm(false)}
+                onConfirm={confirmLogout}
+                title="Sign Out"
+                message="Are you sure you want to sign out? You'll need to sign back in to manage your recipes."
+                confirmText="Yes, Sign Out"
+                variant="danger"
             />
         </div>
     );

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import landingService from '../services/landingService';
-import './LandingPage.css';
+import '../styles/LandingPage.css';
 import Button from '../components/common/Button';
 
 const LandingPage = () => {

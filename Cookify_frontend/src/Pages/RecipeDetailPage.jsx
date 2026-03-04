@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import recipeService from '../services/recipeService';
 import bookmarkService from '../services/bookmarkService';
-import './RecipeDetail.css';
+import '../styles/RecipeDetail.css';
 import authService from '../services/authService';
 import commentService from '../services/commentService';
 

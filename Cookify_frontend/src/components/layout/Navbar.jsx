@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Button from '../common/Button';
 import authService from '../../services/authService';
-import './Layout.css';
+import ConfirmModal from '../common/ConfirmModal';
+import '../../styles/Layout.css';
 
 const Navbar = () => {
     const navigate = useNavigate();
     const [isMobileOpen, setIsMobileOpen] = useState(false);
+    const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
     const [isAuthenticated, setIsAuthenticated] = useState(authService.isAuthenticated());
 
     useEffect(() => {
@@ -18,7 +20,12 @@ const Navbar = () => {
         return () => clearInterval(interval);
     }, []);
 
-    const handleLogout = () => {
+    const handleLogoutClick = () => {
+        setShowLogoutConfirm(true);
+        setIsMobileOpen(false);
+    };
+
+    const confirmLogout = () => {
         authService.clearAuthData();
         setIsAuthenticated(false);
         navigate('/');
@@ -49,7 +56,7 @@ const Navbar = () => {
                             <Link to="/dashboard" className="text-sm font-bold text-[#2E7D32] hover:text-[#1B5E20] transition-colors px-4 py-2">
                                 Dashboard
                             </Link>
-                            <Button onClick={handleLogout} variant="outline" size="sm">
+                            <Button onClick={handleLogoutClick} variant="outline" size="sm">
                                 Sign Out
                             </Button>
                         </>
@@ -92,7 +99,7 @@ const Navbar = () => {
                         {isAuthenticated ? (
                             <>
                                 <Link to="/dashboard" className="text-sm font-bold text-[#2E7D32] py-2">Dashboard</Link>
-                                <Button onClick={handleLogout} variant="outline" size="sm" className="w-full">
+                                <Button onClick={handleLogoutClick} variant="outline" size="sm" className="w-full">
                                     Sign Out
                                 </Button>
                             </>
@@ -107,6 +114,16 @@ const Navbar = () => {
                     </div>
                 </div>
             )}
+            {/* Logout Confirmation Modal */}
+            <ConfirmModal
+                isOpen={showLogoutConfirm}
+                onClose={() => setShowLogoutConfirm(false)}
+                onConfirm={confirmLogout}
+                title="Sign Out"
+                message="Are you sure you want to sign out? You'll need to sign back in to manage your recipes."
+                confirmText="Yes, Sign Out"
+                variant="danger"
+            />
         </nav>
     );
 };

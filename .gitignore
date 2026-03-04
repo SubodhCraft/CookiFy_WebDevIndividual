@@ -42,3 +42,9 @@ coverage/
 # Temporary files
 *.tmp
 *.temp
+
+# Local data
+backend/uploads/
+dist/
+node_modules/
+.env
