@@ -42,7 +42,7 @@ const getRecipes = async (req, res) => {
             data: recipes
         });
     } catch (error) {
-        console.error('❌ Error fetching recipes:', error);
+        console.error(' Error fetching recipes:', error);
         res.status(500).json({
             success: false,
             message: 'Server Error',

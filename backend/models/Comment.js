@@ -38,5 +38,4 @@ const Comment = sequelize.define('Comment', {
     createdAt: 'created_at',
     updatedAt: 'updated_at'
 });
-
 module.exports = Comment;

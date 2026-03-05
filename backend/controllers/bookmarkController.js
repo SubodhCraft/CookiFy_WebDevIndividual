@@ -46,7 +46,7 @@ const toggleBookmark = async (req, res) => {
             });
         }
     } catch (error) {
-        console.error('❌ Error toggling bookmark:', error);
+        console.error('Error toggling bookmark:', error);
         res.status(500).json({
             success: false,
             message: 'Server Error',
@@ -89,7 +89,7 @@ const getMyBookmarks = async (req, res) => {
             data: bookmarkedRecipes
         });
     } catch (error) {
-        console.error('❌ Error fetching bookmarks:', error);
+        console.error('Error fetching bookmarks:', error);
         res.status(500).json({
             success: false,
             message: 'Server Error',

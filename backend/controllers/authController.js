@@ -232,7 +232,7 @@ const forgotPassword = async (req, res) => {
                     message: 'A password reset link has been sent to your actual email address.'
                 });
             } catch (emailError) {
-                console.error('❌ Failed to send email via Nodemailer:', emailError.message);
+                console.error(' Failed to send email via Nodemailer:', emailError.message);
                 return res.status(500).json({
                     success: false,
                     message: 'Email delivery failed. Please check backend logs or try again later.'
@@ -241,8 +241,8 @@ const forgotPassword = async (req, res) => {
         } else {
             // Critical fallback for the user: specifically tell them what is missing in the console
             console.log('\n--- EMAIL SERVICE CONFIGURATION MISSING ---');
-            if (!emailUser) console.log('❌ process.env.EMAIL_USER is undefined');
-            if (!emailPass) console.log('❌ process.env.EMAIL_PASS is undefined');
+            if (!emailUser) console.log(' process.env.EMAIL_USER is undefined');
+            if (!emailPass) console.log(' process.env.EMAIL_PASS is undefined');
             console.log('🔗 Link produced anyway (Dev mode):', resetUrl);
             console.log('-------------------------------------------\n');
 
